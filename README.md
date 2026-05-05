@@ -28,15 +28,16 @@ A lead discovery tool designed for turf vendors to identify animal facilities by
 - Printable shortlist
 - Responsive card layout
 
-
 ## Notes
+
 ### Semantic Decisions
+
 - Used article for each facility card because each result is standalone content.
 - Used dl for label/value metadata pairs.
 - Used fieldset/legend for grouped filter controls.
 
 ### Accessibility Decisions
+
 - Added skip link.
 - Used explicit labels.
 - Added aria-live to results count.
-
