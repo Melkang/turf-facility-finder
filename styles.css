@@ -1,4 +1,9 @@
-@layer reset, base, layout, components, utilities;
+/* /* Layer order:
+   Later layers override earlier ones regardless of specificity.
+   reset + base are implemented now.
+   components, utilities, and layout will be added next.
+*/
+@layer reset, base, components, utilities, layout;
 
 @layer reset {
   *,
@@ -7,9 +12,14 @@
     box-sizing: border-box;
   }
 
+  /* in mobile landscape mode, it won't change text size
+    https://kilianvalkhof.com/2022/css-html/your-css-reset-needs-text-size-adjust-probably/ */
   html {
-    text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
+    /* text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%; */
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
   }
 
   body,
@@ -24,9 +34,24 @@
     margin: 0;
   }
 
-  ul[role="list"],
-  ol[role="list"] {
+  /*if a line of text shifts words to another line, this will balance the amount of words- progressive enhancement*/
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  /* Instead of ol and li, this is a modern approach to not read to screen readers the list
+    https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html */
+  [role="list"] {
     list-style: none;
+    margin: 0;
     padding: 0;
   }
 
@@ -34,7 +59,7 @@
   picture,
   svg {
     display: block;
-    max-width: 100%;
+    max-inline-size: 100%;
   }
 
   video,
