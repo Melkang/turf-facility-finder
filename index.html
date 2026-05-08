@@ -22,7 +22,9 @@
         <!-- </h1> -->
         <!-- </nav> -->
         <div class="site-branding">
-            <a href="/" class="site-logo">Turf Facility Finder</a>
+            <a href="/" class="site-logo">
+                <img src="assets/turf-facility-finder-logo.svg" alt="Turf Facility Finder" width="220" height="55">
+            </a>
         </div>
     </header>
 
@@ -93,62 +95,25 @@
             <!-- <p class="results-message">No facilities match your filters</p> -->
 
             <!-- Total number of facilities found -->
-            <ul role="list" class="lead-list">
+            <ul role="list" class="results-list">
+                <!-- RESULTS LIST -->
 
-
-                <!--OPTION 1 CARD LAYOUT-->
-                <li class="simple-list-item">
-                    <article>
-                        <div class="simple-list-item-leading-visual">
-                            <img alt="To be determined." class="simple-list-item-product" src="https://" />
-                        </div>
-                        <h3 class="simple-list-item-title">Riverbend Equine Center</h3>
-                        <!-- lead quality label/badge here (low, medium, high opportunity)?? -->
-                        <ul class="simple-list-item-badges">
-                            <li data-badge="primary" class="simple-list-item-badge">
-                                Grass
-                            </li>
-                            <li data-badge="secondary" class="simple-list-item-badge">
-                                Mix/ Grass and Turf
-                            </li>
-                            <li data-badge="tertiary" class="simple-list-item-badge">
-                                Turf
-                            </li>
-                        </ul>
-                        <div class="simple-list-item-description">
-                            <!-- Address and phone number go here for contact?. -->
-                            <ul>
-                                <li><strong>Location:</strong> Lexington, KY</li>
-                                <li><strong>Turf type:</strong> Grass</li>
-                                <li><strong>Size:</strong>42,000 sq ft</li>
-                            </ul>
-                        </div>
-                        <div class="simple-list-item-actions">
-                            <!-- <button aria-label="Favorite Riverbend Equine Center" data-action="primary"
-                class="simple-list-item-action" type="button">
-                <svg class="simple-list-item-action-icon">
-                  <use xlink:href="#star"></use>
-                </svg>
-              </button> -->
-                            <button aria-label="Add Riverbend Equine Center to favorite list" data-action="primary"
-                                class="simple-list-item-action" type="button">
-                                <svg class="simple-list-item-action-icon">
-                                    <use xlink:href="#add"></use>
-                                </svg>
-                            </button>
-                        </div>
-                    </article>
-                </li>
-
-                <!--OPTION 2 CARD LAYOUT-->
-                <li class="lead-item">
+                <!-- CARD 1 -->
+                <li class="results-item">
                     <article class="facility-card">
-                        <header>
+
+                        <header class="facility-card--header">
                             <div class="facility-card--title-group">
+
                                 <div class="facility-card--leading-visual">
-                                    <img alt="To be determined." class="facility-card--item-product" src="https://" />
+                                    <img src="https://" alt="Riverbend Equine Center"
+                                        class="facility-card--item-product" />
                                 </div>
-                                <h3 class="facility-card--title">Riverbend Equine Center</h3>
+
+                                <h3 class="facility-card--title">
+                                    Riverbend Equine Center
+                                </h3>
+
                                 <ul class="facility-card--badges" role="list">
                                     <li class="badge badge--opportunity">
                                         High Opportunity
@@ -157,14 +122,16 @@
                                         Grass
                                     </li>
                                 </ul>
+
                             </div>
+
                             <button type="button" class="facility-card--save-button"
                                 aria-label="Save Riverbend Equine Center to shortlist">
                                 ☆
                             </button>
                         </header>
 
-                        <dl class="facility-card--info-container"> <!-- Description list -->
+                        <dl class="facility-card--info-container">
 
                             <div class="facility-card--info-row">
                                 <dt>Location</dt>
@@ -187,59 +154,190 @@
                             </div>
 
                         </dl>
+
                     </article>
                 </li>
 
-
-                <!--OPTION 3 CARD LAYOUT-->
-                <li>
+                <!-- CARD 2 -->
+                <li class="results-item">
                     <article class="facility-card">
-                        <h3 class="facility-header">Pine Crest Animal Arena</h3>
-                        <button aria-label="Save Pine Crest Animal Arena">
-                            ☆
-                        </button>
-                        <dl class="facility-details"> <!-- Description list -->
-                            <div>
-                                <dt><strong>Location:</strong></dt><!-- Description list term -->
-                                <dd>Ocala, FL</dd> <!-- Description list definition -->
+
+                        <header class="facility-card--header">
+                            <div class="facility-card--title-group">
+
+                                <div class="facility-card--leading-visual">
+                                    <img src="https://" alt="Pine Crest Animal Arena"
+                                        class="facility-card--item-product" />
+                                </div>
+
+                                <h3 class="facility-card--title">
+                                    Pine Crest Animal Arena
+                                </h3>
+
+                                <ul class="facility-card--badges" role="list">
+                                    <li class="badge badge--opportunity">
+                                        Medium Opportunity
+                                    </li>
+                                    <li class="badge badge--surface">
+                                        Turf
+                                    </li>
+                                </ul>
+
                             </div>
-                            <div>
-                                <dt><strong>Turf type:</strong></dt>
-                                <dd>Turf</dd>
+
+                            <button type="button" class="facility-card--save-button"
+                                aria-label="Save Pine Crest Animal Arena to shortlist">
+                                ☆
+                            </button>
+                        </header>
+
+                        <dl class="facility-card--info-container">
+
+                            <div class="facility-card--info-row">
+                                <dt>Location</dt>
+                                <dd>Ocala, FL</dd>
                             </div>
-                            <div>
-                                <dt><strong>Size:</strong></dt>
+
+                            <div class="facility-card--info-row">
+                                <dt>Size</dt>
                                 <dd>31,500 sq ft</dd>
                             </div>
+
+                            <div class="facility-card--info-row">
+                                <dt>Facility Type</dt>
+                                <dd>Animal Arena</dd>
+                            </div>
+
+                            <div class="facility-card--info-row">
+                                <dt>Contact</dt>
+                                <dd>(555) 234-5678</dd>
+                            </div>
+
                         </dl>
+
                     </article>
                 </li>
 
-                <!--Example 4 CARD LAYOUT-->
-                <li>
+                <!-- CARD 3 -->
+                <li class="results-item">
                     <article class="facility-card">
-                        <h3 class="facility-header">North Valley Training Grounds</h3>
-                        <button aria-label="Save North Valley Training Grounds">
-                            ☆
-                        </button>
-                        <dl class="facility-details">
-                            <div>
-                                <dt><strong>Location:</strong></dt>
+
+                        <header class="facility-card--header">
+                            <div class="facility-card--title-group">
+
+                                <div class="facility-card--leading-visual">
+                                    <img src="https://" alt="North Valley Training Grounds"
+                                        class="facility-card--item-product" />
+                                </div>
+
+                                <h3 class="facility-card--title">
+                                    North Valley Training Grounds
+                                </h3>
+
+                                <ul class="facility-card--badges" role="list">
+                                    <li class="badge badge--opportunity">
+                                        High Opportunity
+                                    </li>
+                                    <li class="badge badge--surface">
+                                        Grass
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                            <button type="button" class="facility-card--save-button"
+                                aria-label="Save North Valley Training Grounds to shortlist">
+                                ☆
+                            </button>
+                        </header>
+
+                        <dl class="facility-card--info-container">
+
+                            <div class="facility-card--info-row">
+                                <dt>Location</dt>
                                 <dd>Boise, ID</dd>
                             </div>
-                            <div>
-                                <dt><strong>Turf type:</strong></dt>
-                                <dd>Grass</dd>
-                            </div>
-                            <div>
-                                <dt><strong>Size:</strong></dt>
+
+                            <div class="facility-card--info-row">
+                                <dt>Size</dt>
                                 <dd>27,800 sq ft</dd>
                             </div>
+
+                            <div class="facility-card--info-row">
+                                <dt>Facility Type</dt>
+                                <dd>Training Grounds</dd>
+                            </div>
+
+                            <div class="facility-card--info-row">
+                                <dt>Contact</dt>
+                                <dd>(555) 345-6789</dd>
+                            </div>
+
                         </dl>
+
+                    </article>
+                </li>
+
+                <!-- CARD 4 -->
+                <li class="results-item">
+                    <article class="facility-card">
+
+                        <header class="facility-card--header">
+                            <div class="facility-card--title-group">
+
+                                <div class="facility-card--leading-visual">
+                                    <img src="https://" alt="Blue Ridge Canine Complex"
+                                        class="facility-card--item-product" />
+                                </div>
+
+                                <h3 class="facility-card--title">
+                                    Blue Ridge Canine Complex
+                                </h3>
+
+                                <ul class="facility-card--badges" role="list">
+                                    <li class="badge badge--opportunity">
+                                        Low Opportunity
+                                    </li>
+                                    <li class="badge badge--surface">
+                                        Existing Turf
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                            <button type="button" class="facility-card--save-button"
+                                aria-label="Save Blue Ridge Canine Complex to shortlist">
+                                ☆
+                            </button>
+                        </header>
+
+                        <dl class="facility-card--info-container">
+                            <div class="facility-card--info-row">
+                                <dt>Location</dt>
+                                <dd>Asheville, NC</dd>
+                            </div>
+
+                            <div class="facility-card--info-row">
+                                <dt>Size</dt>
+                                <dd>19,400 sq ft</dd>
+                            </div>
+
+                            <div class="facility-card--info-row">
+                                <dt>Facility Type</dt>
+                                <dd>Canine Sports Complex</dd>
+                            </div>
+
+                            <div class="facility-card--info-row">
+                                <dt>Contact</dt>
+                                <dd>(555) 456-7890</dd>
+                            </div>
+                        </dl>
+
                     </article>
                 </li>
             </ul>
         </section>
+
         <!-- End of Results -->
 
     </main>
