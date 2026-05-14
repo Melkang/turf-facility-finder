@@ -1,0 +1,325 @@
+/* /* Layer order:
+   Later layers override earlier ones regardless of specificity.
+   reset + base are implemented now.
+   components, utilities, and layout will be added next.
+*/
+@layer reset, base, components, utilities, layout;
+
+/* ==================================================
+   RESET
+================================================== */
+@layer reset {
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	/* in mobile landscape mode, it won't change text size
+    https://kilianvalkhof.com/2022/css-html/your-css-reset-needs-text-size-adjust-probably/ */
+	html {
+		/* text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%; */
+		-moz-text-size-adjust: none;
+		-webkit-text-size-adjust: none;
+		text-size-adjust: none;
+	}
+
+	body,
+	h1,
+	h2,
+	h3,
+	p,
+	ul,
+	ol,
+	dl,
+	dd {
+		margin: 0;
+	}
+
+	/*if a line of text shifts words to another line, this will balance the amount of words- progressive enhancement*/
+	h1,
+	h2,
+	h3,
+	h4 {
+		text-wrap: balance;
+	}
+
+	p,
+	li {
+		text-wrap: pretty;
+	}
+
+	/* Instead of ol and li, this is a modern approach to not read to screen readers the list
+    https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html */
+	[role="list"] {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	img,
+	picture,
+	svg {
+		display: block;
+		max-inline-size: 100%;
+	}
+
+	video,
+	iframe {
+		max-inline-size: 100%;
+		block-size: auto;
+	}
+
+	input,
+	button,
+	textarea,
+	select {
+		font: inherit;
+	}
+
+	body {
+		min-height: 100dvh;
+		line-height: 1.5;
+		overflow-wrap: break-word;
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 2px;
+	}
+
+	[hidden] {
+		display: none !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+			scroll-behavior: auto !important;
+		}
+	}
+}
+
+/* ==================================================
+   BASE
+================================================== */
+@layer base {
+	/* base/global styles */
+	:root {
+		/* 
+       CORE PALETTE
+       Based on Turf Facility Finder mockup
+       Dark shades have higher values and light shades have lower values.
+     */
+
+		--clr-white: hsl(0 0% 100%);
+
+		/* Primary Brand (teal) */
+		--clr-brand-500: hsl(175, 77%, 26%);
+		--clr-brand-600: hsl(175, 60%, 15%);
+
+		/* Badges */
+		/* priority */
+		--clr-green-200: hsl(120, 72%, 81%);
+		--clr-green-600: hsl(122 38% 32%);
+
+		--clr-yellow-100: hsl(45 100% 86%);
+		--clr-yellow-600: hsl(39 92% 46%);
+
+		--clr-red-100: hsl(0 70% 93%);
+		--clr-red-600: hsl(0 60% 40%);
+
+		/* surface */
+		--clr-green-100: hsl(108, 24%, 76%);
+		--clr-green-700: hsl(109, 30%, 29%);
+
+		--clr-blue-100: hsl(212, 93%, 89%);
+		--clr-blue-600: hsl(205 70% 32%);
+
+		--clr-purple-100: hsl(250 35% 92%);
+		--clr-purple-600: hsl(250 35% 38%);
+
+		/* Neutral Scale */
+		--clr-gray-50: hsl(210 40% 98%);
+		--clr-gray-100: hsl(210 24% 96%);
+		--clr-gray-200: #dee2e8;
+		--clr-gray-500: hsl(215 16% 38%);
+		--clr-gray-900: hsl(222 47% 11%);
+
+		/* Typography */
+		--ff-heading: "Manrope", system-ui, sans-serif;
+		--ff-body: "Inter", system-ui, sans-serif;
+
+		/* Font Sizes */
+		/*smaller font sizes are smaller numbers (ex: --fs-300: 0.875rem). larger font sizes are higher numbers (ex: --fs-900: 3.75rem). ALso changed figma design from px to rem units for accessibility/ user preferences when they have changed screen sizing. If keeping px, it might override user preferences */
+		--fs-300: 0.875rem;
+		--fs-400: 1rem;
+		--fs-500: 1.125rem;
+		--fs-600: 1.25rem;
+		--fs-700: 1.5rem;
+		--fs-800: 2rem;
+		--fs-900: 3.5rem;
+		--fs-1000: 3.5rem;
+
+		@media (width > 760px) {
+			--fs-300: 0.875rem;
+			--fs-400: 1rem;
+			--fs-500: 1.25rem;
+			--fs-600: 1.5rem;
+			--fs-700: 2rem;
+			--fs-800: 3rem;
+			--fs-900: 5rem;
+			--fs-1000: 7.5rem;
+		}
+	}
+
+	:root {
+		/* SEMANTIC TOKENS- description by purpose */
+		--text-main: var(--clr-gray-900);
+		--text-muted: var(--clr-gray-500);
+		--text-high-contrast: var(--clr-white);
+		--text-brand: var(--clr-brand-500);
+
+		--background-main: var(--clr-gray-50);
+		--background-surface: var(--clr-white);
+		--background-accent-main: var(--clr-brand-500);
+		--background-accent-dark: var(--clr-brand-600);
+
+		--font-size-heading-sm: var(--fs-700);
+		--font-size-heading-regular: var(--fs-800);
+		--font-size-heading-lg: var(--fs-900);
+
+		--font-size-sm: var(--fs-300);
+		--font-size-regular: var(--fs-400);
+		--font-size-md: var(--fs-500);
+		--font-size-lg: var(--fs-600);
+
+		--border-color: var(--clr-gray-200);
+
+		--radius-sm: 0.5rem;
+		--radius-md: 0.75rem;
+		--radius-lg: 1rem;
+
+		--shadow-sm: 0 1px 2px hsl(222 47% 11% / 0.06);
+		--shadow-md: 0 6px 18px hsl(222 47% 11% / 0.08);
+		--shadow-lg: 0 12px 30px hsl(222 47% 11% / 0.12);
+
+		/* BADGES */
+		/* Priority */
+
+		--badge-priority-high-bg: var(--clr-green-200);
+		--badge-priority-high-text: var(--clr-green-600);
+
+		--badge-priority-medium-bg: var(--clr-yellow-100);
+		--badge-priority-medium-text: var(--clr-yellow-600);
+
+		--badge-priority-low-bg: var(--clr-red-100);
+		--badge-priority-low-text: var(--clr-red-600);
+
+		/* Surface */
+
+		--badge-surface-grass-bg: var(--clr-green-100);
+		--badge-surface-grass-text: var(--clr-green-700);
+
+		--badge-surface-turf-bg: var(--clr-blue-100);
+		--badge-surface-turf-text: var(--clr-blue-600);
+
+		--badge-surface-mixed-bg: var(--clr-purple-100);
+		--badge-surface-mixed-text: var(--clr-purple-600);
+
+		/* Spacing */
+		--space-1: 0.5rem;
+		--space-2: 0.75rem;
+		--space-3: 1rem;
+		--space-4: 1.5rem;
+		--space-5: 2rem;
+		--space-6: 3rem;
+
+		/* Width */
+		--wrapper-max: 72rem;
+	}
+}
+
+@layer base {
+	/* custom properties for base styles */
+	body {
+		font-family: var(--ff-body);
+		font-size: var(--font-size-regular);
+		line-height: 1.6;
+		color: var(--text-main);
+		background-color: var(--background-main);
+	}
+
+	h1,
+	h2,
+	h3 {
+		font-family: var(--ff-heading);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		line-height: 1.1;
+		text-wrap: balance;
+	}
+
+	h1 {
+		font-size: clamp(
+			var(--font-size-heading-regular),
+			5vw,
+			var(--font-size-heading-lg)
+		);
+	}
+
+	h2 {
+		font-size: clamp(
+			var(--font-size-heading-sm),
+			3vw,
+			var(--font-size-heading-regular)
+		);
+	}
+
+	h3 {
+		font-size: var(--font-size-md);
+	}
+
+	p,
+	label,
+	input,
+	select,
+	button,
+	dd,
+	li {
+		color: var(--text-main);
+		font-size: var(--font-size-regular);
+		text-wrap: pretty;
+	}
+
+	small {
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
+	}
+
+	dt,
+	.results-count {
+		color: var(--text-muted);
+		font-size: var(--font-size-sm);
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.wrapper {
+		width: min(100% - 2rem, var(--wrapper-max));
+		margin-inline: auto;
+	}
+
+	section {
+		padding-block: var(--space-5);
+	}
+}
+
