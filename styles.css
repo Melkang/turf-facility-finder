@@ -390,6 +390,18 @@
 		gap: var(--space-4);
 	}
 
+	@media (width >= 60rem) {
+		.results-list {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (width >= 80rem) {
+		.results-list {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
 	.filter-actions {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(10rem, max-content));
