@@ -45,32 +45,30 @@
                 <fieldset>
                     <legend class="visually-hidden">Search Filters</legend>
 
-                    <ul class="filter-panel">
-                        <li>
-                            <label for="location">Location</label>
-                            <input id="location" name="location" type="text" class="input" autocomplete="address-level2"
-                                placeholder="City, state, or region" />
-                        </li>
-                    </ul>
+                    <div class="filter-grid">
 
-                    <ul class="filter-panel">
-                        <li>
+                        <div class="form-field">
+                            <label for="location">Location</label>
+                            <input id="location" name="location" type="text" class="input"
+                                placeholder="City, state, or region">
+                        </div>
+
+                        <div class="form-field">
                             <label for="surface-type">Surface type</label>
                             <select id="surface-type" name="surfaceType">
                                 <option value="">Any surface</option>
                                 <option value="grass">Grass</option>
                                 <option value="turf">Turf</option>
                             </select>
-                        </li>
-                    </ul>
+                        </div>
 
-                    <ul class="filter-panel">
-                        <li>
+                        <div class="form-field">
                             <label for="size">Minimum size (sq ft)</label>
-                            <small>Optional</small> <!-- For visible helper text outside label-->
-                            <input id="size" name="size" type="number" class="input" min="0" inputmode="numeric" />
-                        </li>
-                    </ul>
+                            <small id="size-help">Optional</small><!-- For visible helper text outside label-->
+                            <input id="size" name="size" type="number" class="input" min="0" inputmode="numeric"
+                                aria-describedby="size-help" />
+                        </div>
+                    </div>
 
                     <!-- Additional filters can be added here:
            Facility type (equine, dog daycare, taining center),
@@ -79,8 +77,9 @@
            etc. -->
 
                     <div class="filter-actions">
-                        <button type="submit" class="btn btn-primary">Show matching facilities</button>
-                        <button type="reset" class="btn btn-secondary">Clear filters</button>
+                        <button type="submit" class="btn btn--primary">Show matching facilities
+                        </button>
+                        <button type="reset" class="btn btn--secondary">Clear filters</button>
                     </div>
 
                 </fieldset>
@@ -116,10 +115,10 @@
                                 </h3>
 
                                 <ul class="facility-card--badges" role="list">
-                                    <li class="badge badge--opportunity">
+                                    <li class="badge badge-opportunity">
                                         High Opportunity
                                     </li>
-                                    <li class="badge badge--surface-grass">
+                                    <li class="badge badge-surface-grass">
                                         Grass
                                     </li>
                                 </ul>
@@ -177,10 +176,10 @@
                                 </h3>
 
                                 <ul class="facility-card--badges" role="list">
-                                    <li class="badge badge--opportunity">
+                                    <li class="badge badge-opportunity">
                                         Medium Opportunity
                                     </li>
-                                    <li class="badge badge--surface-turf">
+                                    <li class="badge badge-surface-turf">
                                         Turf
                                     </li>
                                 </ul>
@@ -238,10 +237,10 @@
                                 </h3>
 
                                 <ul class="facility-card--badges" role="list">
-                                    <li class="badge badge--opportunity">
+                                    <li class="badge badge-opportunity">
                                         High Opportunity
                                     </li>
-                                    <li class="badge badge--surface-grass">
+                                    <li class="badge badge-surface-grass">
                                         Grass
                                     </li>
                                 </ul>
@@ -299,10 +298,10 @@
                                 </h3>
 
                                 <ul class="facility-card--badges" role="list">
-                                    <li class="badge badge--opportunity">
+                                    <li class="badge badge-opportunity">
                                         Low Opportunity
                                     </li>
-                                    <li class="badge badge--surface-turf">
+                                    <li class="badge badge-surface-turf">
                                         Existing Turf
                                     </li>
                                 </ul>
