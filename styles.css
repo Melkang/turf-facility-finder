@@ -732,6 +732,16 @@
 		min-inline-size: 2.75rem;
 		padding-inline: var(--space-2);
 	}
+
+	/* Empty State */
+	.results-message {
+		padding: var(--space-5);
+		background: var(--background-surface);
+		border: 1px dashed var(--border-color);
+		border-radius: var(--radius-md);
+		text-align: center;
+		color: var(--text-muted);
+	}
 }
 
 @layer utilities {
