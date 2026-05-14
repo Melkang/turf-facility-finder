@@ -475,6 +475,12 @@
     animation-range-start: exit; */
 	}
 
+	/* Form Field */
+	.form-field {
+		display: grid;
+		gap: var(--space-1);
+	}
+
 	/* ----- facility-card (grid-first; header row uses flex) ----- */
 
 	.facility-card {
