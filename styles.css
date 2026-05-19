@@ -502,17 +502,57 @@
 	/* ----- hero ----- */
 
 	.hero {
-		padding-block: var(--space-6);
-		/* text-align: center;
-    background-image: url(assets/hero.webp);
-    background-size: cover;
-    background-position: center;
-    font-size: var(--font-size-md);
-    color: var(--text-high-contrast);
+		display: grid;
+		position: relative;
+		isolation: isolate;
+		min-block-size: 75vh;
+	    align-items: end;
+	}
 
-    animation: fade-out forwards;
-    animation-timeline: view();
-    animation-range-start: exit; */
+	.hero-image-container,
+	.hero-content {
+		grid-area: 1 / 1;
+	}
+
+	.hero-image-container {
+		position: absolute;
+	    inset: 0;
+	}
+
+	.hero-image-container::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			to top,
+			hsl(222 47% 11% / 0.82) 0%,
+	        hsl(222 47% 11% / 0.55) 40%,
+	        hsl(222 47% 11% / 0.15) 75%,
+	        transparent 100%
+		);
+		pointer-events: none;
+	}
+
+	.hero-image-container img {
+		inline-size: 100%;
+		block-size: 100%;
+		object-fit: cover;
+	    object-position: center bottom;
+	}
+
+	.hero-content {
+		position: relative;
+		z-index: 1;
+
+		display: grid;
+		gap: var(--space-3);
+
+	    padding-block: var(--space-6);
+	}
+
+	.hero-content h1,
+	.hero-content p {
+		color: var(--text-high-contrast);
 	}
 
 	/* Form Field */
