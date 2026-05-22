@@ -391,8 +391,10 @@
 
 	.filters label {
 		display: inline-block;
+		font-size: var(--font-size-regular);
 		font-weight: 600;
-		margin-block-end: var(--space-1);
+		margin-block-end: 0.3rem;
+		padding-inline-start: 0.2rem;
 	}
 
 	.filters fieldset {
@@ -400,17 +402,11 @@
 		margin: 0;
 		padding: 0;
 	}
-
-	.filter-panel {
-		margin: 0;
-		padding: 0;
-	}
-
-	.filter-panel small {
-		display: block;
-		margin-block-end: var(--space-1);
-	}
 }
+
+/* ==================================================
+   LAYOUT
+================================================== */
 
 @layer layout {
 	/* ----- Width / rhythm ----- */
@@ -422,7 +418,8 @@
 	}
 
 	.section {
-		padding-block: var(--space-5);
+		/* padding-block: var(--space-5); */
+		padding-block: clamp(2rem, 6vw, 4rem);
 	}
 
 	.results-list {
@@ -430,25 +427,48 @@
 		gap: var(--space-4);
 	}
 
+	/* .filters {
+		margin-block-start: -4rem;
+		position: relative;
+		z-index: 2;
+	} */
+
 	.filter-actions {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	.filters fieldset {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(10rem, max-content));
-		align-items: center;
 		gap: var(--space-3);
-		margin-block-start: var(--space-4);
 	}
 
 	.filter-grid {
 		display: grid;
 		gap: var(--space-3);
+		align-items: end;
 	}
 
 	@media (width >= 48rem) {
+		.filters fieldset {
+			grid-template-columns: 1fr auto;
+			column-gap: var(--space-3);
+			align-items: end;
+		}
+
 		.filter-grid {
-			grid-template-columns: repeat(3, 1fr);
+			grid-template-columns:
+				minmax(16rem, 2fr)
+				minmax(12rem, 1fr)
+				minmax(12rem, 1fr);
 		}
 	}
 }
+
+/* ==================================================
+   COMPONENTS
+================================================== */
 
 @layer components {
 	/* ----- skip-link ----- */
@@ -506,7 +526,7 @@
 		position: relative;
 		isolation: isolate;
 		min-block-size: 75vh;
-	    align-items: end;
+		align-items: end;
 	}
 
 	.hero-image-container,
@@ -516,7 +536,7 @@
 
 	.hero-image-container {
 		position: absolute;
-	    inset: 0;
+		inset: 0;
 	}
 
 	.hero-image-container::after {
@@ -526,9 +546,9 @@
 		background: linear-gradient(
 			to top,
 			hsl(222 47% 11% / 0.82) 0%,
-	        hsl(222 47% 11% / 0.55) 40%,
-	        hsl(222 47% 11% / 0.15) 75%,
-	        transparent 100%
+			hsl(222 47% 11% / 0.55) 40%,
+			hsl(222 47% 11% / 0.15) 75%,
+			transparent 100%
 		);
 		pointer-events: none;
 	}
@@ -537,7 +557,7 @@
 		inline-size: 100%;
 		block-size: 100%;
 		object-fit: cover;
-	    object-position: center bottom;
+		object-position: center bottom;
 	}
 
 	.hero-content {
@@ -547,7 +567,7 @@
 		display: grid;
 		gap: var(--space-3);
 
-	    padding-block: var(--space-6);
+		padding-block: var(--space-6);
 	}
 
 	.hero-content h1,
@@ -555,10 +575,59 @@
 		color: var(--text-high-contrast);
 	}
 
-	/* Form Field */
+	/*----------- Form Field ------------*/
+
 	.form-field {
 		display: grid;
-		gap: var(--space-1);
+		gap: 0.25rem;
+	}
+
+	.filters {
+		position: relative;
+		z-index: 2;
+
+		display: grid;
+		gap: var(--space-3);
+
+		margin-block-start: clamp(-4.5rem, -10vw, -3rem);
+		padding: var(--space-4);
+
+		background-color: var(--background-surface);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-lg);
+
+		box-shadow: var(--shadow-md);
+	}
+
+	.filters.section {
+		padding-block: var(--space-5);
+	}
+
+	.filters .input,
+	.filters select {
+		max-inline-size: none;
+	}
+
+	.filters > h2 {
+		margin: 0;
+		font-size: var(--font-size-lg);
+	}
+
+	.filters .btn--secondary {
+		background-color: transparent;
+		color: var(--text-brand);
+		border-color: transparent;
+		box-shadow: none;
+		min-block-size: auto;
+		padding-block: 0;
+		padding-inline: 0;
+		font-weight: 500;
+	}
+
+	.filters .btn--secondary:hover:not(:disabled) {
+		background-color: transparent;
+		color: var(--background-accent-dark);
+		box-shadow: none;
 	}
 
 	/* ----- facility-card (grid-first; header row uses flex) ----- */
@@ -790,6 +859,7 @@
 		background-color: var(--background-surface);
 		color: var(--text-main);
 		border-color: var(--border-color);
+		min-inline-size: max-content;
 		box-shadow: var(--shadow-sm);
 		font-weight: 600;
 	}
