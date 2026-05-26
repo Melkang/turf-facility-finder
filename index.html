@@ -59,6 +59,8 @@
 
                         <div class="form-field">
                             <label for="location">Location</label>
+                            <input id="location" name="location" type="text" class="input"
+                                placeholder="City, state, or region">
                             <input id="location" name="location" type="text" class="input" autocomplete="address-level2"
                                 placeholder="City, state, or region" />
                         </div>
@@ -75,6 +77,10 @@
 
                         <div class="form-field">
                             <label for="size">Minimum size (sq ft)</label>
+                            <small id="size-help">Optional</small><!-- For visible helper text outside label-->
+                            <input id="size" name="size" type="number" class="input" min="0" inputmode="numeric"
+                                aria-describedby="size-help" />
+                        </div>
                             <input id="size" name="size" type="number" class="input" min="0" inputmode="numeric" />
                         </div>
 
@@ -93,6 +99,9 @@
            etc. -->
                     
                     <div class="filter-actions">
+                        <button type="submit" class="btn btn--primary">Show matching facilities
+                        </button>
+                        <button type="reset" class="btn btn--secondary">Clear filters</button>
                         <button type="reset" class="btn btn--ghost">
                             Clear filters
                         </button>
@@ -131,10 +140,10 @@
                                 </h3>
 
                                 <ul class="facility-card--badges" role="list">
-                                    <li class="badge badge--opportunity">
+                                    <li class="badge badge-opportunity">
                                         High Opportunity
                                     </li>
-                                    <li class="badge badge--surface-grass">
+                                    <li class="badge badge-surface-grass">
                                         Grass
                                     </li>
                                 </ul>
@@ -192,10 +201,10 @@
                                 </h3>
 
                                 <ul class="facility-card--badges" role="list">
-                                    <li class="badge badge--opportunity">
+                                    <li class="badge badge-opportunity">
                                         Medium Opportunity
                                     </li>
-                                    <li class="badge badge--surface-turf">
+                                    <li class="badge badge-surface-turf">
                                         Turf
                                     </li>
                                 </ul>
@@ -253,10 +262,10 @@
                                 </h3>
 
                                 <ul class="facility-card--badges" role="list">
-                                    <li class="badge badge--opportunity">
+                                    <li class="badge badge-opportunity">
                                         High Opportunity
                                     </li>
-                                    <li class="badge badge--surface-grass">
+                                    <li class="badge badge-surface-grass">
                                         Grass
                                     </li>
                                 </ul>
@@ -314,10 +323,10 @@
                                 </h3>
 
                                 <ul class="facility-card--badges" role="list">
-                                    <li class="badge badge--opportunity">
+                                    <li class="badge badge-opportunity">
                                         Low Opportunity
                                     </li>
-                                    <li class="badge badge--surface-turf">
+                                    <li class="badge badge-surface-turf">
                                         Existing Turf
                                     </li>
                                 </ul>
