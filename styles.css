@@ -146,6 +146,46 @@
 		--clr-gray-900: hsl(222 47% 11%);
 
 		/* Typography */
+		@font-face {
+			font-family: "Inter";
+			src: url("assets/fonts/Inter-Regular-400.woff2") format("woff2");
+			font-weight: 400;
+			font-style: normal;
+			font-display: swap;
+		}
+
+		@font-face {
+			font-family: "Inter";
+			src: url("assets/fonts/Inter-SemiBold-500.woff2") format("woff2");
+			font-weight: 500;
+			font-style: normal;
+			font-display: swap;
+		}
+
+		@font-face {
+			font-family: "Manrope";
+			src: url("assets/fonts/Manrope-Regular-400.woff2") format("woff2");
+			font-weight: 400;
+			font-style: normal;
+			font-display: swap;
+		}
+
+		@font-face {
+			font-family: "Manrope";
+			src: url("assets/fonts/Manrope-SemiBold-500.woff2") format("woff2");
+			font-weight: 500;
+			font-style: normal;
+			font-display: swap;
+		}
+
+		@font-face {
+			font-family: "Manrope";
+			src: url("assets/fonts/Manrope-Bold-700.woff2") format("woff2");
+			font-weight: 700;
+			font-style: normal;
+			font-display: swap;
+		}
+
 		--ff-heading: "Manrope", system-ui, sans-serif;
 		--ff-body: "Inter", system-ui, sans-serif;
 
@@ -351,8 +391,10 @@
 
 	.filters label {
 		display: inline-block;
+		font-size: var(--font-size-regular);
 		font-weight: 600;
-		margin-block-end: var(--space-1);
+		margin-block-end: 0.3rem;
+		padding-inline-start: 0.2rem;
 	}
 
 	.filters fieldset {
@@ -360,17 +402,11 @@
 		margin: 0;
 		padding: 0;
 	}
-
-	.filter-panel {
-		margin: 0;
-		padding: 0;
-	}
-
-	.filter-panel small {
-		display: block;
-		margin-block-end: var(--space-1);
-	}
 }
+
+/* ==================================================
+   LAYOUT
+================================================== */
 
 @layer layout {
 	/* ----- Width / rhythm ----- */
@@ -382,7 +418,8 @@
 	}
 
 	.section {
-		padding-block: var(--space-5);
+		/* padding-block: var(--space-5); */
+		padding-block: clamp(2rem, 6vw, 4rem);
 	}
 
 	.results-list {
@@ -390,25 +427,48 @@
 		gap: var(--space-4);
 	}
 
+	/* .filters {
+		margin-block-start: -4rem;
+		position: relative;
+		z-index: 2;
+	} */
+
 	.filter-actions {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	.filters fieldset {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(10rem, max-content));
-		align-items: center;
 		gap: var(--space-3);
-		margin-block-start: var(--space-4);
 	}
 
 	.filter-grid {
 		display: grid;
 		gap: var(--space-3);
+		align-items: end;
 	}
 
 	@media (width >= 48rem) {
+		.filters fieldset {
+			grid-template-columns: 1fr auto;
+			column-gap: var(--space-3);
+			align-items: end;
+		}
+
 		.filter-grid {
-			grid-template-columns: repeat(3, 1fr);
+			grid-template-columns:
+				minmax(16rem, 2fr)
+				minmax(12rem, 1fr)
+				minmax(12rem, 1fr);
 		}
 	}
 }
+
+/* ==================================================
+   COMPONENTS
+================================================== */
 
 @layer components {
 	/* ----- skip-link ----- */
@@ -462,23 +522,112 @@
 	/* ----- hero ----- */
 
 	.hero {
-		padding-block: var(--space-6);
-		/* text-align: center;
-    background-image: url(assets/hero.webp);
-    background-size: cover;
-    background-position: center;
-    font-size: var(--font-size-md);
-    color: var(--text-high-contrast);
-
-    animation: fade-out forwards;
-    animation-timeline: view();
-    animation-range-start: exit; */
+		display: grid;
+		position: relative;
+		isolation: isolate;
+		min-block-size: 75vh;
+		align-items: end;
 	}
 
-	/* Form Field */
+	.hero-image-container,
+	.hero-content {
+		grid-area: 1 / 1;
+	}
+
+	.hero-image-container {
+		position: absolute;
+		inset: 0;
+	}
+
+	.hero-image-container::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			to top,
+			hsl(222 47% 11% / 0.82) 0%,
+			hsl(222 47% 11% / 0.55) 40%,
+			hsl(222 47% 11% / 0.15) 75%,
+			transparent 100%
+		);
+		pointer-events: none;
+	}
+
+	.hero-image-container img {
+		inline-size: 100%;
+		block-size: 100%;
+		object-fit: cover;
+		object-position: center bottom;
+	}
+
+	.hero-content {
+		position: relative;
+		z-index: 1;
+
+		display: grid;
+		gap: var(--space-3);
+
+		padding-block: var(--space-6);
+	}
+
+	.hero-content h1,
+	.hero-content p {
+		color: var(--text-high-contrast);
+	}
+
+	/*----------- Form Field ------------*/
+
 	.form-field {
 		display: grid;
-		gap: var(--space-1);
+		gap: 0.25rem;
+	}
+
+	.filters {
+		position: relative;
+		z-index: 2;
+
+		display: grid;
+		gap: var(--space-3);
+
+		margin-block-start: clamp(-4.5rem, -10vw, -3rem);
+		padding: var(--space-4);
+
+		background-color: var(--background-surface);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-lg);
+
+		box-shadow: var(--shadow-md);
+	}
+
+	.filters.section {
+		padding-block: var(--space-5);
+	}
+
+	.filters .input,
+	.filters select {
+		max-inline-size: none;
+	}
+
+	.filters > h2 {
+		margin: 0;
+		font-size: var(--font-size-lg);
+	}
+
+	.filters .btn--secondary {
+		background-color: transparent;
+		color: var(--text-brand);
+		border-color: transparent;
+		box-shadow: none;
+		min-block-size: auto;
+		padding-block: 0;
+		padding-inline: 0;
+		font-weight: 500;
+	}
+
+	.filters .btn--secondary:hover:not(:disabled) {
+		background-color: transparent;
+		color: var(--background-accent-dark);
+		box-shadow: none;
 	}
 
 	/* ----- facility-card (grid-first; header row uses flex) ----- */
@@ -492,6 +641,14 @@
 		border-radius: var(--radius-md);
 		border: 1px solid var(--border-color);
 		box-shadow: var(--shadow-md);
+		transition:
+			transform 0.18s ease,
+			box-shadow 0.18s ease;
+	}
+
+	.facility-card:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-lg);
 	}
 
 	.facility-card--header {
@@ -702,6 +859,7 @@
 		background-color: var(--background-surface);
 		color: var(--text-main);
 		border-color: var(--border-color);
+		min-inline-size: max-content;
 		box-shadow: var(--shadow-sm);
 		font-weight: 600;
 	}

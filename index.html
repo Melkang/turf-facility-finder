@@ -8,7 +8,6 @@
     <meta name="description"
         content="Find animal facilities that may need turf upgrades by location, surface type, and size." />
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="fonts.css">
 </head>
 
 <body>
@@ -23,18 +22,28 @@
         <!-- </nav> -->
         <div class="site-branding container">
             <a href="/" class="site-logo">
-                <img src="assets/turf-facility-finder-logo.svg" alt="Turf Facility Finder" width="220" height="55">
+                <img src="assets/images/turf-facility-finder-logo.svg" alt="Turf Facility Finder" width="220"
+                    height="55">
             </a>
         </div>
     </header>
 
     <main id="main-content">
         <!-- Hero -->
-        <section class="hero container">
-            <h1 id="hero-title">Find animal facilities that may need turf upgrades</h1>
-            <p>
-                Filter by location, surface type, and size to identify your next best leads.
-            </p>
+        <section class="hero">
+            <!-- Hero Image -->
+            <div class="hero-image-container">
+                <img src="assets/images/hero-image.webp" alt="Panned horizontal view of a large indoor dog facility"
+                    width="1600" height="900">
+            </div>
+            <!-- Hero Content -->
+            <div class="hero-content container">
+                <h1 id="hero-title">Find animal facilities that may need turf upgrades
+                </h1>
+                <p>
+                    Filter by location, surface type, and size to identify your next best leads.
+                </p>
+            </div>
         </section>
 
         <!-- Filter Form -->
@@ -43,7 +52,8 @@
             <h2 id="filters-title">Filter facilities</h2>
             <form action="#" method="get">
                 <fieldset>
-                    <legend class="visually-hidden">Search Filters</legend>
+                    <legend class="visually-hidden">Search Filters
+                    </legend>
 
                     <div class="filter-grid">
 
@@ -51,6 +61,8 @@
                             <label for="location">Location</label>
                             <input id="location" name="location" type="text" class="input"
                                 placeholder="City, state, or region">
+                            <input id="location" name="location" type="text" class="input" autocomplete="address-level2"
+                                placeholder="City, state, or region" />
                         </div>
 
                         <div class="form-field">
@@ -59,6 +71,7 @@
                                 <option value="">Any surface</option>
                                 <option value="grass">Grass</option>
                                 <option value="turf">Turf</option>
+                                <option value="other">Mixed</option>
                             </select>
                         </div>
 
@@ -68,6 +81,15 @@
                             <input id="size" name="size" type="number" class="input" min="0" inputmode="numeric"
                                 aria-describedby="size-help" />
                         </div>
+                            <input id="size" name="size" type="number" class="input" min="0" inputmode="numeric" />
+                        </div>
+
+                        <div class="filter-submit">
+                            <button type="submit" class="btn btn--primary">
+                                Show matching facilities
+                            </button>
+                        </div>
+
                     </div>
 
                     <!-- Additional filters can be added here:
@@ -75,11 +97,14 @@
            Lead Potential (low (or already have turf), medium, high),
            Distance/region
            etc. -->
-
+                    
                     <div class="filter-actions">
                         <button type="submit" class="btn btn--primary">Show matching facilities
                         </button>
                         <button type="reset" class="btn btn--secondary">Clear filters</button>
+                        <button type="reset" class="btn btn--ghost">
+                            Clear filters
+                        </button>
                     </div>
 
                 </fieldset>
