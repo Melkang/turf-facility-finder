@@ -104,6 +104,47 @@
 ================================================== */
 @layer base {
 	/* base/global styles */
+	/* Fonts */
+	@font-face {
+		font-family: "Inter";
+		src: url("assets/fonts/Inter-Regular-400.woff2") format("woff2");
+		font-weight: 400;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Inter";
+		src: url("assets/fonts/Inter-SemiBold-500.woff2") format("woff2");
+		font-weight: 500;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Manrope";
+		src: url("assets/fonts/Manrope-Regular-400.woff2") format("woff2");
+		font-weight: 400;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Manrope";
+		src: url("assets/fonts/Manrope-SemiBold-500.woff2") format("woff2");
+		font-weight: 500;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Manrope";
+		src: url("assets/fonts/Manrope-Bold-700.woff2") format("woff2");
+		font-weight: 700;
+		font-style: normal;
+		font-display: swap;
+	}
+
 	:root {
 		/* 
        CORE PALETTE
@@ -146,45 +187,6 @@
 		--clr-gray-900: hsl(222 47% 11%);
 
 		/* Typography */
-		@font-face {
-			font-family: "Inter";
-			src: url("assets/fonts/Inter-Regular-400.woff2") format("woff2");
-			font-weight: 400;
-			font-style: normal;
-			font-display: swap;
-		}
-
-		@font-face {
-			font-family: "Inter";
-			src: url("assets/fonts/Inter-SemiBold-500.woff2") format("woff2");
-			font-weight: 500;
-			font-style: normal;
-			font-display: swap;
-		}
-
-		@font-face {
-			font-family: "Manrope";
-			src: url("assets/fonts/Manrope-Regular-400.woff2") format("woff2");
-			font-weight: 400;
-			font-style: normal;
-			font-display: swap;
-		}
-
-		@font-face {
-			font-family: "Manrope";
-			src: url("assets/fonts/Manrope-SemiBold-500.woff2") format("woff2");
-			font-weight: 500;
-			font-style: normal;
-			font-display: swap;
-		}
-
-		@font-face {
-			font-family: "Manrope";
-			src: url("assets/fonts/Manrope-Bold-700.woff2") format("woff2");
-			font-weight: 700;
-			font-style: normal;
-			font-display: swap;
-		}
 
 		--ff-heading: "Manrope", system-ui, sans-serif;
 		--ff-body: "Inter", system-ui, sans-serif;
@@ -548,7 +550,7 @@
 			to top,
 			hsl(222 47% 11% / 0.42) 0%,
 			hsl(222 47% 11% / 0.25) 40%,
-			hsl(222 47% 11% / 0.10) 75%,
+			hsl(222 47% 11% / 0.1) 75%,
 			transparent 100%
 		);
 		pointer-events: none;
@@ -571,7 +573,7 @@
 
 		padding-block: var(--space-6);
 	}
-	
+
 	.hero-content p {
 		color: var(--text-high-contrast);
 		font-size: var(--font-size-md);
