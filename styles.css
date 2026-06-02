@@ -526,7 +526,7 @@
 		display: grid;
 		position: relative;
 		isolation: isolate;
-		min-block-size: 75vh;
+		min-block-size: clamp(28rem, 70vh, 42rem);
 		align-items: end;
 	}
 
@@ -546,9 +546,9 @@
 		inset: 0;
 		background: linear-gradient(
 			to top,
-			hsl(222 47% 11% / 0.82) 0%,
-			hsl(222 47% 11% / 0.55) 40%,
-			hsl(222 47% 11% / 0.15) 75%,
+			hsl(222 47% 11% / 0.42) 0%,
+			hsl(222 47% 11% / 0.25) 40%,
+			hsl(222 47% 11% / 0.10) 75%,
 			transparent 100%
 		);
 		pointer-events: none;
@@ -558,7 +558,7 @@
 		inline-size: 100%;
 		block-size: 100%;
 		object-fit: cover;
-		object-position: center bottom;
+		object-position: center 30%;
 	}
 
 	.hero-content {
@@ -567,12 +567,17 @@
 
 		display: grid;
 		gap: var(--space-3);
+		max-inline-size: 60rem;
 
 		padding-block: var(--space-6);
 	}
-
-	.hero-content h1,
+	
 	.hero-content p {
+		color: var(--text-high-contrast);
+		font-size: var(--font-size-md);
+	}
+
+	.hero-content h1 {
 		color: var(--text-high-contrast);
 	}
 
