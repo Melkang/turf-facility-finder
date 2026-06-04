@@ -15,17 +15,24 @@
     <!-- Header -->
     <header class="site-header">
         <!-- Nav contains only the brand/logo at left; no right-side actions are included yet. Maybe About page later? -->
-        <!-- <nav class="site-nav" aria-label="Primary"> -->
-        <!-- <h1 class="site-title"> -->
-        <!-- <a href="/" class="site-logo">Turf Facility Finder</a> -->
-        <!-- </h1> -->
-        <!-- </nav> -->
-        <div class="site-branding container">
-            <a href="/" class="site-logo">
-                <img src="assets/images/turf-facility-finder-logo.svg" alt="Turf Facility Finder" width="220"
-                    height="55">
-            </a>
+        <div class="container">
+            <div class="site-branding">
+                <a href="/" class="site-logo">
+                    <img src="assets/images/turf-facility-finder-logo.svg" alt="Turf Facility Finder" width="220"
+                        height="55">
+                </a>
+                <nav class="site-nav" aria-label="Primary">
+                    <a href="saved-leads.html" class="saved-leads-link">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                        </svg>
+                        Saved Leads
+                    </a>
+                </nav>
+            </div>
         </div>
+
     </header>
 
     <main id="main-content">
@@ -91,7 +98,7 @@
            Lead Potential (low (or already have turf), medium, high),
            Distance/region
            etc. -->
-                    
+
                     <div class="filter-actions">
                         <button type="reset" class="btn btn--ghost">
                             Clear filters

@@ -147,7 +147,6 @@
 	}
 
 	:root {
-
 		/* Safe area support spacing- to avoid notches/dynamic island/camera notches */
 		--safe-top: env(safe-area-inset-top, 0px);
 		--safe-right: env(safe-area-inset-right, 0px);
@@ -285,7 +284,7 @@
 		--space-6: 3rem;
 
 		/* Width */
-		--wrapper-max: 72rem;
+		--wrapper-max: 90rem;
 	}
 }
 
@@ -515,9 +514,34 @@
 		padding-top: max(var(--space-3), var(--safe-top));
 	}
 
+	.site-nav {
+		margin-inline-start: auto;
+	}
+
 	.site-branding {
-		flex: 1;
-		min-inline-size: 0;
+		display: flex;
+		align-items: center;
+		gap: var(--space-4);
+	}
+
+	.saved-leads-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+
+		color: var(--text-main);
+		font-size: var(--font-size-sm);
+		font-weight: 500;
+	}
+
+	.saved-leads-link:hover {
+		color: var(--text-brand);
+	}
+
+	.saved-leads-link svg {
+		inline-size: 0.875rem;
+		block-size: 0.875rem;
+		flex-shrink: 0;
 	}
 
 	/* ----- site-footer ----- */
