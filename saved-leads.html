@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0" />
+    <title>Saved Leads — Turf Facility Finder</title>
+    <meta name="description" content="Review and print your saved facility leads." />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="container">
+            <div class="site-branding">
+                <a href="index.html" class="site-logo">
+                    <img src="assets/images/turf-facility-finder-logo.svg" alt="Turf Facility Finder" width="220"
+                        height="55">
+                </a>
+            </div>
+            <nav class="site-nav" aria-label="Primary">
+                <a href="index.html" class="saved-leads-link">
+                    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    Back to Search
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="saved-leads section container" aria-labelledby="saved-leads-title">
+            <div class="saved-leads-header">
+                <div class="saved-leads-header__intro">
+                    <h1 id="saved-leads-title">Saved leads</h1>
+                    <p class="saved-leads-summary" aria-live="polite">2 saved facilities</p>
+                </div>
+                <button type="button" class="btn btn--secondary" onclick="window.print()">
+                    Print shortlist
+                </button>
+            </div>
+
+            <ul role="list" class="results-list saved-leads-list">
+                <li class="results-item">
+                    <article class="facility-card">
+                        <header class="facility-card--header">
+                            <div class="facility-card--title-group">
+                                <div class="facility-card--leading-visual">
+                                    <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
+                                </div>
+                                <div class="facility-card--heading">
+                                    <h2 class="facility-card--title">Riverbend Equine Center</h2>
+                                    <ul class="facility-card--badges" role="list">
+                                        <li class="badge badge-opportunity-high">High Opportunity</li>
+                                        <li class="badge badge-surface-grass">Grass</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </header>
+                        <dl class="facility-card--info-container">
+                            <div class="facility-card--info-item">
+                                <dt class="visually-hidden">Location</dt>
+                                <dd>Lexington, KY</dd>
+                            </div>
+                            <div class="facility-card--info-item">
+                                <dt class="visually-hidden">Size</dt>
+                                <dd>42,000 sq ft</dd>
+                            </div>
+                            <div class="facility-card--info-item">
+                                <dt class="visually-hidden">Facility Type</dt>
+                                <dd>Equine Training Center</dd>
+                            </div>
+                            <div class="facility-card--info-item">
+                                <dt class="visually-hidden">Contact</dt>
+                                <dd>(555) 123-4567</dd>
+                            </div>
+                        </dl>
+                    </article>
+                </li>
+
+                <li class="results-item">
+                    <article class="facility-card">
+                        <header class="facility-card--header">
+                            <div class="facility-card--title-group">
+                                <div class="facility-card--leading-visual">
+                                    <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
+                                </div>
+                                <div class="facility-card--heading">
+                                    <h2 class="facility-card--title">Pine Crest Animal Arena</h2>
+                                    <ul class="facility-card--badges" role="list">
+                                        <li class="badge badge-opportunity-medium">Medium Opportunity</li>
+                                        <li class="badge badge-surface-mixed">Mixed</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </header>
+                        <dl class="facility-card--info-container">
+                            <div class="facility-card--info-item">
+                                <dt class="visually-hidden">Location</dt>
+                                <dd>Ocala, FL</dd>
+                            </div>
+                            <div class="facility-card--info-item">
+                                <dt class="visually-hidden">Size</dt>
+                                <dd>31,500 sq ft</dd>
+                            </div>
+                            <div class="facility-card--info-item">
+                                <dt class="visually-hidden">Facility Type</dt>
+                                <dd>Animal Arena</dd>
+                            </div>
+                            <div class="facility-card--info-item">
+                                <dt class="visually-hidden">Contact</dt>
+                                <dd>(555) 234-5678</dd>
+                            </div>
+                        </dl>
+                    </article>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Turf Facility Finder</p>
+    </footer>
+</body>
+
+</html>
