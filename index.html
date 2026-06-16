@@ -111,14 +111,21 @@
 
         <section id="results" class="results section container" aria-labelledby="results-title">
             <div class="results-header">
-                <div class="results-header__intro">
-                    <h2 id="results-title">Facility results</h2>
-                    <p class="results-count" aria-live="polite">4 facilities match your filters</p>
+                <div class="results-header--intro">
+                    <h2 id="results-title" class="results-title">Facility results</h2>
+                    <div class="results-count" aria-live="polite">
+                        <p class="results-count--compact">
+                            <span>4</span> results
+                            </p>
+                         
+                        <p class="results-count--full"><span>4</span> facilities match your filters
+                        </p>
+                    </div>
                 </div>
-                <div class="results-header__sort">
+                <div class="results-header--sort">
                     <label for="sort-by" class="results-sort-label">Sort by:</label>
-                    <select id="sort-by" name="sortBy" class="results-sort-select">
-                        <option value="relevant" selected>Most Relevant</option>
+                    <select id="sort-by" name="sortBy" class="results-sort-select" aria-label="Sort results">
+                        <option value="relevant" selected>Sort</option>
                         <option value="size-desc">Size (largest first)</option>
                         <option value="size-asc">Size (smallest first)</option>
                         <option value="name-asc">Name (A–Z)</option>
@@ -135,40 +142,30 @@
                 <li class="results-item">
                     <article class="facility-card">
 
+                        <div class="facility-card--leading-visual">
+                            <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
+                        </div>
+
                         <header class="facility-card--header">
-                            <div class="facility-card--title-group">
-
-                                <div class="facility-card--leading-visual">
-                                    <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
-                                </div>
-
-                                <div class="facility-card--heading">
-                                    <h3 class="facility-card--title">
-                                        Riverbend Equine Center
-                                    </h3>
-
-                                    <ul class="facility-card--badges" role="list">
-                                        <li class="badge badge-opportunity-high">
-                                            High Opportunity
-                                        </li>
-                                        <li class="badge badge-surface-grass">
-                                            Grass
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-
-                            <button type="button"
-                                class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
-                                aria-label="Save Riverbend Equine Center to shortlist">
-                                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                                </svg>
-                            </button>
+                            <h3 class="facility-card--title">
+                                Riverbend Equine Center
+                            </h3>
                         </header>
+
+                        <button type="button"
+                            class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
+                            aria-label="Save Riverbend Equine Center to shortlist">
+                            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                            </svg>
+                        </button>
+
+                        <ul class="facility-card--badges" role="list">
+                            <li class="badge badge-opportunity-high">High</li>
+                            <li class="badge badge-surface-grass">Grass</li>
+                        </ul>
 
                         <dl class="facility-card--info-container">
                             <div class="facility-card--info-item">
@@ -194,7 +191,7 @@
                                     42,000 sq ft
                                 </dd>
                             </div>
-                            <div class="facility-card--info-item">
+                            <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Facility Type</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -205,7 +202,7 @@
                                     Equine Training Center
                                 </dd>
                             </div>
-                            <div class="facility-card--info-item">
+                            <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Contact</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -226,40 +223,30 @@
                 <li class="results-item">
                     <article class="facility-card">
 
+                        <div class="facility-card--leading-visual">
+                            <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
+                        </div>
+
                         <header class="facility-card--header">
-                            <div class="facility-card--title-group">
-
-                                <div class="facility-card--leading-visual">
-                                    <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
-                                </div>
-
-                                <div class="facility-card--heading">
-                                    <h3 class="facility-card--title">
-                                        Pine Crest Animal Arena
-                                    </h3>
-
-                                    <ul class="facility-card--badges" role="list">
-                                        <li class="badge badge-opportunity-medium">
-                                            Medium Opportunity
-                                        </li>
-                                        <li class="badge badge-surface-mixed">
-                                            Mixed
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-
-                            <button type="button"
-                                class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
-                                aria-label="Save Pine Crest Animal Arena to shortlist">
-                                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                                </svg>
-                            </button>
+                            <h3 class="facility-card--title">
+                                Pine Crest Animal Arena
+                            </h3>
                         </header>
+
+                        <button type="button"
+                            class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
+                            aria-label="Save Pine Crest Animal Arena to shortlist">
+                            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                            </svg>
+                        </button>
+
+                        <ul class="facility-card--badges" role="list">
+                            <li class="badge badge-opportunity-medium">Medium</li>
+                            <li class="badge badge-surface-mixed">Mixed</li>
+                        </ul>
 
                         <dl class="facility-card--info-container">
                             <div class="facility-card--info-item">
@@ -285,7 +272,7 @@
                                     31,500 sq ft
                                 </dd>
                             </div>
-                            <div class="facility-card--info-item">
+                            <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Facility Type</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -296,7 +283,7 @@
                                     Animal Arena
                                 </dd>
                             </div>
-                            <div class="facility-card--info-item">
+                            <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Contact</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -317,40 +304,30 @@
                 <li class="results-item">
                     <article class="facility-card">
 
+                        <div class="facility-card--leading-visual">
+                            <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
+                        </div>
+
                         <header class="facility-card--header">
-                            <div class="facility-card--title-group">
-
-                                <div class="facility-card--leading-visual">
-                                    <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
-                                </div>
-
-                                <div class="facility-card--heading">
-                                    <h3 class="facility-card--title">
-                                        North Valley Training Grounds
-                                    </h3>
-
-                                    <ul class="facility-card--badges" role="list">
-                                        <li class="badge badge-opportunity-low">
-                                            Low Opportunity
-                                        </li>
-                                        <li class="badge badge-surface-turf">
-                                            Turf
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-
-                            <button type="button"
-                                class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
-                                aria-label="Save North Valley Training Grounds to shortlist">
-                                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                                </svg>
-                            </button>
+                            <h3 class="facility-card--title">
+                                North Valley Training Grounds
+                            </h3>
                         </header>
+
+                        <button type="button"
+                            class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
+                            aria-label="Save North Valley Training Grounds to shortlist">
+                            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                            </svg>
+                        </button>
+
+                        <ul class="facility-card--badges" role="list">
+                            <li class="badge badge-opportunity-low">Low</li>
+                            <li class="badge badge-surface-turf">Turf</li>
+                        </ul>
 
                         <dl class="facility-card--info-container">
                             <div class="facility-card--info-item">
@@ -376,7 +353,7 @@
                                     27,800 sq ft
                                 </dd>
                             </div>
-                            <div class="facility-card--info-item">
+                            <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Facility Type</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -387,7 +364,7 @@
                                     Training Grounds
                                 </dd>
                             </div>
-                            <div class="facility-card--info-item">
+                            <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Contact</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -408,40 +385,30 @@
                 <li class="results-item">
                     <article class="facility-card">
 
+                        <div class="facility-card--leading-visual">
+                            <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
+                        </div>
+
                         <header class="facility-card--header">
-                            <div class="facility-card--title-group">
-
-                                <div class="facility-card--leading-visual">
-                                    <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
-                                </div>
-
-                                <div class="facility-card--heading">
-                                    <h3 class="facility-card--title">
-                                        Blue Ridge Canine Complex
-                                    </h3>
-
-                                    <ul class="facility-card--badges" role="list">
-                                        <li class="badge badge-opportunity-high">
-                                            High Opportunity
-                                        </li>
-                                        <li class="badge badge-surface-grass">
-                                            Grass
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-
-                            <button type="button"
-                                class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
-                                aria-label="Save Blue Ridge Canine Complex to shortlist">
-                                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                                </svg>
-                            </button>
+                            <h3 class="facility-card--title">
+                                Blue Ridge Canine Complex
+                            </h3>
                         </header>
+
+                        <button type="button"
+                            class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
+                            aria-label="Save Blue Ridge Canine Complex to shortlist">
+                            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                            </svg>
+                        </button>
+
+                        <ul class="facility-card--badges" role="list">
+                            <li class="badge badge-opportunity-high">High</li>
+                            <li class="badge badge-surface-grass">Grass</li>
+                        </ul>
 
                         <dl class="facility-card--info-container">
                             <div class="facility-card--info-item">
@@ -467,7 +434,7 @@
                                     19,400 sq ft
                                 </dd>
                             </div>
-                            <div class="facility-card--info-item">
+                            <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Facility Type</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -478,7 +445,7 @@
                                     Canine Sports Complex
                                 </dd>
                             </div>
-                            <div class="facility-card--info-item">
+                            <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Contact</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
