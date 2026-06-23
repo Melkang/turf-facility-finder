@@ -283,6 +283,9 @@
 		--space-5: 2rem;
 		--space-6: 3rem;
 
+		/* font flow spacing */
+		--prose-flow: 1em;
+
 		/* Width */
 		--wrapper-max: 90rem;
 	}
@@ -706,62 +709,82 @@
 	/* ----- hero ----- */
 
 	.hero {
-		display: grid;
-		position: relative;
 		isolation: isolate;
-		min-block-size: clamp(28rem, 70vh, 42rem);
-		align-items: end;
+		min-block-size: clamp(24rem, 40vh, 42rem);
 	}
 
-	.hero-image-container,
-	.hero-content {
-		grid-area: 1 / 1;
-	}
+	/* @media (width >= 48rem) {
+		.hero {
+			min-block-size: clamp(32rem, 70vh, 42rem);
+		}
+	} */
 
 	.hero-image-container {
-		position: absolute;
-		inset: 0;
+		display: grid;
+	}
+
+	.hero-image-container img,
+	.hero-image-container::after {
+		grid-column: 1;
+		grid-row: 1;
 	}
 
 	.hero-image-container::after {
 		content: "";
-		position: absolute;
-		inset: 0;
+		z-index: 1;
 		background: linear-gradient(
-			to top,
-			hsl(222 47% 11% / 0.42) 0%,
-			hsl(222 47% 11% / 0.25) 40%,
-			hsl(222 47% 11% / 0.1) 75%,
-			transparent 100%
+			to right,
+			rgb(0 0 0 / 0.75) 0%,
+			rgb(0 0 0 / 0.55) 60%,
+			rgb(0 0 0 / 0.25) 100%
 		);
 		pointer-events: none;
 	}
 
 	.hero-image-container img {
 		inline-size: 100%;
-		block-size: 100%;
-		min-block-size: clamp(22rem, 55vh, 36rem);
-		aspect-ratio: 21 / 9;
+		block-size: clamp(24rem, 50vh, 40rem);
+		/* min-block-size: 24rem;
+		aspect-ratio: 21 / 9; */
 		object-fit: cover;
-		object-position: center 40%;
+		object-position: center 20%;
+		@media (width >= 48rem) {
+			object-position: bottom 20%;
+		}
 	}
 
 	.hero-content {
-		position: relative;
-		z-index: 1;
+		z-index: 2;
 		display: grid;
-		gap: var(--space-3);
-		max-inline-size: 40rem;
-		padding-block: var(--space-6);
+		max-inline-size: 32rem;
+		align-self: center;
+		gap: 1.25rem;
+		padding-block: var(--space-5);
+		text-shadow: 0 2px 4px rgb(0 0 0 / 0.4);
+	}
+
+	@media (width >= 48rem) {
+		.hero-content {
+			padding-block-end: var(--space-6);
+			max-inline-size: 40rem;
+			font-size: clamp(var(--fs-700), 5vw, var(--fs-900));
+		}
 	}
 
 	.hero-content p {
 		color: var(--text-high-contrast);
-		font-size: var(--font-size-md);
+		/* font-size: var(--font-size-md); */
+		font-weight: 600;
+		font-size: 1.125rem;
+		line-height: 1.5;
+		max-inline-size: 30ch;
+		opacity: 0.95;
 	}
 
 	.hero-content h1 {
 		color: var(--text-high-contrast);
+		font-size: 2rem;
+		line-height: 1;
 	}
 
 	/*----------- Form Field ------------*/
@@ -778,7 +801,7 @@
 		display: grid;
 		gap: var(--space-3);
 
-		margin-block-start: clamp(-6rem, -12vw, -4rem);
+		margin-block-start: -3rem;
 		padding: var(--space-4);
 
 		background-color: var(--background-surface);
@@ -786,6 +809,12 @@
 		border-radius: var(--radius-lg);
 
 		box-shadow: var(--shadow-md);
+	}
+
+	@media (width >= 48rem) {
+		.filters {
+			margin-block-start: clamp(-6rem, -12vw, -4rem);
+		}
 	}
 
 	.filters.section {
@@ -1268,6 +1297,28 @@
 		clip-path: inset(50%);
 		white-space: nowrap;
 	}
+
+	/* stacking content on top, like hero. Then can use z-index for layering in grid */
+	.pile {
+		display: grid;
+		grid-template-areas: "pile";
+		/* place-items: center; */
+
+		> * {
+			grid-area: pile;
+		}
+	}
+
+	/* labotomized owl pattern will apply the margin to the top of each element based on text size with 1em unless defined with custom variable */
+	.prose > * + * {
+		margin-block-start: var(--prose-flow, 1em);
+	}
+
+	/* .stack {
+		display: flex;
+		flex-direction: column;
+		gap: var(--stack-gap, 1rem);
+	} */
 }
 
 /* ==================================================
