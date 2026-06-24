@@ -592,7 +592,7 @@
 
 	.filter-actions {
 		display: flex;
-		justify-content: flex-end;
+		justify-content: center;
 		align-items: center;
 	}
 
@@ -612,6 +612,10 @@
 			grid-template-columns: 1fr auto;
 			column-gap: var(--space-3);
 			align-items: end;
+		}
+
+		.filter-actions {
+			justify-content: flex-end;
 		}
 
 		.filter-grid {
@@ -809,6 +813,10 @@
 		border-radius: var(--radius-lg);
 
 		box-shadow: var(--shadow-md);
+	}
+
+	.filter-submit .btn {
+		min-width: 100%;
 	}
 
 	@media (width >= 48rem) {
@@ -1147,8 +1155,9 @@
 	}
 
 	.btn--ghost:hover:not(:disabled) {
-		background-color: var(--clr-gray-100);
+		background-color: var(--clr-gray-200);
 		color: var(--text-main);
+		min-width: 100%;
 	}
 
 	.btn--ghost-bordered {
