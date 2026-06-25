@@ -23,8 +23,8 @@
             </div>
             <nav class="site-nav" aria-label="Primary">
                 <a href="saved-leads.html" class="saved-leads-link">
-                    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                     </svg>
                     Saved Leads
@@ -38,18 +38,19 @@
         <section class="hero pile">
             <!-- Hero Image -->
             <div class="hero-image-container">
-                <img src="assets/images/hero-image-turf-dog-park.webp" alt="Panned horizontal view of an outdoor dog facility with close up of turf grass blades and black metal fence in background with wood accents"
+                <img src="assets/images/hero-image-turf-dog-park.webp"
+                    alt="Panned horizontal view of an outdoor dog facility with close up of turf grass blades and black metal fence in background with wood accents"
                     width="1600" height="900">
             </div>
-                <!-- Hero Content -->
-                <div class="hero-content container">
-                    <h1 id="hero-title">Search animal facilities by turf opportunity
-                    </h1>
-                    <p>
-                        Filter by location, surface type, and size to identify your next best leads.
-                    </p>
-                </div>
-            
+            <!-- Hero Content -->
+            <div class="hero-content container">
+                <h1 id="hero-title">Search animal facilities by turf opportunity
+                </h1>
+                <p>
+                    Filter by location, surface type, and size to identify your next best leads.
+                </p>
+            </div>
+
         </section>
 
         <!-- Filter Form -->
@@ -62,7 +63,6 @@
                     </legend>
 
                     <div class="filter-grid">
-
                         <div class="form-field">
                             <label for="location">Location</label>
                             <input id="location" name="location" type="text" class="input" autocomplete="address-level2"
@@ -84,12 +84,14 @@
                             <input id="size" name="size" type="number" class="input" min="0" inputmode="numeric" />
                         </div>
 
-                        <div class="filter-submit">
+                        <div class="filter-actions-group">
                             <button type="submit" class="btn btn--primary">
                                 Show matching facilities
                             </button>
+                            <button type="reset" class="btn btn--ghost">
+                                Clear filters
+                            </button>
                         </div>
-
                     </div>
 
                     <!-- Additional filters can be added here:
@@ -97,12 +99,6 @@
            Lead Potential (low (or already have turf), medium, high),
            Distance/region
            etc. -->
-
-                    <div class="filter-actions">
-                        <button type="reset" class="btn btn--ghost">
-                            Clear filters
-                        </button>
-                    </div>
 
                 </fieldset>
             </form>
@@ -113,18 +109,18 @@
         <section id="results" class="results section container" aria-labelledby="results-title">
             <div class="results-header">
                 <div class="results-header--intro">
-                    <h2 id="results-title" class="results-title">Facility results</h2>
+                    <h2 id="results-title" class="results-title visually-hidden">Facility results</h2>
                     <div class="results-count" aria-live="polite">
                         <p class="results-count--compact">
                             <span>4</span> results
-                            </p>
-                         
+                        </p>
+
                         <p class="results-count--full"><span>4</span> facilities match your filters
                         </p>
                     </div>
                 </div>
-                <div class="results-header--sort">
-                    <label for="sort-by" class="results-sort-label">Sort by:</label>
+                <div class="results-header-sort">
+                    <label for="sort-by" class="results-sort-label visually-hidden">Sort by:</label>
                     <select id="sort-by" name="sortBy" class="results-sort-select" aria-label="Sort results">
                         <option value="relevant" selected>Sort</option>
                         <option value="size-desc">Size (largest first)</option>
@@ -157,8 +153,7 @@
                             class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
                             aria-label="Save Riverbend Equine Center to shortlist">
                             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                             </svg>
                         </button>
@@ -238,8 +233,7 @@
                             class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
                             aria-label="Save Pine Crest Animal Arena to shortlist">
                             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                             </svg>
                         </button>
@@ -319,8 +313,7 @@
                             class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
                             aria-label="Save North Valley Training Grounds to shortlist">
                             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                             </svg>
                         </button>
@@ -400,8 +393,7 @@
                             class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
                             aria-label="Save Blue Ridge Canine Complex to shortlist">
                             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                             </svg>
                         </button>
@@ -465,28 +457,28 @@
             </ul>
 
             <nav class="pagination" aria-label="Pagination">
-                <p class="pagination__summary">Showing <span class="pagination__range">1 to 4</span> of <span
-                        class="pagination__total">4</span> results</p>
-                <ul class="pagination__list" role="list">
+                <p class="pagination-summary">Showing <span class="pagination-range">1 to 4</span> of <span
+                        class="pagination-total">4</span> results</p>
+                <ul class="pagination-list" role="list">
                     <li>
-                        <a href="#" class="pagination__link pagination__link--prev" aria-disabled="true"
+                        <a href="#" class="pagination-link pagination-link--prev" aria-disabled="true"
                             tabindex="-1">Previous</a>
                     </li>
                     <li>
-                        <a href="#" class="pagination__link pagination__link--current" aria-current="page"
+                        <a href="#" class="pagination-link pagination-link--current" aria-current="page"
                             aria-label="Page 1, current page">1</a>
                     </li>
                     <li>
-                        <a href="#" class="pagination__link" aria-label="Page 2">2</a>
+                        <a href="#" class="pagination-link" aria-label="Page 2">2</a>
                     </li>
                     <li>
-                        <a href="#" class="pagination__link" aria-label="Page 3">3</a>
+                        <a href="#" class="pagination-link" aria-label="Page 3">3</a>
                     </li>
                     <li>
-                        <span class="pagination__ellipsis" aria-hidden="true">…</span>
+                        <span class="pagination-ellipsis" aria-hidden="true">…</span>
                     </li>
                     <li>
-                        <a href="#" class="pagination__link pagination__link--next">Next</a>
+                        <a href="#" class="pagination-link pagination-link--next">Next</a>
                     </li>
                 </ul>
             </nav>
