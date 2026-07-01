@@ -927,6 +927,17 @@
 		block-size: 1.125rem;
 	}
 
+	/* Saved state — driven by aria-pressed so no extra JS class needed */
+	.facility-card--save-button[aria-pressed="true"] {
+		color: var(--clr-brand-500);
+		border-color: var(--clr-brand-500);
+	}
+
+	.facility-card--save-button[aria-pressed="true"] svg {
+		fill: var(--clr-brand-500);
+		color: var(--clr-brand-500);
+	}
+
 	.facility-card--badges {
 		grid-area: badges;
 		display: flex;
@@ -1175,18 +1186,53 @@
 		padding-inline: var(--space-2);
 	}
 
-	/* Empty State */
+	/* Results section background */
 	.results {
 		background-color: var(--background-surface);
 	}
 
-	.results-message {
-		padding: var(--space-5);
+	/* ----- results state panels (loading / empty / error) ----- */
+	/* JS toggles the [hidden] attribute on each panel.
+	   Only one panel is visible at a time alongside data-state on #results. */
+
+	.results-state {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--space-3);
+		padding: var(--space-6) var(--space-5);
 		background: var(--background-surface);
 		border: 1px dashed var(--border-color);
 		border-radius: var(--radius-md);
 		text-align: center;
 		color: var(--text-muted);
+		margin-block-end: var(--space-4);
+	}
+
+	.results-state p {
+		margin: 0;
+		max-inline-size: 40ch;
+	}
+
+	/* Loading spinner */
+	.results-state--spinner {
+		display: block;
+		inline-size: 2rem;
+		block-size: 2rem;
+		border: 3px solid var(--clr-gray-200);
+		border-block-start-color: var(--clr-brand-500);
+		border-radius: 50%;
+		animation: results-spin 0.7s linear infinite;
+	}
+
+	@keyframes results-spin {
+		to { transform: rotate(360deg); }
+	}
+
+	.results-state--error .btn--ghost {
+		font-size: var(--font-size-sm);
+		min-block-size: auto;
+		padding-block: 0.25rem;
 	}
 
 	/* ----- pagination ----- */
@@ -1280,7 +1326,7 @@
 		margin-block-end: var(--space-4);
 	}
 
-	.saved-leads-header__intro {
+	.saved-leads-header--intro {
 		display: grid;
 		gap: var(--space-1);
 	}

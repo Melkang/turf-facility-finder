@@ -57,7 +57,7 @@
 
         <section id="filters" class="filters section container" aria-labelledby="filters-title">
             <h2 id="filters-title">Filter facilities</h2>
-            <form action="#" method="get">
+            <form id="search-form" action="#" method="get">
                 <fieldset>
                     <legend class="visually-hidden">Search Filters
                     </legend>
@@ -75,7 +75,7 @@
                                 <option value="">Any surface</option>
                                 <option value="grass">Grass</option>
                                 <option value="turf">Turf</option>
-                                <option value="other">Mixed</option>
+                                <option value="mixed">Mixed</option>
                             </select>
                         </div>
 
@@ -106,16 +106,16 @@
 
         <!-- Results  -->
 
-        <section id="results" class="results section container" aria-labelledby="results-title">
+        <section id="results" class="results section container" aria-labelledby="results-title" data-state="idle">
             <div class="results-header">
                 <div class="results-header--intro">
                     <h2 id="results-title" class="results-title visually-hidden">Facility results</h2>
-                    <div class="results-count" aria-live="polite">
+                    <div class="results-count" aria-live="polite" aria-atomic="true">
                         <p class="results-count--compact">
-                            <span>4</span> results
+                            <span data-results-count>4</span> results
                         </p>
 
-                        <p class="results-count--full"><span>4</span> facilities match your filters
+                        <p class="results-count--full"><span data-results-count>4</span> facilities match your filters
                         </p>
                     </div>
                 </div>
@@ -129,15 +129,30 @@
                     </select>
                 </div>
             </div>
-            <!-- Show message if no facilities match filters -->
-            <!-- <p class="results-message">No facilities match your filters</p> -->
+            <!-- UI state panels — JS toggles [hidden] on each; only one shown at a time -->
+            <div class="results-state results-state--loading" hidden role="status">
+                <span class="results-state--spinner" aria-hidden="true"></span>
+                <p>Loading facilities…</p>
+            </div>
 
-            <ul role="list" class="results-list">
+            <div class="results-state results-state--empty" hidden>
+                <p>No facilities match your filters. Try adjusting your location or surface type.</p>
+            </div>
+
+            <div class="results-state results-state--error" hidden>
+                <p>Something went wrong loading facilities. <button type="button" class="btn btn--ghost" data-action="retry">Try again</button></p>
+            </div>
+
+            <ul id="results-list" role="list" class="results-list">
                 <!-- RESULTS LIST -->
 
                 <!-- CARD 1 -->
                 <li class="results-item">
-                    <article class="facility-card">
+                    <article class="facility-card"
+                        data-facility-id="riverbend-equine-center"
+                        data-surface="grass"
+                        data-opportunity="high"
+                        data-size-sqft="42000">
 
                         <div class="facility-card--leading-visual">
                             <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
@@ -151,7 +166,10 @@
 
                         <button type="button"
                             class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
-                            aria-label="Save Riverbend Equine Center to shortlist">
+                            aria-label="Save Riverbend Equine Center to shortlist"
+                            aria-pressed="false"
+                            data-action="save"
+                            data-facility-id="riverbend-equine-center">
                             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
@@ -217,7 +235,11 @@
 
                 <!-- CARD 2 -->
                 <li class="results-item">
-                    <article class="facility-card">
+                    <article class="facility-card"
+                        data-facility-id="pine-crest-animal-arena"
+                        data-surface="mixed"
+                        data-opportunity="medium"
+                        data-size-sqft="31500">
 
                         <div class="facility-card--leading-visual">
                             <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
@@ -231,7 +253,10 @@
 
                         <button type="button"
                             class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
-                            aria-label="Save Pine Crest Animal Arena to shortlist">
+                            aria-label="Save Pine Crest Animal Arena to shortlist"
+                            aria-pressed="false"
+                            data-action="save"
+                            data-facility-id="pine-crest-animal-arena">
                             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
@@ -297,7 +322,11 @@
 
                 <!-- CARD 3 -->
                 <li class="results-item">
-                    <article class="facility-card">
+                    <article class="facility-card"
+                        data-facility-id="north-valley-training-grounds"
+                        data-surface="turf"
+                        data-opportunity="low"
+                        data-size-sqft="27800">
 
                         <div class="facility-card--leading-visual">
                             <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
@@ -311,7 +340,10 @@
 
                         <button type="button"
                             class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
-                            aria-label="Save North Valley Training Grounds to shortlist">
+                            aria-label="Save North Valley Training Grounds to shortlist"
+                            aria-pressed="false"
+                            data-action="save"
+                            data-facility-id="north-valley-training-grounds">
                             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
@@ -377,7 +409,11 @@
 
                 <!-- CARD 4 -->
                 <li class="results-item">
-                    <article class="facility-card">
+                    <article class="facility-card"
+                        data-facility-id="blue-ridge-canine-complex"
+                        data-surface="grass"
+                        data-opportunity="high"
+                        data-size-sqft="19400">
 
                         <div class="facility-card--leading-visual">
                             <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
@@ -391,7 +427,10 @@
 
                         <button type="button"
                             class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
-                            aria-label="Save Blue Ridge Canine Complex to shortlist">
+                            aria-label="Save Blue Ridge Canine Complex to shortlist"
+                            aria-pressed="false"
+                            data-action="save"
+                            data-facility-id="blue-ridge-canine-complex">
                             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
@@ -456,29 +495,29 @@
                 </li>
             </ul>
 
-            <nav class="pagination" aria-label="Pagination">
-                <p class="pagination-summary">Showing <span class="pagination-range">1 to 4</span> of <span
-                        class="pagination-total">4</span> results</p>
+            <nav class="pagination" aria-label="Pagination" data-current-page="1" hidden>
+                <p class="pagination-summary">Showing <span class="pagination-range" data-pagination-range>1 to 4</span> of <span
+                        class="pagination-total" data-pagination-total>4</span> results</p>
                 <ul class="pagination-list" role="list">
                     <li>
-                        <a href="#" class="pagination-link pagination-link--prev" aria-disabled="true"
-                            tabindex="-1">Previous</a>
+                        <a href="#" class="pagination-link pagination-link--prev" rel="prev" aria-disabled="true"
+                            tabindex="-1" data-page="prev">Previous</a>
                     </li>
                     <li>
                         <a href="#" class="pagination-link pagination-link--current" aria-current="page"
-                            aria-label="Page 1, current page">1</a>
+                            aria-label="Page 1, current page" data-page="1">1</a>
                     </li>
                     <li>
-                        <a href="#" class="pagination-link" aria-label="Page 2">2</a>
+                        <a href="#" class="pagination-link" aria-label="Page 2" data-page="2">2</a>
                     </li>
                     <li>
-                        <a href="#" class="pagination-link" aria-label="Page 3">3</a>
+                        <a href="#" class="pagination-link" aria-label="Page 3" data-page="3">3</a>
                     </li>
                     <li>
                         <span class="pagination-ellipsis" aria-hidden="true">…</span>
                     </li>
                     <li>
-                        <a href="#" class="pagination-link pagination-link--next">Next</a>
+                        <a href="#" class="pagination-link pagination-link--next" rel="next" data-page="next">Next</a>
                     </li>
                 </ul>
             </nav>
