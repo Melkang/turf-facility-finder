@@ -36,24 +36,45 @@
     <main id="main-content">
         <section class="saved-leads section container" aria-labelledby="saved-leads-title">
             <div class="saved-leads-header">
-                <div class="saved-leads-header__intro">
+                <div class="saved-leads-header--intro">
                     <h1 id="saved-leads-title">Saved leads</h1>
-                    <p class="saved-leads-summary" aria-live="polite">2 saved facilities</p>
+                    <!-- aria-atomic="true" ensures the whole sentence is read as one unit -->
+                    <p class="saved-leads-summary" aria-live="polite" aria-atomic="true"><span data-saved-count>2</span> saved facilities</p>
                 </div>
-                <button type="button" class="btn btn--secondary" onclick="window.print()">
+                <button id="saved-leads-print-btn" type="button" class="btn btn--secondary" onclick="window.print()">
                     Print shortlist
                 </button>
             </div>
 
-            <ul role="list" class="results-list saved-leads-list">
+            <!-- Empty state — shown by JS when saved list is empty -->
+            <div class="results-state results-state--empty" hidden>
+                <p>No saved leads yet. Search for facilities and save your best prospects.</p>
+            </div>
+
+            <ul id="saved-leads-list" role="list" class="results-list saved-leads-list">
                 <li class="results-item">
-                    <article class="facility-card">
+                    <article class="facility-card"
+                        data-facility-id="riverbend-equine-center"
+                        data-surface="grass"
+                        data-opportunity="high"
+                        data-size-sqft="42000">
                         <div class="facility-card--leading-visual">
                             <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
                         </div>
                         <header class="facility-card--header">
                             <h2 class="facility-card--title">Riverbend Equine Center</h2>
                         </header>
+                        <button type="button"
+                            class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
+                            aria-label="Remove Riverbend Equine Center from shortlist"
+                            aria-pressed="true"
+                            data-action="remove"
+                            data-facility-id="riverbend-equine-center">
+                            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                            </svg>
+                        </button>
                         <ul class="facility-card--badges" role="list">
                             <li class="badge badge-opportunity-high">High</li>
                             <li class="badge badge-surface-grass">Grass</li>
@@ -61,32 +82,77 @@
                         <dl class="facility-card--info-container">
                             <div class="facility-card--info-item">
                                 <dt class="visually-hidden">Location</dt>
-                                <dd>Lexington, KY</dd>
+                                <dd>
+                                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                        <circle cx="12" cy="10" r="3" />
+                                    </svg>
+                                    Lexington, KY
+                                </dd>
                             </div>
                             <div class="facility-card--info-item">
                                 <dt class="visually-hidden">Size</dt>
-                                <dd>42,000 sq ft</dd>
+                                <dd>
+                                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    </svg>
+                                    42,000 sq ft
+                                </dd>
                             </div>
                             <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Facility Type</dt>
-                                <dd>Equine Training Center</dd>
+                                <dd>
+                                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
+                                    </svg>
+                                    Equine Training Center
+                                </dd>
                             </div>
                             <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Contact</dt>
-                                <dd>(555) 123-4567</dd>
+                                <dd>
+                                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path
+                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                                    </svg>
+                                    (555) 123-4567
+                                </dd>
                             </div>
                         </dl>
                     </article>
                 </li>
 
                 <li class="results-item">
-                    <article class="facility-card">
+                    <article class="facility-card"
+                        data-facility-id="pine-crest-animal-arena"
+                        data-surface="mixed"
+                        data-opportunity="medium"
+                        data-size-sqft="31500">
                         <div class="facility-card--leading-visual">
                             <!-- Future: <img src="" alt="" class="facility-card--item-product" /> -->
                         </div>
                         <header class="facility-card--header">
                             <h2 class="facility-card--title">Pine Crest Animal Arena</h2>
                         </header>
+                        <button type="button"
+                            class="facility-card--save-button btn btn--ghost btn--ghost-bordered btn--icon-only"
+                            aria-label="Remove Pine Crest Animal Arena from shortlist"
+                            aria-pressed="true"
+                            data-action="remove"
+                            data-facility-id="pine-crest-animal-arena">
+                            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                            </svg>
+                        </button>
                         <ul class="facility-card--badges" role="list">
                             <li class="badge badge-opportunity-medium">Medium</li>
                             <li class="badge badge-surface-mixed">Mixed</li>
@@ -94,19 +160,49 @@
                         <dl class="facility-card--info-container">
                             <div class="facility-card--info-item">
                                 <dt class="visually-hidden">Location</dt>
-                                <dd>Ocala, FL</dd>
+                                <dd>
+                                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                        <circle cx="12" cy="10" r="3" />
+                                    </svg>
+                                    Ocala, FL
+                                </dd>
                             </div>
                             <div class="facility-card--info-item">
                                 <dt class="visually-hidden">Size</dt>
-                                <dd>31,500 sq ft</dd>
+                                <dd>
+                                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    </svg>
+                                    31,500 sq ft
+                                </dd>
                             </div>
                             <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Facility Type</dt>
-                                <dd>Animal Arena</dd>
+                                <dd>
+                                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
+                                    </svg>
+                                    Animal Arena
+                                </dd>
                             </div>
                             <div class="facility-card--info-item facility-card--info-item--desktop">
                                 <dt class="visually-hidden">Contact</dt>
-                                <dd>(555) 234-5678</dd>
+                                <dd>
+                                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path
+                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                                    </svg>
+                                    (555) 234-5678
+                                </dd>
                             </div>
                         </dl>
                     </article>
