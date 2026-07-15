@@ -72,11 +72,7 @@ saved_leads
 
 ### Primary Keys
 
-Every table uses
-
-id
-
-as the primary key.
+Every table uses a descriptive primary key based on the table name.
 
 ### Foreign Keys
 
@@ -142,27 +138,25 @@ Stores the primary record for every animal-related facility that may represent a
 - Has many **social_profiles**
 - Has many **photos**
 - Has many **evidence** records
-- Has one **opportunity_score**
+- Has many **opportunity_scores**
 - Can appear in many **saved_leads**
 
 ---
 
 ### Columns
 
-| Column             | Type         | Required | Description               |
-| ------------------ | ------------ | -------- | ------------------------- |
-| facility_id        | UUID         | Yes      | Primary Key               |
-| facility_name      | VARCHAR(255) | Yes      | Business name             |
-| facility_type_id   | UUID         | Yes      | References facility_types |
-| primary_address_id | UUID         | Yes      | References addresses      |
-| primary_website    | VARCHAR(500) | No       | Official website          |
-| primary_phone      | VARCHAR(30)  | No       | Business phone number     |
-| google_place_id    | VARCHAR(255) | No       | Google Maps Place ID      |
-
-| status | ENUM | Yes | Active, Inactive, Closed |
-| last_verified_at | DATETIME | No | Last verification date |
-| created_at | DATETIME | Yes | Record created |
-| updated_at | DATETIME | Yes | Record updated |
+| Column           | Type         | Required | Description               |
+| ---------------- | ------------ | -------- | ------------------------- |
+| facility_id      | UUID         | Yes      | Primary Key               |
+| facility_name    | VARCHAR(255) | Yes      | Business name             |
+| facility_type_id | UUID         | Yes      | References facility_types |
+| primary_website  | VARCHAR(500) | No       | Official website          |
+| primary_phone    | VARCHAR(30)  | No       | Business phone number     |
+| google_place_id  | VARCHAR(255) | No       | Google Maps Place ID      |
+| status           | ENUM         | Yes      | Active, Inactive, Closed  |
+| last_verified_at | DATETIME     | No       | Last verification date    |
+| created_at       | DATETIME     | Yes      | Record created            |
+| updated_at       | DATETIME     | Yes      | Record updated            |
 
 ---
 
@@ -304,39 +298,6 @@ Keeping addresses in their own table allows future support for multiple location
 
 ---
 
-`social_profiles`
-
-### Purpose
-
-Stores links to a facility's social media accounts.
-
----
-
-### Relationships
-
-- Many social profiles belong to one facility.
-
----
-
-### Columns
-
-| Column            | Type         | Required | Description               |
-| ----------------- | ------------ | -------- | ------------------------- |
-| social_profile_id | UUID         | Yes      | Primary Key               |
-| facility_id       | UUID         | Yes      | References facilities     |
-| platform          | VARCHAR(50)  | Yes      | Facebook, Instagram, etc. |
-| profile_url       | VARCHAR(500) | Yes      | Profile URL               |
-| created_at        | DATETIME     | Yes      | Record created            |
-| updated_at        | DATETIME     | Yes      | Record updated            |
-
----
-
-### Notes
-
-A facility may have zero, one, or many social media profiles.
-
----
-
 `photos`
 
 ### Purpose
@@ -392,7 +353,7 @@ Stores supporting evidence used to evaluate a sales opportunity.
 | evidence_id      | UUID         | Yes      | Primary Key                  |
 | facility_id      | UUID         | Yes      | References facilities        |
 | source_id        | UUID         | Yes      | References data_sources      |
-| evidence_type    | VARCHAR(100) | Yes      | Review, Image, Website, etc. |
+| evidence_type    | ENUM         | Yes      | Review, Image, Website, etc. |
 | description      | TEXT         | Yes      | Evidence summary             |
 | confidence_score | DECIMAL(5,2) | Yes      | Confidence rating            |
 | collected_at     | DATETIME     | Yes      | Date collected               |
@@ -421,13 +382,13 @@ Stores the origin of imported facility data.
 
 ### Columns
 
-| Column           | Type         | Required | Description                |
-| ---------------- | ------------ | -------- | -------------------------- |
-| data_source_id   | UUID         | Yes      | Primary Key                |
-| source_name      | VARCHAR(100) | Yes      | Google Maps, Website, Yelp |
-| source_type      | VARCHAR(50)  | Yes      | API, Scraper, Manual       |
-| base_url         | VARCHAR(500) | No       | Source website             |
-| last_imported_at | DATETIME     | No       | Last import date           |
+| Column           | Type         | Required | Description                                  |
+| ---------------- | ------------ | -------- | -------------------------------------------- |
+| data_source_id   | UUID         | Yes      | Primary Key                                  |
+| source_name      | VARCHAR(100) | Yes      | Google Maps, Website, Yelp                   |
+| source_type      | ENUM         | Yes      | API, Scraper, Manual, Import, User Submitted |
+| base_url         | VARCHAR(500) | No       | Source website                               |
+| last_imported_at | DATETIME     | No       | Last import date                             |
 
 ---
 
@@ -447,26 +408,63 @@ Stores the calculated opportunity score for each facility.
 
 ### Relationships
 
-- Has many opportunity score belongs to one facility.
+- Many opportunity score records belong to one facility.
+- A facility may have multiple historical opportunity scores.
 
 ---
 
 ### Columns
 
-| Column            | Type         | Required | Description           |
-| ----------------- | ------------ | -------- | --------------------- |
-| score_id          | UUID         | Yes      | Primary Key           |
-| facility_id       | UUID         | Yes      | References facilities |
-| opportunity_score | DECIMAL(5,2) | Yes      | Overall score         |
-| rating            | ENUM         | Yes      | High, Medium, Low     |
-| confidence_score  | DECIMAL(5,2) | Yes      | Confidence score      |
-| calculated_at     | DATETIME     | Yes      | Date calculated       |
+| Column            | Type         | Required | Description                    |
+| ----------------- | ------------ | -------- | ------------------------------ |
+| score_id          | UUID         | Yes      | Primary Key                    |
+| facility_id       | UUID         | Yes      | References facilities          |
+| opportunity_score | DECIMAL(5,2) | Yes      | Overall score                  |
+| rating            | ENUM         | Yes      | High, Medium, Low              |
+| confidence_score  | DECIMAL(5,2) | Yes      | Confidence score               |
+| scoring_method    | VARCHAR(100) | Yes      | Method used to calculate score |
+| calculated_at     | DATETIME     | Yes      | Date calculated                |
 
 ---
 
 ### Notes
 
 Scores may be recalculated as new evidence becomes available.
+
+---
+
+Future Entities:
+
+`social_profiles`
+
+### Purpose
+
+Stores links to a facility's social media accounts.
+
+---
+
+### Relationships
+
+- Many social profiles belong to one facility.
+
+---
+
+### Columns
+
+| Column            | Type         | Required | Description               |
+| ----------------- | ------------ | -------- | ------------------------- |
+| social_profile_id | UUID         | Yes      | Primary Key               |
+| facility_id       | UUID         | Yes      | References facilities     |
+| platform          | VARCHAR(50)  | Yes      | Facebook, Instagram, etc. |
+| profile_url       | VARCHAR(500) | Yes      | Profile URL               |
+| created_at        | DATETIME     | Yes      | Record created            |
+| updated_at        | DATETIME     | Yes      | Record updated            |
+
+---
+
+### Notes
+
+A facility may have zero, one, or many social media profiles.
 
 ---
 
