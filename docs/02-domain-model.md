@@ -1,11 +1,12 @@
 # Turf Facility Finder
+
 ## Domain Model
 
 Version: 1.0
 
 ---
 
-# Purpose
+## Purpose
 
 The domain model defines every major object used by Turf Facility Finder.
 
@@ -18,8 +19,7 @@ These objects become:
 
 ---
 
-# Core Domain
-
+## Core Domain
 
 Vendor
 │
@@ -36,10 +36,9 @@ Vendor
 ├── Photos
 └── Data Sources
 
-
 ---
 
-# Primary Entity
+## Primary Entity
 
 Facility
 
@@ -57,7 +56,7 @@ Everything else belongs to it.
 
 ---
 
-# Facility Relationships
+## Facility Relationships
 
 Facility
 
@@ -91,7 +90,7 @@ Saved Lists
 
 ---
 
-# Vendor
+## Vendor
 
 Represents the customer using Turf Facility Finder.
 
@@ -104,7 +103,7 @@ A vendor can:
 
 ---
 
-# Saved Lead
+## Saved Lead
 
 Represents a facility bookmarked by a vendor.
 
@@ -117,7 +116,7 @@ Stores:
 
 ---
 
-# Search
+## Search
 
 Represents a search request.
 
@@ -130,7 +129,7 @@ Contains:
 
 ---
 
-# Location
+## Location
 
 Describes where a facility exists.
 
@@ -146,7 +145,7 @@ Includes:
 
 ---
 
-# Property
+## Property
 
 Describes the physical characteristics.
 
@@ -162,7 +161,7 @@ Examples:
 
 ---
 
-# Opportunity Score
+## Opportunity Score
 
 Represents the estimated sales potential.
 
@@ -180,7 +179,7 @@ The score is calculated from evidence with reasoning and confidence level.
 
 ---
 
-# Evidence
+## Evidence
 
 Evidence explains why a facility received its score.
 
@@ -206,7 +205,7 @@ News articles
 
 ---
 
-# Contact
+## Contact
 
 Stores publicly available business contacts.
 
@@ -224,7 +223,7 @@ Website
 
 ---
 
-# Photos
+## Photos
 
 Stores references to publicly available imagery.
 
@@ -242,7 +241,7 @@ Social media
 
 ---
 
-# Data Source
+## Data Source
 
 Every piece of information has a source.
 
@@ -268,7 +267,7 @@ Government Data
 
 ---
 
-# Future Entities
+## Future Entities
 
 Visit
 

@@ -1,11 +1,12 @@
 # Turf Facility Finder
+
 ## Product Vision
 
 Version: 1.0
 
 ---
 
-# Mission
+## Mission
 
 Turf Facility Finder is a lead generation platform designed specifically for synthetic turf vendors.
 
@@ -17,7 +18,7 @@ It is a sales intelligence platform focused on identifying commercial opportunit
 
 ---
 
-# Problem
+## Problem
 
 Synthetic turf companies often rely on:
 
@@ -34,7 +35,7 @@ There is currently no search engine dedicated to discovering turf opportunities.
 
 ---
 
-# Solution
+## Solution
 
 Turf Facility Finder automatically identifies businesses that:
 
@@ -47,7 +48,7 @@ The platform organizes those businesses into searchable leads with supporting ev
 
 ---
 
-# Primary User
+## Primary User
 
 Synthetic Turf Vendor
 
@@ -60,7 +61,7 @@ Examples include:
 
 ---
 
-# User Goals
+## User Goals
 
 A vendor should be able to answer questions like:
 
@@ -76,7 +77,7 @@ A vendor should be able to answer questions like:
 
 ---
 
-# Core Value
+## Core Value
 
 Instead of searching manually for hours...
 
@@ -84,7 +85,7 @@ The salesperson receives an organized list of qualified opportunities.
 
 ---
 
-# Lead Qualification Philosophy
+## Lead Qualification Philosophy
 
 The platform does not determine whether a business will purchase turf.
 
@@ -104,7 +105,7 @@ Examples include:
 
 ---
 
-# Facility Types
+## Facility Types
 
 Primary Targets
 
@@ -134,7 +135,7 @@ Excluded
 
 ---
 
-# Opportunity Signals
+## Opportunity Signals
 
 Positive indicators include:
 
@@ -160,7 +161,7 @@ Negative indicators include:
 
 ---
 
-# Long-Term Vision
+## Long-Term Vision
 
 Become the leading commercial search platform for discovering animal facility turf opportunities across North America.
 

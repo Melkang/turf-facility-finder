@@ -1,4 +1,3 @@
-
 # Entity Relationship Diagram (ERD)
 
 ## 1. Purpose

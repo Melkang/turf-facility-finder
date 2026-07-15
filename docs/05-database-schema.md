@@ -105,23 +105,23 @@ is_manual_override
 
 Facility
 │
-├── Facility Types
+├── Facility Type
 │
-├── Addresses
+├── Address
 │
-├── Websites
-│
-├── Social Profiles
-│
-├── Photos
-│
-├── Opportunity Scores
+├── Property
 │
 ├── Evidence
 │
-├── Data Sources
+├── Photos
 │
-└── Saved Leads
+└── Opportunity Scores
+
+Future:
+
+- Vendors
+- Saved Leads
+- Social Profiles
 
 ## 5. Table Definitions
 
@@ -149,25 +149,20 @@ Stores the primary record for every animal-related facility that may represent a
 
 ### Columns
 
-| Column                   | Type         | Required | Description                 |
-| ------------------------ | ------------ | -------- | --------------------------- |
-| id                       | UUID         | Yes      | Primary Key                 |
-| facility_name            | VARCHAR(255) | Yes      | Business name               |
-| facility_type_id         | UUID         | Yes      | References facility_types   |
-| primary_address_id       | UUID         | Yes      | References addresses        |
-| primary_website          | VARCHAR(500) | No       | Official website            |
-| primary_phone            | VARCHAR(30)  | No       | Business phone number       |
-| google_place_id          | VARCHAR(255) | No       | Google Maps Place ID        |
-| latitude                 | DECIMAL(9,6) | Yes      | Latitude coordinate         |
-| longitude                | DECIMAL(9,6) | Yes      | Longitude coordinate        |
-| estimated_play_area_sqft | INTEGER      | No       | Estimated outdoor play area |
-| surface_type             | ENUM         | No       | Grass, Turf, Mixed, Unknown |
-| opportunity_rating       | ENUM         | Yes      | High, Medium, Low           |
-| evidence_score           | DECIMAL(5,2) | Yes      | Confidence score            |
-| status                   | ENUM         | Yes      | Active, Inactive, Closed    |
-| last_verified_at         | DATETIME     | No       | Last verification date      |
-| created_at               | DATETIME     | Yes      | Record created              |
-| updated_at               | DATETIME     | Yes      | Record updated              |
+| Column             | Type         | Required | Description               |
+| ------------------ | ------------ | -------- | ------------------------- |
+| facility_id        | UUID         | Yes      | Primary Key               |
+| facility_name      | VARCHAR(255) | Yes      | Business name             |
+| facility_type_id   | UUID         | Yes      | References facility_types |
+| primary_address_id | UUID         | Yes      | References addresses      |
+| primary_website    | VARCHAR(500) | No       | Official website          |
+| primary_phone      | VARCHAR(30)  | No       | Business phone number     |
+| google_place_id    | VARCHAR(255) | No       | Google Maps Place ID      |
+
+| status | ENUM | Yes | Active, Inactive, Closed |
+| last_verified_at | DATETIME | No | Last verification date |
+| created_at | DATETIME | Yes | Record created |
+| updated_at | DATETIME | Yes | Record updated |
 
 ---
 
@@ -201,13 +196,13 @@ Examples include:
 
 ### Columns
 
-| Column      | Type         | Required | Description          |
-| ----------- | ------------ | -------- | -------------------- |
-| id          | UUID         | Yes      | Primary Key          |
-| type_name   | VARCHAR(100) | Yes      | Facility category    |
-| description | TEXT         | No       | Optional description |
-| created_at  | DATETIME     | Yes      | Record created       |
-| updated_at  | DATETIME     | Yes      | Record updated       |
+| Column           | Type         | Required | Description          |
+| ---------------- | ------------ | -------- | -------------------- |
+| facility_type_id | UUID         | Yes      | Primary Key          |
+| type_name        | VARCHAR(100) | Yes      | Facility category    |
+| description      | TEXT         | No       | Optional description |
+| created_at       | DATETIME     | Yes      | Record created       |
+| updated_at       | DATETIME     | Yes      | Record updated       |
 
 ---
 
@@ -216,6 +211,60 @@ Examples include:
 Stores standardized facility categories to reduce duplicate data.
 
 ---
+
+`properties`
+
+### Purpose
+
+Stores the physical characteristics of the property associated with a facility.
+
+Property data helps evaluate whether a location may be a good candidate for synthetic turf installation.
+
+Examples include:
+
+- estimated outdoor play area size
+- current surface conditions
+- fencing
+- parking availability
+- existing synthetic turf
+
+---
+
+### Relationships
+
+- One facility has one property record.
+
+---
+
+### Columns
+
+| Column                   | Type     | Required | Description                                                   |
+| ------------------------ | -------- | -------- | ------------------------------------------------------------- |
+| property_id              | UUID     | Yes      | Primary key                                                   |
+| facility_id              | UUID     | Yes      | References facilities                                         |
+| estimated_play_area_sqft | INTEGER  | No       | Estimated outdoor activity area size                          |
+| surface_type             | ENUM     | No       | Grass, Dirt, Mixed, Gravel, Synthetic Turf, Concrete, Unknown |
+| synthetic_turf_present   | BOOLEAN  | No       | Indicates whether synthetic turf is currently installed       |
+| fenced_area              | BOOLEAN  | No       | Indicates whether outdoor areas appear to be fenced           |
+| parking_available        | BOOLEAN  | No       | Indicates whether customer parking appears available          |
+| outdoor_space            | BOOLEAN  | Yes      | Indicates whether an outdoor area exists                      |
+| created_at               | DATETIME | Yes      | Record created                                                |
+| updated_at               | DATETIME | Yes      | Record last updated                                           |
+
+---
+
+### Notes
+
+Property information represents observable characteristics of the physical site.
+
+Some property values may be estimated from evidence sources such as:
+
+- satellite imagery
+- street view
+- business websites
+- facility photos
+
+Property records should store observations, while the evidence table stores the source and reasoning behind those observations.
 
 `addresses`
 
@@ -235,13 +284,15 @@ Stores the physical location for each facility.
 
 | Column      | Type         | Required | Description           |
 | ----------- | ------------ | -------- | --------------------- |
-| id          | UUID         | Yes      | Primary Key           |
+| address_id  | UUID         | Yes      | Primary Key           |
 | facility_id | UUID         | Yes      | References facilities |
 | street      | VARCHAR(255) | Yes      | Street address        |
 | city        | VARCHAR(100) | Yes      | City                  |
 | state       | VARCHAR(100) | Yes      | State                 |
 | postal_code | VARCHAR(20)  | Yes      | ZIP or Postal Code    |
 | country     | VARCHAR(100) | Yes      | Country               |
+| latitude    | DECIMAL(9,6) | Yes      | Latitude coordinate   |
+| longitude   | DECIMAL(9,6) | Yes      | Longitude coordinate  |
 | created_at  | DATETIME     | Yes      | Record created        |
 | updated_at  | DATETIME     | Yes      | Record updated        |
 
@@ -269,14 +320,14 @@ Stores links to a facility's social media accounts.
 
 ### Columns
 
-| Column      | Type         | Required | Description               |
-| ----------- | ------------ | -------- | ------------------------- |
-| id          | UUID         | Yes      | Primary Key               |
-| facility_id | UUID         | Yes      | References facilities     |
-| platform    | VARCHAR(50)  | Yes      | Facebook, Instagram, etc. |
-| profile_url | VARCHAR(500) | Yes      | Profile URL               |
-| created_at  | DATETIME     | Yes      | Record created            |
-| updated_at  | DATETIME     | Yes      | Record updated            |
+| Column            | Type         | Required | Description               |
+| ----------------- | ------------ | -------- | ------------------------- |
+| social_profile_id | UUID         | Yes      | Primary Key               |
+| facility_id       | UUID         | Yes      | References facilities     |
+| platform          | VARCHAR(50)  | Yes      | Facebook, Instagram, etc. |
+| profile_url       | VARCHAR(500) | Yes      | Profile URL               |
+| created_at        | DATETIME     | Yes      | Record created            |
+| updated_at        | DATETIME     | Yes      | Record updated            |
 
 ---
 
@@ -304,7 +355,7 @@ Stores photos associated with a facility.
 
 | Column      | Type         | Required | Description                   |
 | ----------- | ------------ | -------- | ----------------------------- |
-| id          | UUID         | Yes      | Primary Key                   |
+| photo_id    | UUID         | Yes      | Primary Key                   |
 | facility_id | UUID         | Yes      | References facilities         |
 | photo_url   | VARCHAR(500) | Yes      | Image URL                     |
 | source      | VARCHAR(100) | No       | Google, Website, Social Media |
@@ -338,7 +389,7 @@ Stores supporting evidence used to evaluate a sales opportunity.
 
 | Column           | Type         | Required | Description                  |
 | ---------------- | ------------ | -------- | ---------------------------- |
-| id               | UUID         | Yes      | Primary Key                  |
+| evidence_id      | UUID         | Yes      | Primary Key                  |
 | facility_id      | UUID         | Yes      | References facilities        |
 | source_id        | UUID         | Yes      | References data_sources      |
 | evidence_type    | VARCHAR(100) | Yes      | Review, Image, Website, etc. |
@@ -372,7 +423,7 @@ Stores the origin of imported facility data.
 
 | Column           | Type         | Required | Description                |
 | ---------------- | ------------ | -------- | -------------------------- |
-| id               | UUID         | Yes      | Primary Key                |
+| data_source_id   | UUID         | Yes      | Primary Key                |
 | source_name      | VARCHAR(100) | Yes      | Google Maps, Website, Yelp |
 | source_type      | VARCHAR(50)  | Yes      | API, Scraper, Manual       |
 | base_url         | VARCHAR(500) | No       | Source website             |
@@ -396,19 +447,20 @@ Stores the calculated opportunity score for each facility.
 
 ### Relationships
 
-- One opportunity score belongs to one facility.
+- Has many opportunity score belongs to one facility.
 
 ---
 
 ### Columns
 
-| Column        | Type         | Required | Description           |
-| ------------- | ------------ | -------- | --------------------- |
-| id            | UUID         | Yes      | Primary Key           |
-| facility_id   | UUID         | Yes      | References facilities |
-| score         | DECIMAL(5,2) | Yes      | Overall score         |
-| rating        | ENUM         | Yes      | High, Medium, Low     |
-| calculated_at | DATETIME     | Yes      | Date calculated       |
+| Column            | Type         | Required | Description           |
+| ----------------- | ------------ | -------- | --------------------- |
+| score_id          | UUID         | Yes      | Primary Key           |
+| facility_id       | UUID         | Yes      | References facilities |
+| opportunity_score | DECIMAL(5,2) | Yes      | Overall score         |
+| rating            | ENUM         | Yes      | High, Medium, Low     |
+| confidence_score  | DECIMAL(5,2) | Yes      | Confidence score      |
+| calculated_at     | DATETIME     | Yes      | Date calculated       |
 
 ---
 
@@ -434,12 +486,12 @@ Stores facilities that a vendor has saved for future follow-up.
 
 ### Columns
 
-| Column      | Type     | Required | Description           |
-| ----------- | -------- | -------- | --------------------- |
-| id          | UUID     | Yes      | Primary Key           |
-| facility_id | UUID     | Yes      | References facilities |
-| saved_at    | DATETIME | Yes      | Date saved            |
-| notes       | TEXT     | No       | Optional vendor notes |
+| Column       | Type     | Required | Description           |
+| ------------ | -------- | -------- | --------------------- |
+| save_lead_id | UUID     | Yes      | Primary Key           |
+| facility_id  | UUID     | Yes      | References facilities |
+| saved_at     | DATETIME | Yes      | Date saved            |
+| notes        | TEXT     | No       | Optional vendor notes |
 
 ---
 
