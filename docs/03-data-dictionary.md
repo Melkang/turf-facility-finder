@@ -150,8 +150,11 @@ Stores what was found during research and helps explain a Facility's score.
 | data_source_id | BIGINT UNSIGNED | Yes | `2` | ID of the related Data Source |
 | evidence_type | ENUM | Yes | Review | Evidence category such as Review, Image, or Website |
 | description | TEXT | Yes | Reviews mention a muddy yard | Evidence summary |
+| source_url | VARCHAR(1000) | No | <https://happypaws.example/services/dog-daycare> | Exact page, review, image, or record supporting the Evidence |
 | confidence_score | DECIMAL(5,2) | Yes | 85.00 | Confidence rating |
 | collected_at | DATETIME | Yes | 2026-07-09 10:00:00 | Collection date |
+
+`source_url` points to the exact item used as Evidence. It is optional because not every source has a useful web address.
 
 ---
 
@@ -164,7 +167,7 @@ Stores where imported information or Evidence came from.
 | data_source_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `2` | Database-generated identifier for the Data Source |
 | source_name | VARCHAR(100) | Yes | Google Maps | Source name |
 | source_type | ENUM | Yes | API | API, Scraper, Manual, Import, or User Submitted |
-| base_url | VARCHAR(500) | No | <https://maps.google.com> | Source website |
+| base_url | VARCHAR(500) | No | <https://maps.google.com> | General website for the Data Source |
 | last_imported_at | DATETIME | No | 2026-07-09 10:00:00 | Most recent import date |
 
 ---

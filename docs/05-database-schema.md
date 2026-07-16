@@ -365,6 +365,7 @@ Stores research findings that help explain a Facility's score.
 | data_source_id   | BIGINT UNSIGNED | Yes | References data_sources |
 | evidence_type    | ENUM         | Yes      | Review, Image, Website, etc. |
 | description      | TEXT         | Yes      | Evidence summary             |
+| source_url       | VARCHAR(1000)| No       | Exact page, review, image, or record that supports the Evidence |
 | confidence_score | DECIMAL(5,2) | Yes      | Confidence rating            |
 | collected_at     | DATETIME     | Yes      | Date collected               |
 
@@ -373,6 +374,8 @@ Stores research findings that help explain a Facility's score.
 ### Notes
 
 Evidence makes it possible to look back and see why a Facility received its rating.
+
+`data_sources.base_url` stores the general website for a Data Source. `evidence.source_url` stores the exact page or item used for one Evidence record. `source_url` is optional because some Evidence may come from an API, an offline record, a deleted page, or a manual observation without a useful URL.
 
 ---
 

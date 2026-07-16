@@ -145,11 +145,13 @@ Examples include:
 
 Each Evidence record belongs to one Facility and points to one Data Source. One Facility can have many pieces of Evidence.
 
+An Evidence record may also store a `source_url`. This is the exact page, review, image, or public record that supports the finding. It is optional because some Evidence does not have a useful web address.
+
 ---
 
 ## Data Source
 
-A Data Source records where information came from.
+A Data Source records the general provider or website where information came from. The exact page used for one finding belongs in `Evidence.source_url`.
 
 Examples include:
 

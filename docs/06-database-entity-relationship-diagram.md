@@ -165,6 +165,7 @@ erDiagram
         BIGINT data_source_id FK
         ENUM evidence_type
         TEXT description
+        VARCHAR source_url
         DECIMAL confidence_score
         DATETIME collected_at
     }
@@ -195,6 +196,7 @@ erDiagram
 - Addresses contain geographic coordinates.
 - Properties contain searchable facts about each physical site.
 - Evidence explains research findings and points to their Data Sources.
+- Evidence may store the exact supporting page or item in `source_url`.
 - Opportunity Scores are separate records so older scores can be kept.
 - MySQL creates the internal primary keys. Foreign keys store matching IDs to connect records.
 - Vendors, Saved Leads, Social Profiles, and Contacts are planned for later.

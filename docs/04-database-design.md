@@ -82,6 +82,15 @@ The business website shows a grass outdoor play yard.
 
 Each Evidence record points to a Data Source, such as Google Maps, a business website, or a government directory. This makes it possible to check where the information came from later.
 
+The Data Source stores the general provider. The Evidence record can also store the exact page:
+
+```text
+data_sources.base_url = https://happypaws.example
+evidence.source_url = https://happypaws.example/services/dog-daycare
+```
+
+`evidence.source_url` is optional because a manual observation, offline record, deleted page, or API result may not have a useful URL.
+
 ---
 
 ### Old Records Are Kept When They Are Useful
