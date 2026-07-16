@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0" />
     <title>Turf Facility Finder</title>
     <meta name="description"
-        content="Find animal facilities that may need turf upgrades by location, surface type, and size." />
+        content="Find animal facilities that may need turf upgrades by location, surface type, and estimated play-area size." />
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -16,7 +16,7 @@
     <header class="site-header">
         <div class="container">
             <div class="site-branding">
-                <a href="/" class="site-logo">
+                <a href="index.html" class="site-logo">
                     <img src="assets/images/turf-facility-finder-logo.svg" alt="Turf Facility Finder" width="220"
                         height="55">
                 </a>
@@ -35,7 +35,7 @@
 
     <main id="main-content">
         <!-- Hero -->
-        <section class="hero pile">
+        <section class="hero pile" aria-labelledby="hero-title">
             <!-- Hero Image -->
             <div class="hero-image-container">
                 <img src="assets/images/hero-image-turf-dog-park.webp"
@@ -57,7 +57,7 @@
 
         <section id="filters" class="filters section container" aria-labelledby="filters-title">
             <h2 id="filters-title">Filter facilities</h2>
-            <form action="#" method="get">
+            <form action="index.html" method="get">
                 <fieldset>
                     <legend class="visually-hidden">Search Filters
                     </legend>
@@ -74,14 +74,17 @@
                             <select id="surface-type" name="surfaceType">
                                 <option value="">Any surface</option>
                                 <option value="grass">Grass</option>
-                                <option value="turf">Turf</option>
-                                <option value="other">Mixed</option>
+                                <option value="synthetic-turf">Turf</option>
+                                <option value="mixed">Mixed</option>
                             </select>
                         </div>
 
                         <div class="form-field">
-                            <label for="size">Minimum size (sq ft)</label>
-                            <input id="size" name="size" type="number" class="input" min="0" inputmode="numeric" />
+                            <label for="minimum-play-area">
+                                Minimum play-area size (sq ft)
+                            </label>
+                            <input id="minimum-play-area" name="minPlayAreaSqft" type="number" class="input" min="0"
+                                step="1" inputmode="numeric" />
                         </div>
 
                         <div class="filter-actions-group">
@@ -95,7 +98,7 @@
                     </div>
 
                     <!-- Additional filters can be added here:
-           Facility type (equine, dog daycare, taining center),
+           Facility type  (dog daycare, training center),
            Lead Potential (low (or already have turf), medium, high),
            Distance/region
            etc. -->
@@ -119,12 +122,16 @@
                         </p>
                     </div>
                 </div>
-                <div class="results-header-sort">
+                <div class="results-header--sort">
                     <label for="sort-by" class="results-sort-label visually-hidden">Sort by:</label>
-                    <select id="sort-by" name="sortBy" class="results-sort-select" aria-label="Sort results">
+                    <select id="sort-by" name="sortBy" class="results-sort-select">
                         <option value="relevant" selected>Sort</option>
-                        <option value="size-desc">Size (largest first)</option>
-                        <option value="size-asc">Size (smallest first)</option>
+                        <option value="play-area-desc">
+                            Play-area size (largest first)
+                        </option>
+                        <option value="play-area-asc">
+                            Play-area size (smallest first)
+                        </option>
                         <option value="name-asc">Name (A–Z)</option>
                     </select>
                 </div>
@@ -159,8 +166,14 @@
                         </button>
 
                         <ul class="facility-card--badges" role="list">
-                            <li class="badge badge-opportunity-high">High</li>
-                            <li class="badge badge-surface-grass">Grass</li>
+                            <li class="badge badge-opportunity-high">
+                                <span class="visually-hidden">Opportunity rating: </span>
+                                High
+                            </li>
+                            <li class="badge badge-surface-grass">
+                                <span class="visually-hidden">Surface type: </span>
+                                Grass
+                            </li>
                         </ul>
 
                         <dl class="facility-card--info-container">
@@ -177,7 +190,7 @@
                                 </dd>
                             </div>
                             <div class="facility-card--info-item">
-                                <dt class="visually-hidden">Size</dt>
+                                <dt class="visually-hidden">Estimated play-area size</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -239,8 +252,15 @@
                         </button>
 
                         <ul class="facility-card--badges" role="list">
-                            <li class="badge badge-opportunity-medium">Medium</li>
-                            <li class="badge badge-surface-mixed">Mixed</li>
+                            <li class="badge badge-opportunity-medium">
+                                <span class="visually-hidden">Opportunity rating: </span>
+                                Medium
+                            </li>
+
+                            <li class="badge badge-surface-mixed">
+                                <span class="visually-hidden">Surface type: </span>
+                                Mixed
+                            </li>
                         </ul>
 
                         <dl class="facility-card--info-container">
@@ -257,7 +277,7 @@
                                 </dd>
                             </div>
                             <div class="facility-card--info-item">
-                                <dt class="visually-hidden">Size</dt>
+                                <dt class="visually-hidden">Estimated play-area size</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -319,8 +339,10 @@
                         </button>
 
                         <ul class="facility-card--badges" role="list">
-                            <li class="badge badge-opportunity-low">Low</li>
-                            <li class="badge badge-surface-turf">Turf</li>
+                            <li class="badge badge-opportunity-low"><span class="visually-hidden">Opportunity rating:
+                                </span>Low</li>
+                            <li class="badge badge-surface-turf"><span class="visually-hidden">Surface type: </span>Turf
+                            </li>
                         </ul>
 
                         <dl class="facility-card--info-container">
@@ -337,7 +359,7 @@
                                 </dd>
                             </div>
                             <div class="facility-card--info-item">
-                                <dt class="visually-hidden">Size</dt>
+                                <dt class="visually-hidden">Estimated play-area size</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -399,8 +421,10 @@
                         </button>
 
                         <ul class="facility-card--badges" role="list">
-                            <li class="badge badge-opportunity-high">High</li>
-                            <li class="badge badge-surface-grass">Grass</li>
+                            <li class="badge badge-opportunity-high"><span class="visually-hidden">Opportunity rating:
+                                </span>High</li>
+                            <li class="badge badge-surface-grass"><span class="visually-hidden">Surface type:
+                                </span>Grass</li>
                         </ul>
 
                         <dl class="facility-card--info-container">
@@ -417,7 +441,7 @@
                                 </dd>
                             </div>
                             <div class="facility-card--info-item">
-                                <dt class="visually-hidden">Size</dt>
+                                <dt class="visually-hidden">Estimated play-area size</dt>
                                 <dd>
                                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -456,11 +480,13 @@
                 </li>
             </ul>
 
-            <nav class="pagination" aria-label="Pagination">
+            <!-- Add server-rendered pagination when the result count exceeds one page. -->
+            <!-- <nav class="pagination" aria-label="Pagination">
                 <p class="pagination-summary">Showing <span class="pagination-range">1 to 4</span> of <span
-                        class="pagination-total">4</span> results</p>
-                <ul class="pagination-list" role="list">
-                    <li>
+                        class="pagination-total">4</span> results
+                </p>
+                <ul class="pagination-list" role="list"> -->
+            <!-- <li>
                         <a href="#" class="pagination-link pagination-link--prev" aria-disabled="true"
                             tabindex="-1">Previous</a>
                     </li>
@@ -479,9 +505,9 @@
                     </li>
                     <li>
                         <a href="#" class="pagination-link pagination-link--next">Next</a>
-                    </li>
-                </ul>
-            </nav>
+                    </li> -->
+            <!-- </ul>
+            </nav> -->
         </section>
 
         <!-- End of Results -->
