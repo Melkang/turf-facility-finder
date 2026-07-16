@@ -65,7 +65,23 @@ Stores the approved list of Facility categories. This prevents the same category
 | created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
 | updated_at | DATETIME | Yes | 2026-07-12 14:30:00 | Most recent record update |
 
-Examples include Dog Daycare, Dog Boarding, Dog Park, Animal Shelter, Veterinary Clinic, and Training Facility.
+Approved values for the first version:
+
+- Dog Daycare
+- Dog Boarding
+- Kennel
+- Dog Training Center
+- Canine Sports Facility
+- Animal Shelter
+- Animal Rescue
+- Adoption Center
+- Pet Resort
+- Dog Park
+- Mixed Animal Facility
+- Other
+- Unknown
+
+Use `Other` when the type is known but does not fit an approved category. Use `Unknown` when the type has not been confirmed.
 
 ---
 

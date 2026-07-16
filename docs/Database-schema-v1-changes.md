@@ -16,3 +16,5 @@ This file is a short history of the decisions made while revising the first data
 - Replaced examples such as `fac_8f32a` with simple numeric IDs such as `1042`.
 - Moved Vendors, Contacts, Search history, Social Profiles, and Saved Leads out of the first database version.
 - Updated the ERD so it shows every first-version table and leaves out future tables.
+- Set the approved first-version Facility Types to Dog Daycare, Dog Boarding, Kennel, Dog Training Center, Canine Sports Facility, Animal Shelter, Animal Rescue, Adoption Center, Pet Resort, Dog Park, Mixed Animal Facility, Other, and Unknown.
+- Defined `Other` as a known type outside the approved categories and `Unknown` as a type that has not been confirmed.

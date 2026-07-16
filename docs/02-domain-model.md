@@ -64,10 +64,19 @@ Examples:
 
 - Dog Daycare
 - Dog Boarding
-- Dog Park
+- Kennel
+- Dog Training Center
+- Canine Sports Facility
 - Animal Shelter
-- Veterinary Clinic
-- Training Facility
+- Animal Rescue
+- Adoption Center
+- Pet Resort
+- Dog Park
+- Mixed Animal Facility
+- Other
+- Unknown
+
+`Other` is used when the type is known but does not fit an approved category. `Unknown` is used when the type has not been confirmed.
 
 One Facility Type may classify many Facilities.
 

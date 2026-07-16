@@ -176,10 +176,17 @@ Examples include:
 
 - Dog Daycare
 - Dog Boarding
-- Dog Park
+- Kennel
+- Dog Training Center
+- Canine Sports Facility
 - Animal Shelter
-- Veterinary Clinic
-- Training Facility
+- Animal Rescue
+- Adoption Center
+- Pet Resort
+- Dog Park
+- Mixed Animal Facility
+- Other
+- Unknown
 
 ---
 
@@ -204,6 +211,8 @@ Examples include:
 ### Notes
 
 Stores each approved Facility category once so category names stay consistent.
+
+Use `Other` when the Facility Type is known but does not fit an approved category. Use `Unknown` when the Facility Type has not been confirmed.
 
 ---
 

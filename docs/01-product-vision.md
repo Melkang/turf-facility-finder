@@ -2,7 +2,7 @@
 
 ## Product Vision
 
-Version: 1.0
+Version: 1.1
 
 ---
 
@@ -107,23 +107,27 @@ Examples include:
 
 ## Facility Types
 
-Primary Targets
+The first version uses the following approved Facility Types:
 
 - Dog Daycare
 - Dog Boarding
-- Kennels
-- Dog Training Centers
-- Canine Sports Facilities
-- Animal Rescue Organizations
-- Animal Shelters
-- Adoption Centers
-- Pet Resorts
-- Dog Parks
+- Kennel
+- Dog Training Center
+- Canine Sports Facility
+- Animal Shelter
+- Animal Rescue
+- Adoption Center
+- Pet Resort
+- Dog Park
+- Mixed Animal Facility
+- Other
+- Unknown
 
-Lower Priority Targets
+`Other` means the Facility Type is known, but it does not fit one of the approved categories.
 
-- Mixed Animal Facilities
-- Wildlife Rehabilitation (future)
+`Unknown` means the Facility Type has not been confirmed yet.
+
+Wildlife Rehabilitation may be considered in a future version.
 
 Excluded
 
@@ -132,6 +136,7 @@ Excluded
 - Mobile Groomers
 - Aquarium Stores
 - Reptile Shops
+- Veterinary Clinics without meaningful outdoor animal space
 
 ---
 
