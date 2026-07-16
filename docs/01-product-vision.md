@@ -166,6 +166,62 @@ Negative indicators include:
 
 ---
 
+## Approved First-Version Values
+
+### Facility Status
+
+- Active
+- Temporarily Closed
+- Permanently Closed
+- Unknown
+
+### Surface Type
+
+- Grass
+- Dirt
+- Mulch
+- Gravel
+- Concrete
+- Synthetic Turf
+- Mixed
+- Other
+- Unknown
+
+`Mixed` means two or more approved surfaces are present. `Other` means the surface is known but not listed. `Unknown` means the surface has not been confirmed.
+
+### Evidence Type
+
+- Business Listing
+- Website
+- Review
+- Photo
+- Satellite Image
+- Street View
+- Social Media Post
+- News Article
+- Public Record
+- Manual Observation
+- Other
+
+### Opportunity Rating
+
+- High
+- Medium
+- Low
+
+A Facility with no Opportunity Score record has not been scored yet.
+
+### Data Source Type
+
+- API
+- Web Scrape
+- Manual Research
+- File Import
+- User Submitted
+- Other
+
+---
+
 ## Long-Term Vision
 
 Become the leading commercial search platform for discovering animal facility turf opportunities across North America.

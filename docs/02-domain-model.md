@@ -185,6 +185,8 @@ It includes:
 
 A Facility can have several scores over time. Keeping the older scores makes it possible to see how the Facility changed. The newest score is the current score.
 
+If a Facility has not been scored yet, it has no Opportunity Score record. An existing score uses a rating of High, Medium, or Low.
+
 ---
 
 ## Future Domain

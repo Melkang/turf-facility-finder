@@ -46,10 +46,17 @@ Represents one physical business location that may be a synthetic turf sales opp
 | primary_website | VARCHAR(500) | No | <https://happypaws.example> | Official website |
 | primary_phone | VARCHAR(30) | No | (555) 555-1234 | Public business phone number |
 | google_place_id | VARCHAR(255) | No | `ChIJ...` | Google Maps Place ID |
-| status | ENUM | Yes | Active | Active, Inactive, or Closed |
+| status | ENUM | Yes | Active | Active, Temporarily Closed, Permanently Closed, or Unknown |
 | last_verified_at | DATETIME | No | 2026-07-12 14:30:00 | Most recent verification date |
 | created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
 | updated_at | DATETIME | Yes | 2026-07-12 14:30:00 | Most recent record update |
+
+Facility status meanings:
+
+- `Active`: the Facility is currently operating
+- `Temporarily Closed`: the Facility is expected to reopen
+- `Permanently Closed`: the Facility is no longer operating
+- `Unknown`: the operating status has not been confirmed
 
 ---
 
@@ -94,7 +101,7 @@ Stores facts about the Facility's physical site, such as its surface and outdoor
 | property_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `501` | Database-generated identifier for the Property record |
 | facility_id | BIGINT UNSIGNED | Yes | `1042` | ID of the related Facility |
 | estimated_play_area_sqft | INTEGER | No | 12000 | Estimated outdoor activity-area size |
-| surface_type | ENUM | No | Grass | Grass, Dirt, Mixed, Gravel, Synthetic Turf, Concrete, or Unknown |
+| surface_type | ENUM | No | Grass | Grass, Dirt, Mulch, Gravel, Concrete, Synthetic Turf, Mixed, Other, or Unknown |
 | synthetic_turf_present | BOOLEAN | No | FALSE | Whether synthetic turf is currently installed |
 | fenced_area | BOOLEAN | No | TRUE | Whether an outdoor area appears fenced |
 | parking_available | BOOLEAN | No | TRUE | Whether customer parking appears available |
@@ -105,6 +112,12 @@ Stores facts about the Facility's physical site, such as its surface and outdoor
 A Facility may have no Property record while the site is still being researched. If a Property record exists, it must belong to one Facility, and its `facility_id` must be unique.
 
 `outdoor_space` is required when a Property record is created. The other Boolean fields are optional: `TRUE` means the feature is present, `FALSE` means it is not present, and `NULL` means it has not been confirmed.
+
+Surface Type meanings:
+
+- `Mixed`: two or more approved surface types are present; Evidence should explain the combination
+- `Other`: the surface is known but does not fit an approved value
+- `Unknown`: the surface has not been confirmed
 
 ---
 
@@ -156,13 +169,15 @@ Stores what was found during research and helps explain a Facility's score.
 | evidence_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `7401` | Database-generated identifier for the Evidence record |
 | facility_id | BIGINT UNSIGNED | Yes | `1042` | ID of the related Facility |
 | data_source_id | BIGINT UNSIGNED | Yes | `2` | ID of the related Data Source |
-| evidence_type | ENUM | Yes | Review | Evidence category such as Review, Image, or Website |
+| evidence_type | ENUM | Yes | Review | Business Listing, Website, Review, Photo, Satellite Image, Street View, Social Media Post, News Article, Public Record, Manual Observation, or Other |
 | description | TEXT | Yes | Reviews mention a muddy yard | Evidence summary |
 | source_url | VARCHAR(1000) | No | <https://happypaws.example/services/dog-daycare> | Exact page, review, image, or record supporting the Evidence |
 | confidence_score | DECIMAL(5,2) | Yes | 85.00 | Confidence rating |
 | collected_at | DATETIME | Yes | 2026-07-09 10:00:00 | Collection date |
 
 `source_url` points to the exact item used as Evidence. It is optional because not every source has a useful web address.
+
+Evidence Type describes what kind of supporting item was found. Use `Other` only when the item is known but does not fit an approved Evidence Type. Do not create an Evidence record until its type is known.
 
 ---
 
@@ -174,9 +189,18 @@ Stores where imported information or Evidence came from.
 | --- | --- | --- | --- | --- |
 | data_source_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `2` | Database-generated identifier for the Data Source |
 | source_name | VARCHAR(100) | Yes | Google Maps | Source name |
-| source_type | ENUM | Yes | API | API, Scraper, Manual, Import, or User Submitted |
+| source_type | ENUM | Yes | API | API, Web Scrape, Manual Research, File Import, User Submitted, or Other |
 | base_url | VARCHAR(500) | No | <https://maps.google.com> | General website for the Data Source |
 | last_imported_at | DATETIME | No | 2026-07-09 10:00:00 | Most recent import date |
+
+Data Source Type describes how the information entered the database:
+
+- `API`: received through a service's API
+- `Web Scrape`: collected automatically from a webpage
+- `Manual Research`: entered by a person researching a Facility
+- `File Import`: loaded from a CSV, spreadsheet, or other dataset
+- `User Submitted`: provided through a future user-facing form
+- `Other`: entered through another known method
 
 ---
 
@@ -195,6 +219,8 @@ Stores a Facility's calculated sales-opportunity score on a specific date.
 | calculated_at | DATETIME | Yes | 2026-07-09 10:00:00 | Calculation date |
 
 A Facility may have multiple score records. The most recently calculated record is its current score.
+
+If a Facility has not been scored, it has no Opportunity Score record. The rating list therefore contains only High, Medium, and Low.
 
 ---
 

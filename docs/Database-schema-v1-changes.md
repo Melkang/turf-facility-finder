@@ -24,3 +24,8 @@ This file is a short history of the decisions made while revising the first data
 - Required `UNIQUE (facility_id)` on `addresses` and `properties` so a Facility cannot have duplicate child records.
 - Made `addresses.street` and `addresses.postal_code` optional for locations without a normal mailing address.
 - Documented that `NULL` means “not confirmed” for optional Property Boolean fields, while `FALSE` means the feature was checked and is not present.
+- Approved Facility Status values: Active, Temporarily Closed, Permanently Closed, and Unknown.
+- Approved Surface Type values: Grass, Dirt, Mulch, Gravel, Concrete, Synthetic Turf, Mixed, Other, and Unknown.
+- Approved Evidence Type values: Business Listing, Website, Review, Photo, Satellite Image, Street View, Social Media Post, News Article, Public Record, Manual Observation, and Other.
+- Approved Opportunity Rating values: High, Medium, and Low. No score record means the Facility has not been scored yet.
+- Approved Data Source Type values: API, Web Scrape, Manual Research, File Import, User Submitted, and Other.

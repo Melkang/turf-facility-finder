@@ -62,6 +62,8 @@ Calculated information includes:
 
 Scores can change when new Evidence is found. Storing scores in `opportunity_scores` keeps those changes away from the basic Facility record and lets the project keep older scores.
 
+A Facility with no Opportunity Score record has not been scored yet. This is clearer than creating a numeric score with an Unknown rating.
+
 ---
 
 ### Property Stores the Fact; Evidence Stores the Explanation
@@ -97,7 +99,7 @@ evidence.source_url = https://happypaws.example/services/dog-daycare
 
 ### Old Records Are Kept When They Are Useful
 
-A Facility should not be deleted only because it closes. Its `status` can be changed to Active, Inactive, or Closed. Keeping the record helps prevent the same closed business from being imported again.
+A Facility should not be deleted only because it closes. Its `status` can be changed to Active, Temporarily Closed, Permanently Closed, or Unknown. Keeping the record helps prevent the same closed business from being imported again.
 
 Older Opportunity Scores are also kept. The score with the newest `calculated_at` date is the current score.
 

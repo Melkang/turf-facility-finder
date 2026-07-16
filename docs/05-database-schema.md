@@ -121,6 +121,22 @@ Planned for later:
 - Saved Leads
 - Social Profiles
 
+### Approved ENUM Values
+
+The first database version uses these fixed lists:
+
+**Facility status:** Active, Temporarily Closed, Permanently Closed, Unknown
+
+**Surface Type:** Grass, Dirt, Mulch, Gravel, Concrete, Synthetic Turf, Mixed, Other, Unknown
+
+**Evidence Type:** Business Listing, Website, Review, Photo, Satellite Image, Street View, Social Media Post, News Article, Public Record, Manual Observation, Other
+
+**Opportunity Rating:** High, Medium, Low
+
+**Data Source Type:** API, Web Scrape, Manual Research, File Import, User Submitted, Other
+
+For fields that include them, `Other` means the value is known but not listed, while `Unknown` means the value has not been confirmed. For Surface Type, `Mixed` means two or more listed surfaces are present.
+
 ## 5. Table Definitions
 
 ---
@@ -154,7 +170,7 @@ Stores one animal-related business location that may be a turf sales opportunity
 | primary_website  | VARCHAR(500) | No       | Official website          |
 | primary_phone    | VARCHAR(30)  | No       | Business phone number     |
 | google_place_id  | VARCHAR(255) | No       | Google Maps Place ID      |
-| status           | ENUM         | Yes      | Active, Inactive, Closed  |
+| status           | ENUM         | Yes      | Active, Temporarily Closed, Permanently Closed, Unknown |
 | last_verified_at | DATETIME     | No       | Last verification date    |
 | created_at       | DATETIME     | Yes      | Record created            |
 | updated_at       | DATETIME     | Yes      | Record updated            |
@@ -249,7 +265,7 @@ Examples include:
 | property_id              | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key                                                   |
 | facility_id              | BIGINT UNSIGNED | Yes | References facilities                                         |
 | estimated_play_area_sqft | INTEGER  | No       | Estimated outdoor activity area size                          |
-| surface_type             | ENUM     | No       | Grass, Dirt, Mixed, Gravel, Synthetic Turf, Concrete, Unknown |
+| surface_type             | ENUM     | No       | Grass, Dirt, Mulch, Gravel, Concrete, Synthetic Turf, Mixed, Other, Unknown |
 | synthetic_turf_present   | BOOLEAN  | No       | Indicates whether synthetic turf is currently installed       |
 | fenced_area              | BOOLEAN  | No       | Indicates whether outdoor areas appear to be fenced           |
 | parking_available        | BOOLEAN  | No       | Indicates whether customer parking appears available          |
@@ -377,7 +393,7 @@ Stores research findings that help explain a Facility's score.
 | evidence_id      | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
 | facility_id      | BIGINT UNSIGNED | Yes | References facilities |
 | data_source_id   | BIGINT UNSIGNED | Yes | References data_sources |
-| evidence_type    | ENUM         | Yes      | Review, Image, Website, etc. |
+| evidence_type    | ENUM         | Yes      | Business Listing, Website, Review, Photo, Satellite Image, Street View, Social Media Post, News Article, Public Record, Manual Observation, Other |
 | description      | TEXT         | Yes      | Evidence summary             |
 | source_url       | VARCHAR(1000)| No       | Exact page, review, image, or record that supports the Evidence |
 | confidence_score | DECIMAL(5,2) | Yes      | Confidence rating            |
@@ -413,7 +429,7 @@ Stores where imported information or Evidence came from.
 | ---------------- | ------------ | -------- | -------------------------------------------- |
 | data_source_id   | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
 | source_name      | VARCHAR(100) | Yes      | Google Maps, Website, Yelp                   |
-| source_type      | ENUM         | Yes      | API, Scraper, Manual, Import, User Submitted |
+| source_type      | ENUM         | Yes      | API, Web Scrape, Manual Research, File Import, User Submitted, Other |
 | base_url         | VARCHAR(500) | No       | Source website                               |
 | last_imported_at | DATETIME     | No       | Last import date                             |
 
@@ -457,6 +473,8 @@ Stores a calculated sales-opportunity score for a Facility on a specific date.
 ### Notes
 
 New scores can be added when new Evidence is found. Older scores stay in the table.
+
+If a Facility has not been scored yet, it has no Opportunity Score record. `rating` therefore uses only High, Medium, or Low and does not need an Unknown value.
 
 ---
 
