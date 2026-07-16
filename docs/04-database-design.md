@@ -37,6 +37,8 @@ The `facilities` table is the main table.
 
 If a company has several locations, each location gets its own Facility record. This is important because each location can have a different Address, outdoor area, surface, Evidence, Photos, and Opportunity Score.
 
+A new Facility may temporarily have no Address or Property record while research is incomplete. Once either record is added, the Facility can have only one of that type.
+
 ---
 
 ### Facts and Scores Are Kept Separate
@@ -171,11 +173,23 @@ Property stores the searchable fact. Evidence stores the explanation and source 
 
 The coordinates describe where a Facility is located, so they are stored with its Address.
 
-### Decision 005: Vendor workflow is a future feature
+An Address is optional while a Facility is being researched. When an Address exists, city, state, country, latitude, and longitude are required. Street and postal code are optional because some locations do not have a normal mailing address.
+
+`addresses.facility_id` must be unique so one Facility cannot accidentally receive two Address records.
+
+### Decision 005: Property records can be added after site research
+
+A Property record is optional while a Facility's physical site is being researched. When it exists, `outdoor_space` is required.
+
+Optional Boolean fields use `NULL` for “not confirmed,” `TRUE` for “present,” and `FALSE` for “not present.”
+
+`properties.facility_id` must be unique so one Facility cannot accidentally receive two Property records.
+
+### Decision 006: Vendor workflow is a future feature
 
 Saved Leads, accounts, notes, and CRM activity are not part of the first database version.
 
-### Decision 006: MySQL creates the internal IDs
+### Decision 007: MySQL creates the internal IDs
 
 Each table uses a positive whole-number primary key such as `facility_id`.
 

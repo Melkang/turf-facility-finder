@@ -136,8 +136,8 @@ Stores one animal-related business location that may be a turf sales opportunity
 ### Relationships
 
 - Belongs to one **facility_type**
-- Has one **address**
-- Has one **property** record
+- May have zero or one **address**
+- May have zero or one **property** record
 - Has many **photos**
 - Has many **evidence** records
 - Has many **opportunity_scores**
@@ -236,7 +236,9 @@ Examples include:
 
 ### Relationships
 
-- One facility has one property record.
+- A Facility may have zero or one Property record.
+- Each Property record belongs to exactly one Facility.
+- `properties.facility_id` must be unique so a Facility cannot have more than one Property record.
 
 ---
 
@@ -261,6 +263,14 @@ Examples include:
 
 Property fields store things that can be observed or reasonably estimated about the site.
 
+A Property record should be added after the physical site has been reviewed. `outdoor_space` is required when the record is created.
+
+The optional Boolean fields can store three states:
+
+- `TRUE`: the feature was checked and is present
+- `FALSE`: the feature was checked and is not present
+- `NULL`: the feature has not been confirmed yet
+
 Some property values may be estimated from evidence sources such as:
 
 - satellite imagery
@@ -280,7 +290,9 @@ Stores the physical location for each facility.
 
 ### Relationships
 
-- One address belongs to one facility.
+- A Facility may have zero or one Address.
+- Each Address belongs to exactly one Facility.
+- `addresses.facility_id` must be unique so a Facility cannot have more than one Address.
 
 ---
 
@@ -290,10 +302,10 @@ Stores the physical location for each facility.
 | ----------- | ------------ | -------- | --------------------- |
 | address_id  | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
 | facility_id | BIGINT UNSIGNED | Yes | References facilities |
-| street      | VARCHAR(255) | Yes      | Street address        |
+| street      | VARCHAR(255) | No       | Street address, when one is available |
 | city        | VARCHAR(100) | Yes      | City                  |
 | state       | VARCHAR(100) | Yes      | State                 |
-| postal_code | VARCHAR(20)  | Yes      | ZIP or Postal Code    |
+| postal_code | VARCHAR(20)  | No       | ZIP or Postal Code, when known |
 | country     | VARCHAR(100) | Yes      | Country               |
 | latitude    | DECIMAL(9,6) | Yes      | Latitude coordinate   |
 | longitude   | DECIMAL(9,6) | Yes      | Longitude coordinate  |
@@ -305,6 +317,8 @@ Stores the physical location for each facility.
 ### Notes
 
 The Address is separate from the main Facility record so location fields stay grouped together and can support map searches later.
+
+Some locations, such as parks, may have coordinates and a city but no normal street address. An Address should be added once the city, state, country, latitude, and longitude are known.
 
 ---
 
@@ -534,13 +548,17 @@ Both Facility records store the ID of the same “Dog Daycare” Facility Type r
 
 ### Facility → Address
 
-Each facility has one primary address.
+A Facility may have no Address while its location is still being researched. Once an Address is added, that Facility can have only one.
+
+Each Address must belong to one Facility. The future SQL must include `UNIQUE (facility_id)` on `addresses`.
 
 ---
 
 ### Facility → Property
 
-Each Facility has one Property record describing its physical site.
+A Facility may have no Property record while its physical site is still being researched. Once a Property record is added, that Facility can have only one.
+
+Each Property record must belong to one Facility. The future SQL must include `UNIQUE (facility_id)` on `properties`.
 
 ---
 

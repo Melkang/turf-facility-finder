@@ -24,8 +24,8 @@ To keep the diagram readable, it shortens the ID type to `BIGINT`:
 A Facility:
 
 - belongs to one Facility Type
-- has one Address
-- has one Property record
+- may have zero or one Address
+- may have zero or one Property record
 - may have many Photos
 - may have many Evidence records
 - may have many Opportunity Scores over time
@@ -44,17 +44,17 @@ Many Facilities can use the same Facility Type. Each Facility uses one Facility 
 
 ### Facilities → Addresses
 
-Each Facility has one Address, and each Address belongs to one Facility.
+An Address may not exist yet while a Facility is being researched. If it exists, it belongs to exactly one Facility, and that Facility cannot have another Address.
 
-**Relationship:** One Facility to one Address (1:1)
+**Relationship:** One Facility to zero or one Address (0..1)
 
 ---
 
 ### Facilities → Properties
 
-Each Facility has one Property record, and each Property record belongs to one Facility.
+A Property record may not exist yet while a Facility is being researched. If it exists, it belongs to exactly one Facility, and that Facility cannot have another Property record.
 
-**Relationship:** One Facility to one Property (1:1)
+**Relationship:** One Facility to zero or one Property (0..1)
 
 ---
 
@@ -95,8 +95,8 @@ The current score is the record with the most recent `calculated_at` value.
 ```mermaid
 erDiagram
     FACILITY_TYPES ||--o{ FACILITIES : classifies
-    FACILITIES ||--|| ADDRESSES : has
-    FACILITIES ||--|| PROPERTIES : has
+    FACILITIES ||--o| ADDRESSES : may_have
+    FACILITIES ||--o| PROPERTIES : may_have
     FACILITIES ||--o{ PHOTOS : has
     FACILITIES ||--o{ EVIDENCE : supports
     DATA_SOURCES ||--o{ EVIDENCE : provides
@@ -195,6 +195,7 @@ erDiagram
 - Facility Types are stored once so category names stay consistent.
 - Addresses contain geographic coordinates.
 - Properties contain searchable facts about each physical site.
+- Address and Property records are optional while research is incomplete, but each Facility can have no more than one of each.
 - Evidence explains research findings and points to their Data Sources.
 - Evidence may store the exact supporting page or item in `source_url`.
 - Opportunity Scores are separate records so older scores can be kept.

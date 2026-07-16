@@ -20,3 +20,7 @@ This file is a short history of the decisions made while revising the first data
 - Defined `Other` as a known type outside the approved categories and `Unknown` as a type that has not been confirmed.
 - Added the optional `evidence.source_url` field to store the exact page, review, image, or record supporting an Evidence item.
 - Kept `data_sources.base_url` for the general source website and documented the difference between the two URL fields.
+- Changed Address and Property relationships from required one-to-one to optional one-to-one. A Facility may have zero or one of each while research is incomplete.
+- Required `UNIQUE (facility_id)` on `addresses` and `properties` so a Facility cannot have duplicate child records.
+- Made `addresses.street` and `addresses.postal_code` optional for locations without a normal mailing address.
+- Documented that `NULL` means “not confirmed” for optional Property Boolean fields, while `FALSE` means the feature was checked and is not present.

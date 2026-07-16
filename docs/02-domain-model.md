@@ -48,8 +48,8 @@ If one company has several locations, each location gets its own Facility record
 A Facility:
 
 - belongs to one Facility Type
-- has one Address
-- has one Property record
+- may have zero or one Address
+- may have zero or one Property record
 - has many Photos
 - has many Evidence records
 - has many Opportunity Scores over time
@@ -96,7 +96,9 @@ It includes:
 - latitude
 - longitude
 
-Each Facility has one Address in the MVP.
+A Facility may have no Address while its location is still being researched. If an Address exists, it belongs to one Facility, and that Facility cannot have a second Address.
+
+Street and postal code are optional because some locations, such as parks, may not have a normal mailing address. City, state, country, latitude, and longitude are required when an Address record is added.
 
 ---
 
@@ -113,7 +115,11 @@ It includes:
 - whether parking is available
 - whether outdoor space exists
 
-Each Facility has one Property record in the first version. Put the fact in Property—for example, `surface_type = Grass`. Put where that fact came from in Evidence—for example, “The business website shows a grass play yard.”
+A Facility may have no Property record while the site is still being researched. If a Property record exists, it belongs to one Facility, and that Facility cannot have a second Property record.
+
+Put the fact in Property—for example, `surface_type = Grass`. Put where that fact came from in Evidence—for example, “The business website shows a grass play yard.”
+
+For optional true-or-false fields, `NULL` means “not confirmed yet.” This is different from `FALSE`, which means the feature was checked and is not present.
 
 ---
 

@@ -102,6 +102,10 @@ Stores facts about the Facility's physical site, such as its surface and outdoor
 | created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
 | updated_at | DATETIME | Yes | 2026-07-12 14:30:00 | Most recent record update |
 
+A Facility may have no Property record while the site is still being researched. If a Property record exists, it must belong to one Facility, and its `facility_id` must be unique.
+
+`outdoor_space` is required when a Property record is created. The other Boolean fields are optional: `TRUE` means the feature is present, `FALSE` means it is not present, and `NULL` means it has not been confirmed.
+
 ---
 
 ## Entity: Address (`addresses`)
@@ -112,15 +116,19 @@ Stores the physical location and coordinates of a Facility.
 | --- | --- | --- | --- | --- |
 | address_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `880` | Database-generated identifier for the Address |
 | facility_id | BIGINT UNSIGNED | Yes | `1042` | ID of the related Facility |
-| street | VARCHAR(255) | Yes | 123 Main St | Street address |
+| street | VARCHAR(255) | No | 123 Main St | Street address, when one is available |
 | city | VARCHAR(100) | Yes | Lexington | City |
 | state | VARCHAR(100) | Yes | Kentucky | State or region |
-| postal_code | VARCHAR(20) | Yes | 40502 | ZIP or postal code |
+| postal_code | VARCHAR(20) | No | 40502 | ZIP or postal code, when known |
 | country | VARCHAR(100) | Yes | United States | Country |
 | latitude | DECIMAL(9,6) | Yes | 38.040584 | Latitude coordinate |
 | longitude | DECIMAL(9,6) | Yes | -84.503716 | Longitude coordinate |
 | created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
 | updated_at | DATETIME | Yes | 2026-07-12 14:30:00 | Most recent record update |
+
+A Facility may have no Address while its location is being researched. If an Address exists, it must belong to one Facility, and its `facility_id` must be unique.
+
+City, state, country, latitude, and longitude are required before an Address record is added. Street and postal code are optional because some locations do not have a normal mailing address.
 
 ---
 
