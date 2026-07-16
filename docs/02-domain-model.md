@@ -2,47 +2,40 @@
 
 ## Domain Model
 
-Version: 1.0
+Version: 1.1
 
 ---
 
 ## Purpose
 
-The domain model defines every major object used by Turf Facility Finder.
+This file is a simple map of the main types of information in Turf Facility Finder and how they connect.
 
-These objects become:
+In database terms, these types of information are called **entities**. Most entities will become database tables later.
 
-- database tables
-- API resources
-- JavaScript models
-- search indexes
+`05-database-schema.md` is the main file to trust if two database documents disagree. **MVP** means the smallest useful first version of the project.
 
 ---
 
-## Core Domain
+## MVP Domain
 
-Vendor
-│
-├── Saved Lead
-│
-├── Search
-│
+```text
+Facility Type
 └── Facility
-├── Location
-├── Property
-├── Opportunity Score
-├── Evidence
-├── Contact
-├── Photos
-└── Data Sources
+    ├── Address
+    ├── Property
+    ├── Photos
+    ├── Evidence
+    │   └── Data Source
+    └── Opportunity Scores
+```
+
+`Facility` is the main entity. The other entities describe a Facility, group it by type, show where its information came from, or store its score.
 
 ---
 
-## Primary Entity
+## Facility
 
-Facility
-
-A Facility represents one physical business location.
+A Facility represents one physical business location that may be a synthetic turf sales opportunity.
 
 Examples:
 
@@ -50,245 +43,150 @@ Examples:
 - Bark Park Boarding
 - Canine Adventure Center
 
-A facility is the main object throughout the application.
+If one company has several locations, each location gets its own Facility record. Each location can have a different address, outdoor area, surface, and opportunity score.
 
-Everything else belongs to it.
+A Facility:
 
----
-
-## Facility Relationships
-
-Facility
-
-has one
-
-Location
-
-has one
-
-Property
-
-has many
-
-Evidence Items
-
-has many
-
-Photos
-
-has many
-
-Contacts
-
-belongs to many
-
-Data Sources
-
-can belong to many
-
-Saved Lists
+- belongs to one Facility Type
+- has one Address
+- has one Property record
+- has many Photos
+- has many Evidence records
+- has many Opportunity Scores over time
 
 ---
 
-## Vendor
+## Facility Type
 
-Represents the customer using Turf Facility Finder.
+A Facility Type is a category used to group similar Facilities. Storing the category once helps avoid variations such as “Dog daycare,” “Dog Day Care,” and “Daycare for Dogs.”
 
-A vendor can:
+Examples:
 
-- search
-- save leads
-- export leads
-- manage territories (future)
+- Dog Daycare
+- Dog Boarding
+- Dog Park
+- Animal Shelter
+- Veterinary Clinic
+- Training Facility
 
----
-
-## Saved Lead
-
-Represents a facility bookmarked by a vendor.
-
-Stores:
-
-- saved date
-- notes
-- status
-- follow-up history
+One Facility Type may classify many Facilities.
 
 ---
 
-## Search
+## Address
 
-Represents a search request.
+An Address stores where a Facility is located. It also stores the latitude and longitude needed for map and distance searches.
 
-Contains:
+It includes:
 
-- location
-- radius
-- filters
-- sorting
-
----
-
-## Location
-
-Describes where a facility exists.
-
-Includes:
-
-- address
+- street
 - city
-- county
 - state
-- ZIP
+- postal code
+- country
 - latitude
 - longitude
+
+Each Facility has one Address in the MVP.
 
 ---
 
 ## Property
 
-Describes the physical characteristics.
+A Property stores facts about the physical site that may affect whether turf would be useful.
 
-Examples:
+It includes:
 
-- estimated acreage
-- outdoor space
-- fencing
-- parking
-- visible grass
-- visible dirt
-- synthetic turf present
+- estimated outdoor play-area size
+- surface type
+- whether synthetic turf is already present
+- whether the area is fenced
+- whether parking is available
+- whether outdoor space exists
+
+Each Facility has one Property record in the first version. Put the fact in Property—for example, `surface_type = Grass`. Put where that fact came from in Evidence—for example, “The business website shows a grass play yard.”
 
 ---
 
-## Opportunity Score
+## Photo
 
-Represents the estimated sales potential.
+A Photo stores the web address of a publicly available image connected to a Facility. The database stores the image link, not necessarily the image file itself.
 
-Possible values:
+Examples include:
 
-High
+- facility photos
+- satellite imagery
+- Street View imagery
+- business website images
 
-Medium
-
-Low
-
-Unknown
-
-The score is calculated from evidence with reasoning and confidence level.
+A Facility may have many Photos.
 
 ---
 
 ## Evidence
 
-Evidence explains why a facility received its score.
+Evidence stores a short explanation of what was found and where it was found. It helps explain why a Facility received a particular score.
 
 Examples include:
 
-Website
+- reviews mentioning a muddy yard
+- a website describing an outdoor play area
+- imagery showing worn grass
+- public records describing a property expansion
 
-Customer Reviews
-
-Google Maps
-
-Satellite imagery
-
-Street View
-
-Facebook
-
-Instagram
-
-Photos
-
-News articles
-
----
-
-## Contact
-
-Stores publicly available business contacts.
-
-Examples:
-
-Owner
-
-Manager
-
-Email
-
-Phone
-
-Website
-
----
-
-## Photos
-
-Stores references to publicly available imagery.
-
-May include:
-
-Facility photos
-
-Street View
-
-Satellite
-
-Website images
-
-Social media
+Each Evidence record belongs to one Facility and points to one Data Source. One Facility can have many pieces of Evidence.
 
 ---
 
 ## Data Source
 
-Every piece of information has a source.
+A Data Source records where information came from.
 
-Examples:
+Examples include:
 
-Google Business
+- Google Maps
+- a business website
+- OpenStreetMap
+- a government directory
+- a manual research import
 
-Business Website
-
-County GIS
-
-Facebook
-
-Instagram
-
-Yelp
-
-Review Sites
-
-OpenStreetMap
-
-Government Data
+Many Evidence records can point to the same Data Source. For example, several pieces of Evidence may come from Google Maps.
 
 ---
 
-## Future Entities
+## Opportunity Score
 
-Visit
+An Opportunity Score stores the calculated sales potential of a Facility on a specific date.
 
-Proposal
+It includes:
 
-Sales Activity
+- numeric opportunity score
+- rating of High, Medium, or Low
+- confidence score
+- scoring method
+- calculation date
 
-CRM Sync
+A Facility can have several scores over time. Keeping the older scores makes it possible to see how the Facility changed. The newest score is the current score.
 
-Inspection
+---
 
-Maintenance History
+## Future Domain
 
-Installation History
+The following ideas are not part of the first database version. They can be designed later:
 
-AI Recommendation
+- Vendor and user accounts
+- Saved Leads
+- Social Profiles
+- Contacts
+- Search history
+- Visits
+- Proposals
+- Sales Activity
+- CRM synchronization
+- Inspections
+- Maintenance and installation history
+- AI recommendations
+- Territories and sales representatives
+- Opportunity trends and market analysis
 
-Territory
-
-Sales Representative
-
-Opportunity Trend
-
-Market Analysis
+Leaving these out for now keeps the first database smaller and easier to build.

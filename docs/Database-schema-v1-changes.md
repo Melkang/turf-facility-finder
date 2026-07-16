@@ -1,13 +1,18 @@
-# Version 1.1
+# Database Changes for Version 1.1
 
-Changed:
+This file is a short history of the decisions made while revising the first database draft.
 
-- Removed opportunity_rating from facilities
-- Moved geographic coordinates to addresses
-- Moved property attributes to properties table
-- Changed opportunity scores from 1:1 to 1:many
-- Standardized primary key naming
-- Removed opportunity scoring fields from facilities.
-- Moved property attributes into properties table.
-- Removed vendor functionality from MVP.
-- Moved social profiles and saved leads to future expansion.
+## What Changed
+
+- Made `05-database-schema.md` the main file to trust for table names, field names, and relationships.
+- Updated the other database documents to use the same names as the schema.
+- Removed `opportunity_rating` and other scoring fields from `facilities`.
+- Moved geographic coordinates to `addresses`.
+- Moved physical-site fields to `properties`.
+- Allowed each Facility to have several Opportunity Scores so older scores can be kept.
+- Made primary-key and foreign-key names consistent, including `data_source_id`.
+- Changed internal IDs from UUID-style values to MySQL-generated `BIGINT UNSIGNED AUTO_INCREMENT` primary keys.
+- Changed matching foreign keys to `BIGINT UNSIGNED`.
+- Replaced examples such as `fac_8f32a` with simple numeric IDs such as `1042`.
+- Moved Vendors, Contacts, Search history, Social Profiles, and Saved Leads out of the first database version.
+- Updated the ERD so it shows every first-version table and leaves out future tables.

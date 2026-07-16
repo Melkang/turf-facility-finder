@@ -2,16 +2,16 @@
 
 ## Database Schema
 
-Version: 1.0
+Version: 1.1
 Status: Draft
 
 ---
 
 ## 1. Purpose
 
-This document describes the logical database schema used by Turf Facility Finder.
+This is the main planning document for the Turf Facility Finder database. It lists the tables, the fields inside each table, and how the tables connect.
 
-The application is designed as a lead generation platform for synthetic turf vendors by identifying animal-related facilities that may benefit from synthetic turf installation, replacement, or maintenance.
+The project helps turf vendors find animal-related Facilities that may benefit from synthetic turf.
 
 This document defines:
 
@@ -19,85 +19,87 @@ This document defines:
 - primary keys
 - foreign keys
 - relationships
-- normalization decisions
-- indexing strategy
-- future scalability considerations
+- decisions made to avoid repeated data
+- fields that may need indexes for faster searches
+- ideas saved for later versions
 
-This is a logical schema rather than a database-specific implementation.
+This file describes what the database should contain. It is not the SQL code that creates the database.
 
-Physical SQL scripts will be created later after the schema has been reviewed.
+The SQL scripts will be written after this draft is reviewed.
+
+If two database documents disagree, use this file as the correct version. The Domain Model, Data Dictionary, Database Design Decisions, and ERD should all match it.
+
+**MVP** means the smallest useful first version of the project.
 
 ---
 
-## 2. Database Design Philosophy
+## 2. Main Database Goals
 
-The database is designed around several goals.
+The database should:
 
-• Store each facility only once.
+- store each Facility location once
+- allow each Facility to have several pieces of Evidence
+- keep useful older records instead of overwriting or deleting them
+- keep basic Facility facts separate from research notes and calculated scores
+- support future map and distance searches
+- accept both imported data and manual research
+- avoid storing the same information in several places
 
-• Allow multiple evidence sources to support each facility.
-
-• Preserve historical information instead of deleting records.
-
-• Separate searchable business information from supporting metadata.
-
-• Support future GIS (map) functionality.
-
-• Support automated data imports from APIs and web scraping.
-
-• Support manual review and editing.
-
-• Minimize duplicated information.
-
-The design follows Third Normal Form (3NF) wherever practical.
+Keeping each fact in the table where it belongs is called **normalization**. This database aims for Third Normal Form (3NF), which is a common way to reduce repeated data and keep relationships clear.
 
 ---
 
 ## 3. Naming Standards
 
-The database follows consistent naming conventions to improve readability, maintainability, and collaboration.
+Use these naming rules so fields are predictable and easy to find.
 
 ### Tables
 
-- Use plural nouns
-- snake_case
-- lowercase
+- use plural nouns: `facilities`, not `facility`
+- use lowercase letters
+- separate words with underscores: `facility_types`
 
 Examples
 
 facilities
 facility_types
-social_profiles
-saved_leads
+opportunity_scores
+data_sources
 
 ### Primary Keys
 
-Every table uses a descriptive primary key based on the table name.
+Every table has a **primary key**, which is the unique ID for one record. Its name matches the table. For example, `facilities` uses `facility_id`.
+
+Primary keys use `BIGINT UNSIGNED AUTO_INCREMENT`. In plain language, this is a positive whole number that MySQL creates automatically when a record is added.
 
 ### Foreign Keys
 
-Foreign keys reference the parent table name.
+**Foreign keys** connect tables. A foreign key stores the primary key of a related record.
+
+Foreign keys use `BIGINT UNSIGNED` so their type matches the related primary key. They do not use `AUTO_INCREMENT` because they point to an ID that already exists.
 
 facility_id
 facility_type_id
-address_id
-source_id
+data_source_id
 
 ### Date Fields
+
+Date-field names describe when something happened:
 
 created_at
 updated_at
 last_verified_at
-deleted_at
 
 ### Boolean Fields
 
-is_active
-is_verified
-is_closed
-is_manual_override
+Boolean fields store true or false. Their names should read clearly as yes-or-no questions:
 
-## 4. Entity Relationship Overview
+synthetic_turf_present
+fenced_area
+parking_available
+outdoor_space
+
+## 4. Table Relationship Overview
 
 Facility
 │
@@ -113,7 +115,7 @@ Facility
 │
 └── Opportunity Scores
 
-Future:
+Planned for later:
 
 - Vendors
 - Saved Leads
@@ -127,7 +129,7 @@ Future:
 
 ### Purpose
 
-Stores the primary record for every animal-related facility that may represent a synthetic turf sales opportunity.
+Stores one animal-related business location that may be a turf sales opportunity.
 
 ---
 
@@ -135,11 +137,10 @@ Stores the primary record for every animal-related facility that may represent a
 
 - Belongs to one **facility_type**
 - Has one **address**
-- Has many **social_profiles**
+- Has one **property** record
 - Has many **photos**
 - Has many **evidence** records
 - Has many **opportunity_scores**
-- Can appear in many **saved_leads**
 
 ---
 
@@ -147,9 +148,9 @@ Stores the primary record for every animal-related facility that may represent a
 
 | Column           | Type         | Required | Description               |
 | ---------------- | ------------ | -------- | ------------------------- |
-| facility_id      | UUID         | Yes      | Primary Key               |
+| facility_id      | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
 | facility_name    | VARCHAR(255) | Yes      | Business name             |
-| facility_type_id | UUID         | Yes      | References facility_types |
+| facility_type_id | BIGINT UNSIGNED | Yes | References facility_types |
 | primary_website  | VARCHAR(500) | No       | Official website          |
 | primary_phone    | VARCHAR(30)  | No       | Business phone number     |
 | google_place_id  | VARCHAR(255) | No       | Google Maps Place ID      |
@@ -192,7 +193,7 @@ Examples include:
 
 | Column           | Type         | Required | Description          |
 | ---------------- | ------------ | -------- | -------------------- |
-| facility_type_id | UUID         | Yes      | Primary Key          |
+| facility_type_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
 | type_name        | VARCHAR(100) | Yes      | Facility category    |
 | description      | TEXT         | No       | Optional description |
 | created_at       | DATETIME     | Yes      | Record created       |
@@ -202,7 +203,7 @@ Examples include:
 
 ### Notes
 
-Stores standardized facility categories to reduce duplicate data.
+Stores each approved Facility category once so category names stay consistent.
 
 ---
 
@@ -210,9 +211,9 @@ Stores standardized facility categories to reduce duplicate data.
 
 ### Purpose
 
-Stores the physical characteristics of the property associated with a facility.
+Stores facts about a Facility's physical site.
 
-Property data helps evaluate whether a location may be a good candidate for synthetic turf installation.
+These facts help show whether synthetic turf may be useful at that location.
 
 Examples include:
 
@@ -234,8 +235,8 @@ Examples include:
 
 | Column                   | Type     | Required | Description                                                   |
 | ------------------------ | -------- | -------- | ------------------------------------------------------------- |
-| property_id              | UUID     | Yes      | Primary key                                                   |
-| facility_id              | UUID     | Yes      | References facilities                                         |
+| property_id              | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key                                                   |
+| facility_id              | BIGINT UNSIGNED | Yes | References facilities                                         |
 | estimated_play_area_sqft | INTEGER  | No       | Estimated outdoor activity area size                          |
 | surface_type             | ENUM     | No       | Grass, Dirt, Mixed, Gravel, Synthetic Turf, Concrete, Unknown |
 | synthetic_turf_present   | BOOLEAN  | No       | Indicates whether synthetic turf is currently installed       |
@@ -249,7 +250,7 @@ Examples include:
 
 ### Notes
 
-Property information represents observable characteristics of the physical site.
+Property fields store things that can be observed or reasonably estimated about the site.
 
 Some property values may be estimated from evidence sources such as:
 
@@ -258,7 +259,7 @@ Some property values may be estimated from evidence sources such as:
 - business websites
 - facility photos
 
-Property records should store observations, while the evidence table stores the source and reasoning behind those observations.
+Store the fact in `properties`. Store where the fact came from and why it was entered in `evidence`.
 
 `addresses`
 
@@ -278,8 +279,8 @@ Stores the physical location for each facility.
 
 | Column      | Type         | Required | Description           |
 | ----------- | ------------ | -------- | --------------------- |
-| address_id  | UUID         | Yes      | Primary Key           |
-| facility_id | UUID         | Yes      | References facilities |
+| address_id  | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
+| facility_id | BIGINT UNSIGNED | Yes | References facilities |
 | street      | VARCHAR(255) | Yes      | Street address        |
 | city        | VARCHAR(100) | Yes      | City                  |
 | state       | VARCHAR(100) | Yes      | State                 |
@@ -294,7 +295,7 @@ Stores the physical location for each facility.
 
 ### Notes
 
-Keeping addresses in their own table allows future support for multiple locations if needed.
+The Address is separate from the main Facility record so location fields stay grouped together and can support map searches later.
 
 ---
 
@@ -316,8 +317,8 @@ Stores photos associated with a facility.
 
 | Column      | Type         | Required | Description                   |
 | ----------- | ------------ | -------- | ----------------------------- |
-| photo_id    | UUID         | Yes      | Primary Key                   |
-| facility_id | UUID         | Yes      | References facilities         |
+| photo_id    | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
+| facility_id | BIGINT UNSIGNED | Yes | References facilities |
 | photo_url   | VARCHAR(500) | Yes      | Image URL                     |
 | source      | VARCHAR(100) | No       | Google, Website, Social Media |
 | caption     | VARCHAR(255) | No       | Optional description          |
@@ -327,7 +328,7 @@ Stores photos associated with a facility.
 
 ### Notes
 
-Multiple photos help estimate outdoor conditions and support opportunity scoring.
+Photos can help show outdoor conditions and support a Facility's score.
 
 ---
 
@@ -335,7 +336,7 @@ Multiple photos help estimate outdoor conditions and support opportunity scoring
 
 ### Purpose
 
-Stores supporting evidence used to evaluate a sales opportunity.
+Stores research findings that help explain a Facility's score.
 
 ---
 
@@ -350,9 +351,9 @@ Stores supporting evidence used to evaluate a sales opportunity.
 
 | Column           | Type         | Required | Description                  |
 | ---------------- | ------------ | -------- | ---------------------------- |
-| evidence_id      | UUID         | Yes      | Primary Key                  |
-| facility_id      | UUID         | Yes      | References facilities        |
-| source_id        | UUID         | Yes      | References data_sources      |
+| evidence_id      | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
+| facility_id      | BIGINT UNSIGNED | Yes | References facilities |
+| data_source_id   | BIGINT UNSIGNED | Yes | References data_sources |
 | evidence_type    | ENUM         | Yes      | Review, Image, Website, etc. |
 | description      | TEXT         | Yes      | Evidence summary             |
 | confidence_score | DECIMAL(5,2) | Yes      | Confidence rating            |
@@ -362,7 +363,7 @@ Stores supporting evidence used to evaluate a sales opportunity.
 
 ### Notes
 
-Evidence provides transparency for why a facility received its opportunity rating.
+Evidence makes it possible to look back and see why a Facility received its rating.
 
 ---
 
@@ -370,7 +371,7 @@ Evidence provides transparency for why a facility received its opportunity ratin
 
 ### Purpose
 
-Stores the origin of imported facility data.
+Stores where imported information or Evidence came from.
 
 ---
 
@@ -384,7 +385,7 @@ Stores the origin of imported facility data.
 
 | Column           | Type         | Required | Description                                  |
 | ---------------- | ------------ | -------- | -------------------------------------------- |
-| data_source_id   | UUID         | Yes      | Primary Key                                  |
+| data_source_id   | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
 | source_name      | VARCHAR(100) | Yes      | Google Maps, Website, Yelp                   |
 | source_type      | ENUM         | Yes      | API, Scraper, Manual, Import, User Submitted |
 | base_url         | VARCHAR(500) | No       | Source website                               |
@@ -394,7 +395,7 @@ Stores the origin of imported facility data.
 
 ### Notes
 
-Allows tracking of where every piece of information originated.
+This makes it easier to check the original source later.
 
 ---
 
@@ -402,7 +403,7 @@ Allows tracking of where every piece of information originated.
 
 ### Purpose
 
-Stores the calculated opportunity score for each facility.
+Stores a calculated sales-opportunity score for a Facility on a specific date.
 
 ---
 
@@ -417,8 +418,8 @@ Stores the calculated opportunity score for each facility.
 
 | Column            | Type         | Required | Description                    |
 | ----------------- | ------------ | -------- | ------------------------------ |
-| score_id          | UUID         | Yes      | Primary Key                    |
-| facility_id       | UUID         | Yes      | References facilities          |
+| score_id          | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
+| facility_id       | BIGINT UNSIGNED | Yes | References facilities |
 | opportunity_score | DECIMAL(5,2) | Yes      | Overall score                  |
 | rating            | ENUM         | Yes      | High, Medium, Low              |
 | confidence_score  | DECIMAL(5,2) | Yes      | Confidence score               |
@@ -429,11 +430,13 @@ Stores the calculated opportunity score for each facility.
 
 ### Notes
 
-Scores may be recalculated as new evidence becomes available.
+New scores can be added when new Evidence is found. Older scores stay in the table.
 
 ---
 
-Future Entities:
+## Future Entities
+
+The following tables are ideas for later versions. Their fields may change and should not be built as part of the first database version.
 
 `social_profiles`
 
@@ -453,8 +456,8 @@ Stores links to a facility's social media accounts.
 
 | Column            | Type         | Required | Description               |
 | ----------------- | ------------ | -------- | ------------------------- |
-| social_profile_id | UUID         | Yes      | Primary Key               |
-| facility_id       | UUID         | Yes      | References facilities     |
+| social_profile_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
+| facility_id       | BIGINT UNSIGNED | Yes | References facilities |
 | platform          | VARCHAR(50)  | Yes      | Facebook, Instagram, etc. |
 | profile_url       | VARCHAR(500) | Yes      | Profile URL               |
 | created_at        | DATETIME     | Yes      | Record created            |
@@ -486,8 +489,8 @@ Stores facilities that a vendor has saved for future follow-up.
 
 | Column       | Type     | Required | Description           |
 | ------------ | -------- | -------- | --------------------- |
-| save_lead_id | UUID     | Yes      | Primary Key           |
-| facility_id  | UUID     | Yes      | References facilities |
+| saved_lead_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
+| facility_id  | BIGINT UNSIGNED | Yes | References facilities |
 | saved_at     | DATETIME | Yes      | Date saved            |
 | notes        | TEXT     | No       | Optional vendor notes |
 
@@ -495,17 +498,17 @@ Stores facilities that a vendor has saved for future follow-up.
 
 ### Notes
 
-Initially supports a simple saved list. Future versions may associate saved leads with individual user accounts.
+This future table would store a simple saved list. User accounts can be connected to it when that feature is designed.
 
 ---
 
-## 6. Relationship Rules
+## 6. How the Tables Connect
 
-The database follows these relationship rules.
+This section explains the table connections in plain language.
 
 ### Facility → Facility Type
 
-Many facilities may belong to one facility type.
+Many Facilities can use the same Facility Type.
 
 Example:
 
@@ -513,7 +516,7 @@ Dogtopia → Dog Daycare
 
 Camp Bow Wow → Dog Daycare
 
-Both reference the same Facility Type record.
+Both Facility records store the ID of the same “Dog Daycare” Facility Type record.
 
 ---
 
@@ -523,19 +526,9 @@ Each facility has one primary address.
 
 ---
 
-### Facility → Social Profiles
+### Facility → Property
 
-A facility may have zero or many social media profiles.
-
-Examples:
-
-Facebook
-
-Instagram
-
-LinkedIn
-
-TikTok
+Each Facility has one Property record describing its physical site.
 
 ---
 
@@ -547,29 +540,31 @@ A facility may have multiple photos.
 
 ### Facility → Evidence
 
-Each facility may have many pieces of evidence collected from different sources.
+Each Facility can have many pieces of Evidence from different sources.
+
+---
+
+### Data Source → Evidence
+
+Many Evidence records can point to the same Data Source.
 
 ---
 
 ### Facility → Opportunity Score
 
-Each facility has one current opportunity score.
+Each Facility can have several Opportunity Scores over time. The record with the newest `calculated_at` date is the current score.
 
-## 7. Indexing Strategies
+## 7. Fields That May Need Indexes
 
-Indexes improve search performance.
+An **index** helps MySQL find records faster, similar to an index in a book. Indexes use extra storage, so they should be added to fields that are searched, sorted, or joined often.
 
-The following columns should be indexed.
+These fields are likely index candidates when the SQL is written:
 
 ### facilities
 
 facility_name
 
 google_place_id
-
-latitude
-
-longitude
 
 status
 
@@ -585,29 +580,23 @@ state
 
 postal_code
 
+latitude
+
+longitude
+
 ---
 
 ### evidence
 
 facility_id
 
-source_id
+data_source_id
 
 ---
 
-### social_profiles
+## 8. Ideas for Later Versions
 
-facility_id
-
-platform
-
----
-
-## 8. Future Expansion Thoughts
-
-The current schema supports the MVP.
-
-Future versions may include:
+These features are not part of the first database version:
 
 ### User Accounts
 
@@ -629,7 +618,7 @@ Allow vendors to save follow-up notes.
 
 ### GIS Mapping
 
-Support map overlays and spatial searches.
+Support maps, distance filters, and location-based searches.
 
 ---
 

@@ -1,247 +1,216 @@
-# Database Design (Architecture Decision Record)
+# Database Design Decisions
+
+Version: 1.1
 
 ## Purpose
 
-The Turf Facility Finder database is designed to support a lead generation platform for synthetic turf vendors.
+This file explains why the database is organized the way it is. Use it when you need to remember the reasoning behind a table or relationship.
 
-The primary goal of the database is to identify, organize, analyze, and surface potential sales opportunities for businesses that maintain outdoor animal activity areas where synthetic turf may provide operational, hygienic, or maintenance benefits.
+Turf Facility Finder helps turf vendors find animal-related facilities that may benefit from synthetic turf. The database stores information about those Facilities and the research used to evaluate them.
 
-Rather than functioning as a traditional customer relationship management (CRM) system, the database serves as an opportunity discovery engine. Vendors interact with analyzed opportunities while the underlying facility data remains protected as the system's source of truth.
+`05-database-schema.md` is the main file to trust for exact table names, field names, data types, and relationships.
 
----
-
-### Design Goals
-
-The database was designed around the following principles:
-
-• Maintain a single source of truth for imported facility information.
-
-• Separate factual data from calculated opportunity analysis.
-
-• Separate shared platform data from vendor-specific data.
-
-• Normalize repetitive information to improve consistency.
-
-• Preserve historical records instead of deleting them.
-
-• Support multiple external data sources.
-
-• Allow future expansion without significant schema redesign.
-
-• Keep the design understandable for both technical and non-technical stakeholders.
+**MVP** means the smallest useful first version of the project.
 
 ---
 
-## Core Design Principles
+## Goals for the First Database Version
 
-### Source of Truth
+The database should:
 
-Facility information originates from trusted external sources.
-
-Examples include:
-
-• Google Places
-• OpenStreetMap
-• Business websites
-• Government business directories
-• Animal organization directories
-
-Imported information should not be directly editable by vendors.
+- store each physical Facility location once
+- keep basic Facility facts separate from calculated scores
+- use one approved list of Facility Types
+- keep older Opportunity Scores instead of overwriting them
+- record where Evidence came from
+- support searches by location
+- support both imported data and manual research
+- stay small enough to understand and maintain
 
 ---
 
-### Read-Only Master Dataset
+## How the Data Is Organized
 
-The Facilities table represents the platform's master dataset.
+### One Physical Location Equals One Facility
 
-Users can:
+The `facilities` table is the main table.
 
-• Save facilities
-• Add notes
-• Track follow-ups
-
-Users cannot directly modify imported facility records.
-
-Corrections should be stored separately for administrative review.
+If a company has several locations, each location gets its own Facility record. This is important because each location can have a different Address, outdoor area, surface, Evidence, Photos, and Opportunity Score.
 
 ---
 
-### Facts vs Analysis
+### Facts and Scores Are Kept Separate
 
-The database separates observable facts from calculated opportunity scores.
+Basic facts include:
 
-Examples of factual information include:
+- Facility name and status
+- Facility Type
+- Address and map coordinates
+- Property details
+- Photos
+- Evidence and its Data Source
 
-• Facility name
-• Address
-• Website
-• Facility type
-• Geographic location
+Calculated information includes:
 
-Examples of analytical information include:
+- opportunity score
+- High, Medium, or Low rating
+- confidence score
+- scoring method
+- calculation date
 
-• Opportunity score
-• Turf suitability
-• Estimated installation potential
-• Confidence score
-• Recommended sales priority
-
-Separating these concerns allows scoring algorithms to improve without modifying historical facility data.
-
----
-
-### Shared Data vs Vendor Data
-
-Platform data is shared among all vendors.
-
-Examples include:
-
-• Facilities
-• Evidence
-• Facility Types
-
-Vendor-specific data includes:
-
-• Saved leads
-• Personal notes
-• Follow-up reminders
-• Sales status
-
-This prevents one vendor's activity from affecting another vendor's workspace.
+Scores can change when new Evidence is found. Storing scores in `opportunity_scores` keeps those changes away from the basic Facility record and lets the project keep older scores.
 
 ---
 
-### Soft Deletes
+### Property Stores the Fact; Evidence Stores the Explanation
 
-Facilities should never be permanently removed.
+The `properties` table stores searchable facts about the site.
 
-Instead, records receive status values such as:
+Example:
 
-• Active
-• Temporarily Closed
-• Permanently Closed
-• Unknown
+```text
+surface_type = Grass
+```
 
-Historical records provide reporting value and prevent duplicate imports.
+The `evidence` table stores why that fact was entered.
 
----
+Example:
 
-### Data Quality
+```text
+The business website shows a grass outdoor play yard.
+```
 
-Every imported record should include metadata describing:
-
-• Original source
-
-• Last verification date
-
-• Import timestamp
-
-• Confidence level
-
-These fields improve trust in the dataset and simplify maintenance.
+Each Evidence record points to a Data Source, such as Google Maps, a business website, or a government directory. This makes it possible to check where the information came from later.
 
 ---
 
-## Normalization Strategy
+### Old Records Are Kept When They Are Useful
 
-The database follows Third Normal Form (3NF) where practical.
+A Facility should not be deleted only because it closes. Its `status` can be changed to Active, Inactive, or Closed. Keeping the record helps prevent the same closed business from being imported again.
 
-Large repeating values are stored once and referenced through foreign keys.
-
-Examples include:
-
-Facility Types
-
-instead of repeatedly storing
-
-Dog Daycare
-Dog Park
-Boarding Facility
-Veterinary Clinic
-
-throughout thousands of records.
-
-This reduces duplication, improves consistency, and simplifies future updates.
+Older Opportunity Scores are also kept. The score with the newest `calculated_at` date is the current score.
 
 ---
 
-## High-Level Entity Relationships
+### Future Account Features Stay Out of the First Version
 
-FacilityTypes
+The first database version contains shared Facility research:
 
-↓
+- Facilities
+- Facility Types
+- Addresses
+- Properties
+- Photos
+- Evidence
+- Data Sources
+- Opportunity Scores
 
-Facilities
-
-├── Evidence
-
-├── SocialProfiles
-
-├── OpportunityScores
-
-├── SavedLeads
-
-└── LeadNotes
-
-Facilities serve as the central entity within the application.
-
-Most business information ultimately relates back to a single facility.
+Vendor accounts, Saved Leads, Social Profiles, Contacts, notes, reminders, and sales activity will be designed later. Leaving them out keeps the first database focused and easier to build.
 
 ---
 
-## Future Scalability
+## Why the Data Uses Separate Tables
 
-The architecture anticipates future features including:
+Separating related information into tables reduces repeated data and spelling differences. Database designers call this **normalization**.
 
-• AI-assisted opportunity scoring
+For example, `facility_types` stores “Dog Daycare” once. Each matching Facility stores the ID for that Facility Type instead of storing another copy of the category name.
 
-• Satellite imagery analysis
+The main tables have one clear job:
 
-• Multiple import pipelines
-
-• Automated website crawling
-
-• User accounts
-
-• Analytics dashboards
-
-The database is intentionally designed to accommodate these features without requiring major structural changes.
-
----
-
-## Database Philosophy
-
-The Turf Facility Finder database is designed around one guiding principle:
-
-Store reliable facts once.
-
-Build intelligent analysis on top of those facts.
-
-Allow vendors to personalize their workflow without compromising the integrity of the shared dataset.
-
-### Key Architecture Decisions
-
-### Decision 001
-
-One business location equals one Facility record.
-
-Reason:
-The application identifies opportunities at the physical location level rather than the company level. A business with multiple locations may have different outdoor conditions, opportunity scores, and supporting evidence at each location.
+- `facilities` stores the business location
+- `facility_types` stores the approved categories
+- `addresses` stores the street address and map coordinates
+- `properties` stores facts about the physical site
+- `photos` stores image links
+- `evidence` stores research findings
+- `data_sources` stores where research came from
+- `opportunity_scores` stores calculated scores over time
 
 ---
 
-### Decision 002
+## Relationship Overview
 
-Opportunity Scores are stored separately from Facilities.
+```text
+Facility Type
+└── Facilities
+    ├── Address
+    ├── Property
+    ├── Photos
+    ├── Evidence ── Data Source
+    └── Opportunity Scores
+```
 
-Reason:
-Opportunity scores are analytical values that change over time, while facility information represents factual imported data.
+Most records connect to one Facility.
 
 ---
 
-### Decision 003
+## Decisions to Remember
 
-Vendor data is separated from shared platform data.
+### Decision 001: One business location gets one Facility record
 
-Reason:
-Each vendor maintains independent saved leads, notes, and sales activities while sharing the same underlying facility dataset.
+Different locations can have different turf needs, so they must be stored separately.
+
+### Decision 002: Opportunity Scores are not stored in Facilities
+
+A score can change. Basic Facility information should not have to change with it.
+
+### Decision 003: Property and Evidence have different jobs
+
+Property stores the searchable fact. Evidence stores the explanation and source behind that fact.
+
+### Decision 004: Latitude and longitude belong in Addresses
+
+The coordinates describe where a Facility is located, so they are stored with its Address.
+
+### Decision 005: Vendor workflow is a future feature
+
+Saved Leads, accounts, notes, and CRM activity are not part of the first database version.
+
+### Decision 006: MySQL creates the internal IDs
+
+Each table uses a positive whole-number primary key such as `facility_id`.
+
+Primary keys use:
+
+```text
+BIGINT UNSIGNED AUTO_INCREMENT
+```
+
+This means MySQL creates the next ID automatically when a record is added.
+
+Foreign keys use:
+
+```text
+BIGINT UNSIGNED
+```
+
+A foreign key stores the ID of a related record. It does not create its own number.
+
+For example, `facilities.facility_type_id` stores the ID of a record in `facility_types`.
+
+IDs from outside services remain text. For example, `google_place_id` is Google's ID and is not the database's primary key.
+
+UUIDs are not needed for the first version because all records will be created in one MySQL database. A separate public ID can be added later if public URLs need IDs that are difficult to guess.
+
+---
+
+## Possible Future Features
+
+- vendor and user accounts
+- Saved Leads and sales notes
+- Social Profiles and Contacts
+- map and distance-search tools
+- AI-assisted scoring
+- satellite image analysis
+- automatic data imports
+- website research tools
+- dashboards
+- CRM integrations
+
+These ideas are not requirements for the first database version.
+
+---
+
+## Simple Rule to Follow
+
+Store each fact once, record where it came from, and calculate scores separately.

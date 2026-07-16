@@ -2,257 +2,183 @@
 
 ## Data Dictionary
 
-Version: 1.0
+Version: 1.1
 
 ---
 
 ## Purpose
 
-The Data Dictionary defines every data field used by Turf Facility Finder.
+Use this file to look up what each database field means, what type of value it stores, and whether it is required.
 
-Each field includes:
+`05-database-schema.md` is the main file to trust if two database documents disagree. This dictionary uses the same names and data types as that schema.
 
-- Name
-- Description
-- Data Type
-- Required?
-- Example
-- Notes
+## How to Read the Tables
 
-This document serves as the source of truth before creating the database schema.
+- **Field** is the column name used in the database.
+- **Type** controls what kind of value the field can store.
+- **Required** tells you whether every record must have a value.
+- **Example** shows what a value might look like.
+- **Description** explains why the field exists.
 
----
+Common data types:
 
-## Entity: Facility
-
-Represents a single physical business location that may be a sales opportunity.
-
-| Field           | Type         | Required | Example                           | Description                        |
-| --------------- | ------------ | -------- | --------------------------------- | ---------------------------------- |
-| facility_id     | UUID         | Yes      | `fac_8f32a...`                    | Unique identifier for the facility |
-| business_name   | VARCHAR(150) | Yes      | Happy Paws Dog Daycare            | Official business name             |
-| facility_type   | ENUM         | Yes      | Dog Daycare                       | Primary facility classification    |
-| business_status | ENUM         | Yes      | Active                            | Operational status                 |
-| website_url     | VARCHAR(255) | No       | <https://happypaws.com>           | Official website                   |
-| phone_number    | VARCHAR(25)  | No       | (555) 555-1234                    | Public phone number                |
-| email           | VARCHAR(150) | No       | <info@happypaws.com>              | Public email                       |
-| description     | TEXT         | No       | Indoor and outdoor dog daycare... | Business description               |
-| created_at      | DATETIME     | Yes      | 2026-07-09                        | Record created                     |
-| updated_at      | DATETIME     | Yes      | 2026-07-12                        | Last updated                       |
+- `BIGINT UNSIGNED AUTO_INCREMENT` is a positive whole-number ID created automatically by MySQL.
+- `BIGINT UNSIGNED` is a positive whole-number ID that points to a record in another table.
+- `VARCHAR(255)` stores short text, with the maximum length shown in parentheses.
+- `TEXT` stores longer text.
+- `INTEGER` stores a whole number.
+- `DECIMAL(5,2)` stores a number with two decimal places, such as `87.50`.
+- `BOOLEAN` stores true or false.
+- `DATETIME` stores a date and time.
+- `ENUM` limits a field to a list of allowed choices.
 
 ---
 
-## Entity: Location
+## Entity: Facility (`facilities`)
 
-Stores the geographic location of a facility.
+Represents one physical business location that may be a synthetic turf sales opportunity.
 
-| Field          | Type          | Required | Example     | Description        |
-| -------------- | ------------- | -------- | ----------- | ------------------ |
-| location_id    | UUID          | Yes      | loc_12345   | Unique identifier  |
-| facility_id    | UUID          | Yes      | fac_8f32a   | Related facility   |
-| street_address | VARCHAR(255)  | Yes      | 123 Main St | Street address     |
-| city           | VARCHAR(100)  | Yes      | Lexington   | City               |
-| state          | CHAR(2)       | Yes      | KY          | State abbreviation |
-| postal_code    | VARCHAR(15)   | Yes      | 40502       | ZIP code           |
-| county         | VARCHAR(100)  | No       | Fayette     | County             |
-| latitude       | DECIMAL(10,7) | Yes      | 38.040584   | Latitude           |
-| longitude      | DECIMAL(10,7) | Yes      | -84.503716  | Longitude          |
-
----
-
-## Entity: Property
-
-Describes the physical property.
-
-| Field                        | Type    | Required | Example   | Description             |
-| ---------------------------- | ------- | -------- | --------- | ----------------------- |
-| property_id                  | UUID    | Yes      | prop_201  | Unique identifier       |
-| facility_id                  | UUID    | Yes      | fac_8f32a | Related facility        |
-| estimated_property_size_sqft | INTEGER | No       | 35000     | Estimated property size |
-| estimated_play_area_sqft     | INTEGER | No       | 12000     | Outdoor animal area     |
-| fenced_area                  | BOOLEAN | No       | TRUE      | Fence detected          |
-| parking_available            | BOOLEAN | No       | TRUE      | Parking visible         |
-| outdoor_space                | BOOLEAN | Yes      | TRUE      | Outdoor area exists     |
-| current_surface              | ENUM    | No       | Grass     | Primary surface         |
-| synthetic_turf_present       | BOOLEAN | No       | FALSE     | Existing turf detected  |
+| Field | Type | Required | Example | Description |
+| --- | --- | --- | --- | --- |
+| facility_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `1042` | Database-generated identifier for the Facility |
+| facility_name | VARCHAR(255) | Yes | Happy Paws Dog Daycare | Business name |
+| facility_type_id | BIGINT UNSIGNED | Yes | `1` | ID of the related record in `facility_types` |
+| primary_website | VARCHAR(500) | No | <https://happypaws.example> | Official website |
+| primary_phone | VARCHAR(30) | No | (555) 555-1234 | Public business phone number |
+| google_place_id | VARCHAR(255) | No | `ChIJ...` | Google Maps Place ID |
+| status | ENUM | Yes | Active | Active, Inactive, or Closed |
+| last_verified_at | DATETIME | No | 2026-07-12 14:30:00 | Most recent verification date |
+| created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
+| updated_at | DATETIME | Yes | 2026-07-12 14:30:00 | Most recent record update |
 
 ---
 
-## Entity: Opportunity Assessment
+## Entity: Facility Type (`facility_types`)
 
-Represents how promising the facility is.
+Stores the approved list of Facility categories. This prevents the same category from being entered with different spellings.
 
-| Field             | Type     | Required | Example               | Description             |
-| ----------------- | -------- | -------- | --------------------- | ----------------------- |
-| assessment_id     | UUID     | Yes      | assess_1              | Unique identifier       |
-| facility_id       | UUID     | Yes      | fac_8f32a             | Related facility        |
-| opportunity_score | ENUM     | Yes      | High                  | Lead ranking            |
-| confidence_score  | INTEGER  | Yes      | 92                    | 0–100 confidence        |
-| assessment_date   | DATETIME | Yes      | 2026-07-09            | Last calculation        |
-| assessment_method | ENUM     | Yes      | Rules Engine          | How score was generated |
-| notes             | TEXT     | No       | Large worn grass area | Explanation             |
+| Field | Type | Required | Example | Description |
+| --- | --- | --- | --- | --- |
+| facility_type_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `1` | Database-generated identifier for the Facility Type |
+| type_name | VARCHAR(100) | Yes | Dog Daycare | Standard category name |
+| description | TEXT | No | Daytime care facility for dogs | Optional category explanation |
+| created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
+| updated_at | DATETIME | Yes | 2026-07-12 14:30:00 | Most recent record update |
 
----
-
-## Entity: Evidence
-
-Evidence supporting the opportunity score.
-
-| Field            | Type         | Required | Example                    | Description       |
-| ---------------- | ------------ | -------- | -------------------------- | ----------------- |
-| evidence_id      | UUID         | Yes      | ev_1001                    | Unique identifier |
-| facility_id      | UUID         | Yes      | fac_8f32a                  | Related facility  |
-| evidence_type    | ENUM         | Yes      | Review                     | Source type       |
-| source_name      | VARCHAR(100) | Yes      | Google Reviews             | Source            |
-| evidence_summary | TEXT         | Yes      | Reviews mention muddy yard | Summary           |
-| source_url       | VARCHAR(255) | No       | https://...                | Original source   |
-| confidence       | INTEGER      | Yes      | 85                         | Reliability score |
-| collected_at     | DATETIME     | Yes      | 2026-07-09                 | Collection date   |
+Examples include Dog Daycare, Dog Boarding, Dog Park, Animal Shelter, Veterinary Clinic, and Training Facility.
 
 ---
 
-## Entity: Contact
+## Entity: Property (`properties`)
 
-Public business contacts.
+Stores facts about the Facility's physical site, such as its surface and outdoor play area.
 
-| Field         | Type         | Required | Example              | Description       |
-| ------------- | ------------ | -------- | -------------------- | ----------------- |
-| contact_id    | UUID         | Yes      | contact_1            | Unique identifier |
-| facility_id   | UUID         | Yes      | fac_8f32a            | Related facility  |
-| contact_name  | VARCHAR(150) | No       | Sarah Smith          | Public contact    |
-| contact_title | VARCHAR(100) | No       | Owner                | Position          |
-| phone         | VARCHAR(25)  | No       | (555) 123-4567       | Phone             |
-| email         | VARCHAR(150) | No       | <owner@business.com> | Email             |
-
----
-
-## Entity: Photo
-
-References publicly available imagery.
-
-| Field        | Type         | Required | Example        | Description       |
-| ------------ | ------------ | -------- | -------------- | ----------------- |
-| photo_id     | UUID         | Yes      | photo_123      | Unique identifier |
-| facility_id  | UUID         | Yes      | fac_8f32a      | Related facility  |
-| photo_type   | ENUM         | Yes      | Satellite      | Image source      |
-| image_url    | VARCHAR(255) | Yes      | https://...    | Image location    |
-| caption      | VARCHAR(255) | No       | Rear play yard | Description       |
-| collected_at | DATETIME     | Yes      | 2026-07-09     | Collection date   |
+| Field | Type | Required | Example | Description |
+| --- | --- | --- | --- | --- |
+| property_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `501` | Database-generated identifier for the Property record |
+| facility_id | BIGINT UNSIGNED | Yes | `1042` | ID of the related Facility |
+| estimated_play_area_sqft | INTEGER | No | 12000 | Estimated outdoor activity-area size |
+| surface_type | ENUM | No | Grass | Grass, Dirt, Mixed, Gravel, Synthetic Turf, Concrete, or Unknown |
+| synthetic_turf_present | BOOLEAN | No | FALSE | Whether synthetic turf is currently installed |
+| fenced_area | BOOLEAN | No | TRUE | Whether an outdoor area appears fenced |
+| parking_available | BOOLEAN | No | TRUE | Whether customer parking appears available |
+| outdoor_space | BOOLEAN | Yes | TRUE | Whether an outdoor area exists |
+| created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
+| updated_at | DATETIME | Yes | 2026-07-12 14:30:00 | Most recent record update |
 
 ---
 
-## Entity: Data Source
+## Entity: Address (`addresses`)
 
-Tracks where information originated.
+Stores the physical location and coordinates of a Facility.
 
-| Field        | Type         | Required | Example         | Description       |
-| ------------ | ------------ | -------- | --------------- | ----------------- |
-| source_id    | UUID         | Yes      | src_12          | Unique identifier |
-| facility_id  | UUID         | Yes      | fac_8f32a       | Related facility  |
-| source_type  | ENUM         | Yes      | Google Business | Source category   |
-| source_url   | VARCHAR(255) | No       | https://...     | Original URL      |
-| last_checked | DATETIME     | Yes      | 2026-07-09      | Last verified     |
-
----
-
-## Entity: Vendor
-
-Represents a Turf Facility Finder customer.
-
-| Field        | Type         | Required | Example            | Description       |
-| ------------ | ------------ | -------- | ------------------ | ----------------- |
-| vendor_id    | UUID         | Yes      | vendor_55          | Unique identifier |
-| company_name | VARCHAR(150) | Yes      | ABC Turf           | Vendor business   |
-| contact_name | VARCHAR(150) | Yes      | John Doe           | Primary contact   |
-| email        | VARCHAR(150) | Yes      | <john@abcturf.com> | Login email       |
-| phone        | VARCHAR(25)  | No       | (555) 123-1234     | Contact phone     |
+| Field | Type | Required | Example | Description |
+| --- | --- | --- | --- | --- |
+| address_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `880` | Database-generated identifier for the Address |
+| facility_id | BIGINT UNSIGNED | Yes | `1042` | ID of the related Facility |
+| street | VARCHAR(255) | Yes | 123 Main St | Street address |
+| city | VARCHAR(100) | Yes | Lexington | City |
+| state | VARCHAR(100) | Yes | Kentucky | State or region |
+| postal_code | VARCHAR(20) | Yes | 40502 | ZIP or postal code |
+| country | VARCHAR(100) | Yes | United States | Country |
+| latitude | DECIMAL(9,6) | Yes | 38.040584 | Latitude coordinate |
+| longitude | DECIMAL(9,6) | Yes | -84.503716 | Longitude coordinate |
+| created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
+| updated_at | DATETIME | Yes | 2026-07-12 14:30:00 | Most recent record update |
 
 ---
 
-## Entity: Saved Lead
+## Entity: Photo (`photos`)
 
-Facilities saved by vendors.
+Stores references to publicly available imagery associated with a Facility.
 
-| Field         | Type     | Required | Example        | Description       |
-| ------------- | -------- | -------- | -------------- | ----------------- |
-| saved_lead_id | UUID     | Yes      | save_101       | Unique identifier |
-| vendor_id     | UUID     | Yes      | vendor_55      | Vendor            |
-| facility_id   | UUID     | Yes      | fac_8f32a      | Saved facility    |
-| saved_at      | DATETIME | Yes      | 2026-07-09     | Date saved        |
-| status        | ENUM     | Yes      | New            | Lead stage        |
-| notes         | TEXT     | No       | Call next week | Vendor notes      |
-
----
-
-## Common Enumerations
-
-### Facility Type
-
-- Dog Daycare
-- Dog Boarding
-- Kennel
-- Dog Training Center
-- Canine Sports Facility
-- Animal Shelter
-- Animal Rescue
-- Adoption Center
-- Pet Resort
-- Mixed Animal Facility
-- Dog Park
+| Field | Type | Required | Example | Description |
+| --- | --- | --- | --- | --- |
+| photo_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `3201` | Database-generated identifier for the Photo |
+| facility_id | BIGINT UNSIGNED | Yes | `1042` | ID of the related Facility |
+| photo_url | VARCHAR(500) | Yes | <https://images.example/play-yard.jpg> | Image location |
+| source | VARCHAR(100) | No | Business Website | Human-readable image source |
+| caption | VARCHAR(255) | No | Rear outdoor play yard | Optional image description |
+| created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
 
 ---
 
-### Business Status
+## Entity: Evidence (`evidence`)
 
-- Active
-- Permanently Closed
-- Temporarily Closed
-- Unknown
+Stores what was found during research and helps explain a Facility's score.
 
----
-
-### Surface Type
-
-- Grass
-- Dirt
-- Mixed
-- Gravel
-- Synthetic Turf
-- Concrete
-- Unknown
+| Field | Type | Required | Example | Description |
+| --- | --- | --- | --- | --- |
+| evidence_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `7401` | Database-generated identifier for the Evidence record |
+| facility_id | BIGINT UNSIGNED | Yes | `1042` | ID of the related Facility |
+| data_source_id | BIGINT UNSIGNED | Yes | `2` | ID of the related Data Source |
+| evidence_type | ENUM | Yes | Review | Evidence category such as Review, Image, or Website |
+| description | TEXT | Yes | Reviews mention a muddy yard | Evidence summary |
+| confidence_score | DECIMAL(5,2) | Yes | 85.00 | Confidence rating |
+| collected_at | DATETIME | Yes | 2026-07-09 10:00:00 | Collection date |
 
 ---
 
-### Opportunity Score
+## Entity: Data Source (`data_sources`)
 
-- High
-- Medium
-- Low
-- Unknown
+Stores where imported information or Evidence came from.
 
----
-
-### Evidence Type
-
-- Website
-- Google Business
-- Google Review
-- Facebook
-- Instagram
-- Satellite
-- Street View
-- News
-- Public Records
-- AI Observation
+| Field | Type | Required | Example | Description |
+| --- | --- | --- | --- | --- |
+| data_source_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `2` | Database-generated identifier for the Data Source |
+| source_name | VARCHAR(100) | Yes | Google Maps | Source name |
+| source_type | ENUM | Yes | API | API, Scraper, Manual, Import, or User Submitted |
+| base_url | VARCHAR(500) | No | <https://maps.google.com> | Source website |
+| last_imported_at | DATETIME | No | 2026-07-09 10:00:00 | Most recent import date |
 
 ---
 
-### Saved Lead Status
+## Entity: Opportunity Score (`opportunity_scores`)
 
-- New
-- Contacted
-- Qualified
-- Proposal Sent
-- Won
-- Lost
-- Archived
+Stores a Facility's calculated sales-opportunity score on a specific date.
+
+| Field | Type | Required | Example | Description |
+| --- | --- | --- | --- | --- |
+| score_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `9101` | Database-generated identifier for the Opportunity Score |
+| facility_id | BIGINT UNSIGNED | Yes | `1042` | ID of the related Facility |
+| opportunity_score | DECIMAL(5,2) | Yes | 87.50 | Overall numeric score |
+| rating | ENUM | Yes | High | High, Medium, or Low |
+| confidence_score | DECIMAL(5,2) | Yes | 92.00 | Confidence in the calculation |
+| scoring_method | VARCHAR(100) | Yes | Rules Engine v1 | Method used to calculate the score |
+| calculated_at | DATETIME | Yes | 2026-07-09 10:00:00 | Calculation date |
+
+A Facility may have multiple score records. The most recently calculated record is its current score.
+
+---
+
+## Future Entities
+
+The following features are not part of the first database version, so their fields are not final:
+
+- Vendors and user accounts
+- Saved Leads
+- Social Profiles
+- Contacts
+- Sales notes and follow-up activity
+
+Their tables and fields will be designed when work begins on those features.
