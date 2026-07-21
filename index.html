@@ -57,7 +57,7 @@
 
         <section id="filters" class="filters section container" aria-labelledby="filters-title">
             <h2 id="filters-title">Filter facilities</h2>
-            <form action="index.html" method="get">
+            <form id="facility-search" action="index.html" method="get">
                 <fieldset>
                     <legend class="visually-hidden">Search Filters
                     </legend>
@@ -123,17 +123,24 @@
                     </div>
                 </div>
                 <div class="results-header--sort">
-                    <label for="sort-by" class="results-sort-label visually-hidden">Sort by:</label>
-                    <select id="sort-by" name="sortBy" class="results-sort-select">
+                    <label for="sort-by" class="results-sort-label visually-hidden">Sort by:
+                    </label>
+                    
+                    <select id="sort-by" name="sortBy" class="results-sort-select" form="facility-search">
                         <option value="relevant" selected>Sort</option>
                         <option value="play-area-desc">
-                            Play-area size (largest first)
+                            Play-area size (largest)
                         </option>
                         <option value="play-area-asc">
-                            Play-area size (smallest first)
+                            Play-area size (smallest)
                         </option>
                         <option value="name-asc">Name (A–Z)</option>
                     </select>
+
+                    <button type="submit" class="btn btn--secondary" form="facility-search">
+                        Apply sort
+                    </button>
+
                 </div>
             </div>
             <!-- Show message if no facilities match filters -->
@@ -485,8 +492,8 @@
                 <p class="pagination-summary">Showing <span class="pagination-range">1 to 4</span> of <span
                         class="pagination-total">4</span> results
                 </p>
-                <ul class="pagination-list" role="list"> -->
-            <!-- <li>
+                <ul class="pagination-list" role="list">
+                    <li>
                         <a href="#" class="pagination-link pagination-link--prev" aria-disabled="true"
                             tabindex="-1">Previous</a>
                     </li>
@@ -505,8 +512,8 @@
                     </li>
                     <li>
                         <a href="#" class="pagination-link pagination-link--next">Next</a>
-                    </li> -->
-            <!-- </ul>
+                    </li>
+                </ul>
             </nav> -->
         </section>
 

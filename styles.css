@@ -1139,7 +1139,8 @@
 		border-color: var(--border-color);
 		min-inline-size: max-content;
 		box-shadow: var(--shadow-sm);
-		font-weight: 600;
+		font-weight: 500;
+		font-size: var(--font-size-sm);
 	}
 
 	.btn--secondary:hover:not(:disabled) {
@@ -1358,10 +1359,10 @@
 	.site-nav,
 	.hero,
 	.filters,
-	.results-header-sort,
+	.results-header--sort,
 	.facility-card--save-button,
 	.pagination,
-	.filter-actions,
+	.filter-actions-group,
 	.saved-leads-header .btn,
 	.site-footer {
 		display: none !important;
