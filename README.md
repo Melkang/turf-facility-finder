@@ -98,3 +98,16 @@ turf-facility-finder/
 ├── styles.css
 └── README.md
 ```
+
+## Deferred Interface Work
+
+The following interface features will be added as the server-rendered application is built:
+
+- Render a simple empty-results message when a database search returns no facilities.
+- Render an understandable server-error message if facility data cannot be loaded.
+- Use one reusable EJS partial for facility cards.
+- Add server-rendered pagination only when the database contains enough results to require it.
+- Use `rel="prev"` and `rel="next"` on working pagination links.
+- Add `aria-atomic="true"` when result counts are updated dynamically.
+- Use `aria-pressed` when saved-lead buttons gain working toggle behavior.
+- Add remove-from-saved controls when the saved-leads data workflow is implemented.
