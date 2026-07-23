@@ -109,9 +109,9 @@ Facility
 │
 ├── Property
 │
-├── Evidence
+├── Evidence ── Data Source
 │
-├── Photos
+├── Photos ── Data Source
 │
 └── Opportunity Scores
 
@@ -133,9 +133,11 @@ The first database version uses these fixed lists:
 
 **Opportunity Rating:** High, Medium, Low
 
-**Data Source Type:** API, Web Scrape, Manual Research, File Import, User Submitted, Other
+**Collection Method:** API, Web Scrape, Manual Research, File Import, User Submitted, Other
 
-For fields that include them, `Other` means the value is known but not listed, while `Unknown` means the value has not been confirmed. For Surface Type, `Mixed` means two or more listed surfaces are present.
+For fields that include them, `Other` means the value is known but not listed, while `Unknown` means the value has not been confirmed. For Surface Type, `Mixed` means two or more listed surfaces are present. Collection Method describes how information entered the database.
+
+For example, Google Maps is a Data Source. API or Manual Research describes how information from Google Maps was collected.
 
 ## 5. Table Definitions
 
@@ -162,18 +164,18 @@ Stores one animal-related business location that may be a turf sales opportunity
 
 ### Columns
 
-| Column           | Type         | Required | Description               |
-| ---------------- | ------------ | -------- | ------------------------- |
-| facility_id      | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
-| facility_name    | VARCHAR(255) | Yes      | Business name             |
-| facility_type_id | BIGINT UNSIGNED | Yes | References facility_types |
-| primary_website  | VARCHAR(500) | No       | Official website          |
-| primary_phone    | VARCHAR(30)  | No       | Business phone number     |
-| google_place_id  | VARCHAR(255) | No       | Google Maps Place ID      |
-| status           | ENUM         | Yes      | Active, Temporarily Closed, Permanently Closed, Unknown |
-| last_verified_at | DATETIME     | No       | Last verification date    |
-| created_at       | DATETIME     | Yes      | Record created            |
-| updated_at       | DATETIME     | Yes      | Record updated            |
+| Column           | Type                           | Required | Description                                             |
+| ---------------- | ------------------------------ | -------- | ------------------------------------------------------- |
+| facility_id      | BIGINT UNSIGNED AUTO_INCREMENT | Yes      | Primary Key                                             |
+| facility_name    | VARCHAR(255)                   | Yes      | Business name                                           |
+| facility_type_id | BIGINT UNSIGNED                | Yes      | References facility_types                               |
+| primary_website  | VARCHAR(500)                   | No       | Official website                                        |
+| primary_phone    | VARCHAR(30)                    | No       | Business phone number                                   |
+| google_place_id  | VARCHAR(255)                   | No       | Google Maps Place ID                                    |
+| status           | ENUM                           | Yes      | Active, Temporarily Closed, Permanently Closed, Unknown |
+| last_verified_at | DATETIME                       | No       | Last verification date                                  |
+| created_at       | DATETIME                       | Yes      | Record created                                          |
+| updated_at       | DATETIME                       | Yes      | Record updated                                          |
 
 ---
 
@@ -214,13 +216,13 @@ Examples include:
 
 ### Columns
 
-| Column           | Type         | Required | Description          |
-| ---------------- | ------------ | -------- | -------------------- |
-| facility_type_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
-| type_name        | VARCHAR(100) | Yes      | Facility category    |
-| description      | TEXT         | No       | Optional description |
-| created_at       | DATETIME     | Yes      | Record created       |
-| updated_at       | DATETIME     | Yes      | Record updated       |
+| Column           | Type                           | Required | Description          |
+| ---------------- | ------------------------------ | -------- | -------------------- |
+| facility_type_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes      | Primary Key          |
+| type_name        | VARCHAR(100)                   | Yes      | Facility category    |
+| description      | TEXT                           | No       | Optional description |
+| created_at       | DATETIME                       | Yes      | Record created       |
+| updated_at       | DATETIME                       | Yes      | Record updated       |
 
 ---
 
@@ -242,7 +244,7 @@ These facts help show whether synthetic turf may be useful at that location.
 
 Examples include:
 
-- estimated outdoor play area size
+- estimated animal activity or play-area size
 - current surface conditions
 - fencing
 - parking availability
@@ -260,18 +262,18 @@ Examples include:
 
 ### Columns
 
-| Column                   | Type     | Required | Description                                                   |
-| ------------------------ | -------- | -------- | ------------------------------------------------------------- |
-| property_id              | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key                                                   |
-| facility_id              | BIGINT UNSIGNED | Yes | References facilities                                         |
-| estimated_play_area_sqft | INTEGER  | No       | Estimated outdoor activity area size                          |
-| surface_type             | ENUM     | No       | Grass, Dirt, Mulch, Gravel, Concrete, Synthetic Turf, Mixed, Other, Unknown |
-| synthetic_turf_present   | BOOLEAN  | No       | Indicates whether synthetic turf is currently installed       |
-| fenced_area              | BOOLEAN  | No       | Indicates whether outdoor areas appear to be fenced           |
-| parking_available        | BOOLEAN  | No       | Indicates whether customer parking appears available          |
-| outdoor_space            | BOOLEAN  | Yes      | Indicates whether an outdoor area exists                      |
-| created_at               | DATETIME | Yes      | Record created                                                |
-| updated_at               | DATETIME | Yes      | Record last updated                                           |
+| Column                   | Type                           | Required | Description                                                                 |
+| ------------------------ | ------------------------------ | -------- | --------------------------------------------------------------------------- |
+| property_id              | BIGINT UNSIGNED AUTO_INCREMENT | Yes      | Primary Key                                                                 |
+| facility_id              | BIGINT UNSIGNED                | Yes      | References facilities                                                       |
+| estimated_play_area_sqft | INT UNSIGNED                   | No       | Estimated animal activity or play-area size in square feet                  |
+| surface_type             | ENUM                           | Yes      | Grass, Dirt, Mulch, Gravel, Concrete, Synthetic Turf, Mixed, Other, Unknown |
+| synthetic_turf_present   | BOOLEAN                        | No       | Indicates whether synthetic turf is currently installed                     |
+| fenced_area              | BOOLEAN                        | No       | Indicates whether outdoor areas appear to be fenced                         |
+| parking_available        | BOOLEAN                        | No       | Indicates whether customer parking appears available                        |
+| outdoor_space            | BOOLEAN                        | Yes      | Indicates whether an outdoor area exists                                    |
+| created_at               | DATETIME                       | Yes      | Record created                                                              |
+| updated_at               | DATETIME                       | Yes      | Record last updated                                                         |
 
 ---
 
@@ -294,6 +296,10 @@ Some property values may be estimated from evidence sources such as:
 - business websites
 - facility photos
 
+`surface_type` is required when a Property record is created. If the surface has not been confirmed, use `Unknown`.
+
+The future SQL should use `Unknown` as the default value. This avoids using both `NULL` and `Unknown` for the same meaning.
+
 Store the fact in `properties`. Store where the fact came from and why it was entered in `evidence`.
 
 `addresses`
@@ -314,19 +320,19 @@ Stores the physical location for each facility.
 
 ### Columns
 
-| Column      | Type         | Required | Description           |
-| ----------- | ------------ | -------- | --------------------- |
-| address_id  | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
-| facility_id | BIGINT UNSIGNED | Yes | References facilities |
-| street      | VARCHAR(255) | No       | Street address, when one is available |
-| city        | VARCHAR(100) | Yes      | City                  |
-| state       | VARCHAR(100) | Yes      | State                 |
-| postal_code | VARCHAR(20)  | No       | ZIP or Postal Code, when known |
-| country     | VARCHAR(100) | Yes      | Country               |
-| latitude    | DECIMAL(9,6) | Yes      | Latitude coordinate   |
-| longitude   | DECIMAL(9,6) | Yes      | Longitude coordinate  |
-| created_at  | DATETIME     | Yes      | Record created        |
-| updated_at  | DATETIME     | Yes      | Record updated        |
+| Column      | Type                           | Required | Description                           |
+| ----------- | ------------------------------ | -------- | ------------------------------------- |
+| address_id  | BIGINT UNSIGNED AUTO_INCREMENT | Yes      | Primary Key                           |
+| facility_id | BIGINT UNSIGNED                | Yes      | References facilities                 |
+| street      | VARCHAR(255)                   | No       | Street address, when one is available |
+| city        | VARCHAR(100)                   | Yes      | City                                  |
+| state       | VARCHAR(100)                   | Yes      | State                                 |
+| postal_code | VARCHAR(20)                    | No       | ZIP or Postal Code, when known        |
+| country     | VARCHAR(100)                   | Yes      | Country                               |
+| latitude    | DECIMAL(9,6)                   | Yes      | Latitude coordinate                   |
+| longitude   | DECIMAL(9,6)                   | Yes      | Longitude coordinate                  |
+| created_at  | DATETIME                       | Yes      | Record created                        |
+| updated_at  | DATETIME                       | Yes      | Record updated                        |
 
 ---
 
@@ -348,20 +354,23 @@ Stores photos associated with a facility.
 
 ### Relationships
 
-- Many photos belong to one facility.
+- Many Photo records may belong to one Facility.
+- Each Photo belongs to exactly one Facility.
+- Each Photo references exactly one Data Source.
+- One Data Source may provide many Photos.
 
 ---
 
 ### Columns
 
-| Column      | Type         | Required | Description                   |
-| ----------- | ------------ | -------- | ----------------------------- |
-| photo_id    | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
-| facility_id | BIGINT UNSIGNED | Yes | References facilities |
-| photo_url   | VARCHAR(500) | Yes      | Image URL                     |
-| source      | VARCHAR(100) | No       | Google, Website, Social Media |
-| caption     | VARCHAR(255) | No       | Optional description          |
-| created_at  | DATETIME     | Yes      | Record created                |
+| Column         | Type                           | Required | Description             |
+| -------------- | ------------------------------ | -------- | ----------------------- |
+| photo_id       | BIGINT UNSIGNED AUTO_INCREMENT | Yes      | Primary Key             |
+| facility_id    | BIGINT UNSIGNED                | Yes      | References facilities   |
+| photo_url      | VARCHAR(500)                   | Yes      | Image URL               |
+| data_source_id | BIGINT UNSIGNED                | Yes      | References data_sources |
+| caption        | VARCHAR(255)                   | No       | Optional description    |
+| created_at     | DATETIME                       | Yes      | Record created          |
 
 ---
 
@@ -388,16 +397,16 @@ Stores research findings that help explain a Facility's score.
 
 ### Columns
 
-| Column           | Type         | Required | Description                  |
-| ---------------- | ------------ | -------- | ---------------------------- |
-| evidence_id      | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
-| facility_id      | BIGINT UNSIGNED | Yes | References facilities |
-| data_source_id   | BIGINT UNSIGNED | Yes | References data_sources |
-| evidence_type    | ENUM         | Yes      | Business Listing, Website, Review, Photo, Satellite Image, Street View, Social Media Post, News Article, Public Record, Manual Observation, Other |
-| description      | TEXT         | Yes      | Evidence summary             |
-| source_url       | VARCHAR(1000)| No       | Exact page, review, image, or record that supports the Evidence |
-| confidence_score | DECIMAL(5,2) | Yes      | Confidence rating            |
-| collected_at     | DATETIME     | Yes      | Date collected               |
+| Column           | Type                           | Required | Description                                                                                                                                       |
+| ---------------- | ------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| evidence_id      | BIGINT UNSIGNED AUTO_INCREMENT | Yes      | Primary Key                                                                                                                                       |
+| facility_id      | BIGINT UNSIGNED                | Yes      | References facilities                                                                                                                             |
+| data_source_id   | BIGINT UNSIGNED                | Yes      | References data_sources                                                                                                                           |
+| evidence_type    | ENUM                           | Yes      | Business Listing, Website, Review, Photo, Satellite Image, Street View, Social Media Post, News Article, Public Record, Manual Observation, Other |
+| description      | TEXT                           | Yes      | Evidence summary                                                                                                                                  |
+| source_url       | VARCHAR(1000)                  | No       | Exact page, review, image, or record that supports the Evidence                                                                                   |
+| confidence_score | DECIMAL(5,2)                   | Yes      | Confidence rating                                                                                                                                 |
+| collected_at     | DATETIME                       | Yes      | Date collected                                                                                                                                    |
 
 ---
 
@@ -413,25 +422,28 @@ Evidence makes it possible to look back and see why a Facility received its rati
 
 ### Purpose
 
-Stores where imported information or Evidence came from.
+Stores where imported information, Photos, or Evidence came from.
 
 ---
 
 ### Relationships
 
-- One data source may provide many evidence records.
+- One Data Source may provide many Photo records.
+- One Data Source may provide many Evidence records.
 
 ---
 
 ### Columns
 
-| Column           | Type         | Required | Description                                  |
-| ---------------- | ------------ | -------- | -------------------------------------------- |
-| data_source_id   | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
-| source_name      | VARCHAR(100) | Yes      | Google Maps, Website, Yelp                   |
-| source_type      | ENUM         | Yes      | API, Web Scrape, Manual Research, File Import, User Submitted, Other |
-| base_url         | VARCHAR(500) | No       | Source website                               |
-| last_imported_at | DATETIME     | No       | Last import date                             |
+| Column            | Type                           | Required | Description                                                          |
+| ----------------- | ------------------------------ | -------- | -------------------------------------------------------------------- |
+| data_source_id    | BIGINT UNSIGNED AUTO_INCREMENT | Yes      | Primary Key                                                          |
+| source_name       | VARCHAR(100)                   | Yes      | Google Maps, Website, Yelp                                           |
+| collection_method | ENUM                           | Yes      | API, Web Scrape, Manual Research, File Import, User Submitted, Other |
+| base_url          | VARCHAR(500)                   | No       | Source website                                                       |
+| last_imported_at  | DATETIME                       | No       | Last import date                                                     |
+| created_at        | DATETIME                       | Yes      | Record created                                                       |
+| updated_at        | DATETIME                       | Yes      | Record last updated                                                  |
 
 ---
 
@@ -458,15 +470,15 @@ Stores a calculated sales-opportunity score for a Facility on a specific date.
 
 ### Columns
 
-| Column            | Type         | Required | Description                    |
-| ----------------- | ------------ | -------- | ------------------------------ |
-| score_id          | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
-| facility_id       | BIGINT UNSIGNED | Yes | References facilities |
-| opportunity_score | DECIMAL(5,2) | Yes      | Overall score                  |
-| rating            | ENUM         | Yes      | High, Medium, Low              |
-| confidence_score  | DECIMAL(5,2) | Yes      | Confidence score               |
-| scoring_method    | VARCHAR(100) | Yes      | Method used to calculate score |
-| calculated_at     | DATETIME     | Yes      | Date calculated                |
+| Column            | Type                           | Required | Description                    |
+| ----------------- | ------------------------------ | -------- | ------------------------------ |
+| score_id          | BIGINT UNSIGNED AUTO_INCREMENT | Yes      | Primary Key                    |
+| facility_id       | BIGINT UNSIGNED                | Yes      | References facilities          |
+| opportunity_score | DECIMAL(5,2)                   | Yes      | Overall score                  |
+| rating            | ENUM                           | Yes      | High, Medium, Low              |
+| confidence_score  | DECIMAL(5,2)                   | Yes      | Confidence score               |
+| scoring_method    | VARCHAR(100)                   | Yes      | Method used to calculate score |
+| calculated_at     | DATETIME                       | Yes      | Date calculated                |
 
 ---
 
@@ -498,14 +510,14 @@ Stores links to a facility's social media accounts.
 
 ### Columns
 
-| Column            | Type         | Required | Description               |
-| ----------------- | ------------ | -------- | ------------------------- |
-| social_profile_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
-| facility_id       | BIGINT UNSIGNED | Yes | References facilities |
-| platform          | VARCHAR(50)  | Yes      | Facebook, Instagram, etc. |
-| profile_url       | VARCHAR(500) | Yes      | Profile URL               |
-| created_at        | DATETIME     | Yes      | Record created            |
-| updated_at        | DATETIME     | Yes      | Record updated            |
+| Column            | Type                           | Required | Description               |
+| ----------------- | ------------------------------ | -------- | ------------------------- |
+| social_profile_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes      | Primary Key               |
+| facility_id       | BIGINT UNSIGNED                | Yes      | References facilities     |
+| platform          | VARCHAR(50)                    | Yes      | Facebook, Instagram, etc. |
+| profile_url       | VARCHAR(500)                   | Yes      | Profile URL               |
+| created_at        | DATETIME                       | Yes      | Record created            |
+| updated_at        | DATETIME                       | Yes      | Record updated            |
 
 ---
 
@@ -531,12 +543,12 @@ Stores facilities that a vendor has saved for future follow-up.
 
 ### Columns
 
-| Column       | Type     | Required | Description           |
-| ------------ | -------- | -------- | --------------------- |
-| saved_lead_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | Primary Key |
-| facility_id  | BIGINT UNSIGNED | Yes | References facilities |
-| saved_at     | DATETIME | Yes      | Date saved            |
-| notes        | TEXT     | No       | Optional vendor notes |
+| Column        | Type                           | Required | Description           |
+| ------------- | ------------------------------ | -------- | --------------------- |
+| saved_lead_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes      | Primary Key           |
+| facility_id   | BIGINT UNSIGNED                | Yes      | References facilities |
+| saved_at      | DATETIME                       | Yes      | Date saved            |
+| notes         | TEXT                           | No       | Optional vendor notes |
 
 ---
 
@@ -586,6 +598,12 @@ A facility may have multiple photos.
 
 ---
 
+### Data Source → Photos
+
+Many Photo records can point to the same Data Source. Each Photo record must point to one Data Source.
+
+---
+
 ### Facility → Evidence
 
 Each Facility can have many pieces of Evidence from different sources.
@@ -602,43 +620,108 @@ Many Evidence records can point to the same Data Source.
 
 Each Facility can have several Opportunity Scores over time. The record with the newest `calculated_at` date is the current score.
 
-## 7. Fields That May Need Indexes
+## 7. MySQL Rules for the First Version
 
-An **index** helps MySQL find records faster, similar to an index in a book. Indexes use extra storage, so they should be added to fields that are searched, sorted, or joined often.
+This section lists the rules that must be included when the SQL tables are created.
 
-These fields are likely index candidates when the SQL is written:
+### Number Limits
 
-### facilities
+The future SQL must use `CHECK` constraints for these limits:
 
-facility_name
+| Field | Allowed value |
+| --- | --- |
+| `addresses.latitude` | From `-90` through `90` |
+| `addresses.longitude` | From `-180` through `180` |
+| `evidence.confidence_score` | From `0` through `100` |
+| `opportunity_scores.opportunity_score` | From `0` through `100` |
+| `opportunity_scores.confidence_score` | From `0` through `100` |
 
-google_place_id
+`properties.estimated_play_area_sqft` uses `INT UNSIGNED`, so it cannot store a negative number. It may be `NULL` when the size has not been estimated.
 
-status
-
-facility_type_id
-
----
-
-### addresses
-
-city
-
-state
-
-postal_code
-
-latitude
-
-longitude
+The High, Medium, and Low score thresholds still need to be approved before automated scoring is built. Sample data may use manually assigned ratings and a clearly named sample scoring method.
 
 ---
 
-### evidence
+### Timestamp Defaults
 
-facility_id
+MySQL should create and update routine record timestamps automatically:
 
-data_source_id
+- `created_at` uses `DEFAULT CURRENT_TIMESTAMP`.
+- `updated_at` uses `DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`.
+- `photos.created_at` uses `DEFAULT CURRENT_TIMESTAMP`.
+
+Event dates describe when real work happened and should be supplied by the import or application:
+
+- `evidence.collected_at`
+- `opportunity_scores.calculated_at`
+
+`facilities.last_verified_at` and `data_sources.last_imported_at` stay nullable until those events happen.
+
+---
+
+### Unique Values
+
+A **unique constraint** prevents a value or combination of values from being stored more than once.
+
+The first SQL version must include:
+
+- `UNIQUE (type_name)` on `facility_types`
+- `UNIQUE (google_place_id)` on `facilities`
+- `UNIQUE (facility_id)` on `addresses`
+- `UNIQUE (facility_id)` on `properties`
+- `UNIQUE (source_name, collection_method)` on `data_sources`
+
+MySQL allows several `NULL` values in a unique nullable column, so several Facilities may have no Google Place ID. Two Facilities may not share the same confirmed Google Place ID.
+
+---
+
+### Foreign-Key Deletion Rules
+
+The first SQL version should use `ON DELETE RESTRICT` and `ON UPDATE RESTRICT` for every foreign key.
+
+`RESTRICT` means MySQL will stop a parent record from being deleted or have its ID changed while related records still use it. This supports the project rule that a closed Facility should be kept and marked Permanently Closed instead of being deleted.
+
+These foreign keys need the rule:
+
+- `facilities.facility_type_id`
+- `addresses.facility_id`
+- `properties.facility_id`
+- `photos.facility_id`
+- `photos.data_source_id`
+- `evidence.facility_id`
+- `evidence.data_source_id`
+- `opportunity_scores.facility_id`
+
+---
+
+### Search Indexes
+
+An **index** helps MySQL find records faster, similar to an index in a book. The first version should add indexes that support the current searches, joins, and sorting:
+
+| Table | Index fields | Purpose |
+| --- | --- | --- |
+| `facilities` | `facility_name` | Sort or search by name |
+| `facilities` | `status, facility_type_id` | Filter by status and Facility Type |
+| `addresses` | `state, city` | Filter by location |
+| `addresses` | `latitude, longitude` | Prepare for coordinate searches |
+| `properties` | `surface_type, estimated_play_area_sqft` | Filter by surface and minimum play-area size |
+| `evidence` | `facility_id, collected_at` | Find a Facility's Evidence in date order |
+| `evidence` | `data_source_id` | Find Evidence from one Data Source |
+| `opportunity_scores` | `facility_id, calculated_at` | Find the newest score for a Facility |
+
+---
+
+### Missing-Value Display Rules
+
+The database must not use made-up values such as `0` or an empty string to hide missing research. The server-rendered page should handle missing values clearly:
+
+- No Address record: display “Location not confirmed.”
+- No Property record: display “Property details not confirmed.”
+- `estimated_play_area_sqft` is `NULL`: display “Play-area size not confirmed.”
+- `surface_type` is `Unknown`: display “Surface type: Unknown.”
+- An optional Boolean is `NULL`: treat it as not confirmed, not false.
+- No Opportunity Score record: display “Not scored” and do not show a High, Medium, or Low rating.
+- No phone number or website: leave that item out instead of displaying an empty value.
 
 ---
 

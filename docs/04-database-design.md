@@ -97,6 +97,14 @@ evidence.source_url = https://happypaws.example/services/dog-daycare
 
 ---
 
+### Photos Also Point to Their Data Source
+
+The `photos` table stores the exact image URL. Each Photo also stores a `data_source_id` that points to the provider recorded in `data_sources`.
+
+The Data Source stores a `collection_method`, such as API, Manual Research, or File Import. This keeps provider names out of free-text Photo fields and makes the source easier to check later.
+
+---
+
 ### Old Records Are Kept When They Are Useful
 
 A Facility should not be deleted only because it closes. Its `status` can be changed to Active, Temporarily Closed, Permanently Closed, or Unknown. Keeping the record helps prevent the same closed business from being imported again.
@@ -148,7 +156,7 @@ Facility Type
 └── Facilities
     ├── Address
     ├── Property
-    ├── Photos
+    ├── Photos ── Data Source
     ├── Evidence ── Data Source
     └── Opportunity Scores
 ```
@@ -216,6 +224,20 @@ For example, `facilities.facility_type_id` stores the ID of a record in `facilit
 IDs from outside services remain text. For example, `google_place_id` is Google's ID and is not the database's primary key.
 
 UUIDs are not needed for the first version because all records will be created in one MySQL database. A separate public ID can be added later if public URLs need IDs that are difficult to guess.
+
+### Decision 008: Photos and Evidence use Data Sources
+
+Each Photo and Evidence record points to a Data Source. The Data Source stores the provider and the Collection Method used to bring the information into the database.
+
+### Decision 009: Related records prevent accidental deletion
+
+Foreign keys use `ON DELETE RESTRICT` and `ON UPDATE RESTRICT`. MySQL should stop a Facility, Facility Type, or Data Source from being deleted while another record still uses it.
+
+Closed Facilities stay in the database and use the Permanently Closed status.
+
+### Decision 010: Missing information stays missing
+
+Do not replace missing research with `0`, an empty string, or a made-up value. Use the approved `Unknown` value, a nullable field, or the absence of an optional related record according to the schema.
 
 ---
 

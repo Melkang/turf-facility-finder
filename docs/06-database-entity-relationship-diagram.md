@@ -14,6 +14,7 @@ To keep the diagram readable, it shortens the ID type to `BIGINT`:
 
 - a `BIGINT` marked `PK` is a `BIGINT UNSIGNED AUTO_INCREMENT` primary key
 - a `BIGINT` marked `FK` is a `BIGINT UNSIGNED` foreign key
+- `INT_UNSIGNED` is the diagram's short form for `INT UNSIGNED`
 
 `PK` means primary key: the unique ID for a record. `FK` means foreign key: an ID that connects to another table.
 
@@ -30,7 +31,7 @@ A Facility:
 - may have many Evidence records
 - may have many Opportunity Scores over time
 
-Each Evidence record points to one Data Source. Many Evidence records can use the same Data Source.
+Each Photo and Evidence record points to one Data Source. Many Photo and Evidence records can use the same Data Source.
 
 ## 3. Relationship Details
 
@@ -66,6 +67,14 @@ A Facility may have zero or many Photos. Each Photo belongs to one Facility.
 
 ---
 
+### Data Sources → Photos
+
+Many Photo records can point to the same Data Source. Each Photo points to one Data Source.
+
+**Relationship:** One Data Source to many Photos (1:M)
+
+---
+
 ### Facilities → Evidence
 
 A Facility may have zero or many Evidence records. Each Evidence record belongs to one Facility.
@@ -98,6 +107,7 @@ erDiagram
     FACILITIES ||--o| ADDRESSES : may_have
     FACILITIES ||--o| PROPERTIES : may_have
     FACILITIES ||--o{ PHOTOS : has
+    DATA_SOURCES ||--o{ PHOTOS : provides
     FACILITIES ||--o{ EVIDENCE : supports
     DATA_SOURCES ||--o{ EVIDENCE : provides
     FACILITIES ||--o{ OPPORTUNITY_SCORES : receives
@@ -140,7 +150,7 @@ erDiagram
     PROPERTIES {
         BIGINT property_id PK
         BIGINT facility_id FK
-        INTEGER estimated_play_area_sqft
+        INT_UNSIGNED estimated_play_area_sqft
         ENUM surface_type
         BOOLEAN synthetic_turf_present
         BOOLEAN fenced_area
@@ -153,8 +163,8 @@ erDiagram
     PHOTOS {
         BIGINT photo_id PK
         BIGINT facility_id FK
+        BIGINT data_source_id FK
         VARCHAR photo_url
-        VARCHAR source
         VARCHAR caption
         DATETIME created_at
     }
@@ -173,9 +183,11 @@ erDiagram
     DATA_SOURCES {
         BIGINT data_source_id PK
         VARCHAR source_name
-        ENUM source_type
+        ENUM collection_method
         VARCHAR base_url
         DATETIME last_imported_at
+        DATETIME created_at
+        DATETIME updated_at
     }
 
     OPPORTUNITY_SCORES {
@@ -196,7 +208,8 @@ erDiagram
 - Addresses contain geographic coordinates.
 - Properties contain searchable facts about each physical site.
 - Address and Property records are optional while research is incomplete, but each Facility can have no more than one of each.
-- Evidence explains research findings and points to their Data Sources.
+- Photos and Evidence point to their Data Sources.
+- Evidence explains research findings.
 - Evidence may store the exact supporting page or item in `source_url`.
 - Opportunity Scores are separate records so older scores can be kept.
 - MySQL creates the internal primary keys. Foreign keys store matching IDs to connect records.

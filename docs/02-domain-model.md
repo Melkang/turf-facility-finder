@@ -24,6 +24,7 @@ Facility Type
     ├── Address
     ├── Property
     ├── Photos
+    │   └── Data Source
     ├── Evidence
     │   └── Data Source
     └── Opportunity Scores
@@ -50,7 +51,7 @@ A Facility:
 - belongs to one Facility Type
 - may have zero or one Address
 - may have zero or one Property record
-- has many Photos
+- may have many Photos
 - has many Evidence records
 - has many Opportunity Scores over time
 
@@ -108,7 +109,7 @@ A Property stores facts about the physical site that may affect whether turf wou
 
 It includes:
 
-- estimated outdoor play-area size
+- estimated animal activity or play-area size
 - surface type
 - whether synthetic turf is already present
 - whether the area is fenced
@@ -118,6 +119,8 @@ It includes:
 A Facility may have no Property record while the site is still being researched. If a Property record exists, it belongs to one Facility, and that Facility cannot have a second Property record.
 
 Put the fact in Property—for example, `surface_type = Grass`. Put where that fact came from in Evidence—for example, “The business website shows a grass play yard.”
+
+Surface Type is required when a Property record exists. Use `Unknown` when the surface has not been confirmed. The estimated play-area size may be left empty until a reasonable estimate is available.
 
 For optional true-or-false fields, `NULL` means “not confirmed yet.” This is different from `FALSE`, which means the feature was checked and is not present.
 
@@ -134,7 +137,7 @@ Examples include:
 - Street View imagery
 - business website images
 
-A Facility may have many Photos.
+A Facility may have many Photos. Each Photo belongs to one Facility and points to one Data Source so the image provider can be checked later.
 
 ---
 
@@ -167,7 +170,9 @@ Examples include:
 - a government directory
 - a manual research import
 
-Many Evidence records can point to the same Data Source. For example, several pieces of Evidence may come from Google Maps.
+Many Photo and Evidence records can point to the same Data Source. For example, several Photos and pieces of Evidence may come from Google Maps.
+
+The Data Source also records the Collection Method. This explains how the information entered the database, such as through an API, Manual Research, or a File Import.
 
 ---
 

@@ -211,7 +211,7 @@ Negative indicators include:
 
 A Facility with no Opportunity Score record has not been scored yet.
 
-### Data Source Type
+### Collection Method
 
 - API
 - Web Scrape
@@ -219,6 +219,8 @@ A Facility with no Opportunity Score record has not been scored yet.
 - File Import
 - User Submitted
 - Other
+
+Collection Method describes how information entered the database. For example, Google Maps is a Data Source, while API or Manual Research describes how information from Google Maps was collected.
 
 ---
 

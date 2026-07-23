@@ -26,7 +26,7 @@ Common data types:
 - `BIGINT UNSIGNED` is a positive whole-number ID that points to a record in another table.
 - `VARCHAR(255)` stores short text, with the maximum length shown in parentheses.
 - `TEXT` stores longer text.
-- `INTEGER` stores a whole number.
+- `INT UNSIGNED` stores zero or a positive whole number.
 - `DECIMAL(5,2)` stores a number with two decimal places, such as `87.50`.
 - `BOOLEAN` stores true or false.
 - `DATETIME` stores a date and time.
@@ -57,6 +57,8 @@ Facility status meanings:
 - `Temporarily Closed`: the Facility is expected to reopen
 - `Permanently Closed`: the Facility is no longer operating
 - `Unknown`: the operating status has not been confirmed
+
+When `google_place_id` is present, it must be unique so the same Google Maps location cannot be attached to two Facility records.
 
 ---
 
@@ -90,18 +92,20 @@ Approved values for the first version:
 
 Use `Other` when the type is known but does not fit an approved category. Use `Unknown` when the type has not been confirmed.
 
+Each `type_name` must be unique so an approved Facility Type is stored only once.
+
 ---
 
 ## Entity: Property (`properties`)
 
-Stores facts about the Facility's physical site, such as its surface and outdoor play area.
+Stores facts about the Facility's physical site, such as its surface and animal activity or play area.
 
 | Field | Type | Required | Example | Description |
 | --- | --- | --- | --- | --- |
 | property_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `501` | Database-generated identifier for the Property record |
 | facility_id | BIGINT UNSIGNED | Yes | `1042` | ID of the related Facility |
-| estimated_play_area_sqft | INTEGER | No | 12000 | Estimated outdoor activity-area size |
-| surface_type | ENUM | No | Grass | Grass, Dirt, Mulch, Gravel, Concrete, Synthetic Turf, Mixed, Other, or Unknown |
+| estimated_play_area_sqft | INT UNSIGNED | No | 12000 | Estimated animal activity or play-area size in square feet |
+| surface_type | ENUM | Yes | Grass | Grass, Dirt, Mulch, Gravel, Concrete, Synthetic Turf, Mixed, Other, or Unknown |
 | synthetic_turf_present | BOOLEAN | No | FALSE | Whether synthetic turf is currently installed |
 | fenced_area | BOOLEAN | No | TRUE | Whether an outdoor area appears fenced |
 | parking_available | BOOLEAN | No | TRUE | Whether customer parking appears available |
@@ -118,6 +122,8 @@ Surface Type meanings:
 - `Mixed`: two or more approved surface types are present; Evidence should explain the combination
 - `Other`: the surface is known but does not fit an approved value
 - `Unknown`: the surface has not been confirmed
+
+Surface Type is required when a Property record exists. The future SQL uses `Unknown` as its default value. The play-area size may be `NULL` when it has not been estimated.
 
 ---
 
@@ -154,9 +160,11 @@ Stores references to publicly available imagery associated with a Facility.
 | photo_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `3201` | Database-generated identifier for the Photo |
 | facility_id | BIGINT UNSIGNED | Yes | `1042` | ID of the related Facility |
 | photo_url | VARCHAR(500) | Yes | <https://images.example/play-yard.jpg> | Image location |
-| source | VARCHAR(100) | No | Business Website | Human-readable image source |
+| data_source_id | BIGINT UNSIGNED | Yes | `2` | ID of the related Data Source |
 | caption | VARCHAR(255) | No | Rear outdoor play yard | Optional image description |
 | created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
+
+Each Photo points to one Data Source. The Data Source stores the provider and how the image information was collected.
 
 ---
 
@@ -183,17 +191,19 @@ Evidence Type describes what kind of supporting item was found. Use `Other` only
 
 ## Entity: Data Source (`data_sources`)
 
-Stores where imported information or Evidence came from.
+Stores where imported information, Photos, or Evidence came from.
 
 | Field | Type | Required | Example | Description |
 | --- | --- | --- | --- | --- |
 | data_source_id | BIGINT UNSIGNED AUTO_INCREMENT | Yes | `2` | Database-generated identifier for the Data Source |
 | source_name | VARCHAR(100) | Yes | Google Maps | Source name |
-| source_type | ENUM | Yes | API | API, Web Scrape, Manual Research, File Import, User Submitted, or Other |
+| collection_method | ENUM | Yes | API | API, Web Scrape, Manual Research, File Import, User Submitted, or Other |
 | base_url | VARCHAR(500) | No | <https://maps.google.com> | General website for the Data Source |
 | last_imported_at | DATETIME | No | 2026-07-09 10:00:00 | Most recent import date |
+| created_at | DATETIME | Yes | 2026-07-09 10:00:00 | Record creation date |
+| updated_at | DATETIME | Yes | 2026-07-12 14:30:00 | Most recent record update |
 
-Data Source Type describes how the information entered the database:
+Collection Method describes how the information entered the database:
 
 - `API`: received through a service's API
 - `Web Scrape`: collected automatically from a webpage
@@ -201,6 +211,8 @@ Data Source Type describes how the information entered the database:
 - `File Import`: loaded from a CSV, spreadsheet, or other dataset
 - `User Submitted`: provided through a future user-facing form
 - `Other`: entered through another known method
+
+The combination of `source_name` and `collection_method` must be unique. This allows the same provider to be recorded with different Collection Methods without creating duplicate rows for the same method.
 
 ---
 
@@ -221,6 +233,13 @@ Stores a Facility's calculated sales-opportunity score on a specific date.
 A Facility may have multiple score records. The most recently calculated record is its current score.
 
 If a Facility has not been scored, it has no Opportunity Score record. The rating list therefore contains only High, Medium, and Low.
+
+Latitude, longitude, Opportunity Scores, and confidence scores have limits:
+
+- latitude is from `-90` through `90`
+- longitude is from `-180` through `180`
+- Opportunity Scores are from `0` through `100`
+- confidence scores are from `0` through `100`
 
 ---
 
