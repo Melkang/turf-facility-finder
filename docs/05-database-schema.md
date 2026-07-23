@@ -628,13 +628,13 @@ This section lists the rules that must be included when the SQL tables are creat
 
 The future SQL must use `CHECK` constraints for these limits:
 
-| Field | Allowed value |
-| --- | --- |
-| `addresses.latitude` | From `-90` through `90` |
-| `addresses.longitude` | From `-180` through `180` |
-| `evidence.confidence_score` | From `0` through `100` |
-| `opportunity_scores.opportunity_score` | From `0` through `100` |
-| `opportunity_scores.confidence_score` | From `0` through `100` |
+| Field                                  | Allowed value             |
+| -------------------------------------- | ------------------------- |
+| `addresses.latitude`                   | From `-90` through `90`   |
+| `addresses.longitude`                  | From `-180` through `180` |
+| `evidence.confidence_score`            | From `0` through `100`    |
+| `opportunity_scores.opportunity_score` | From `0` through `100`    |
+| `opportunity_scores.confidence_score`  | From `0` through `100`    |
 
 `properties.estimated_play_area_sqft` uses `INT UNSIGNED`, so it cannot store a negative number. It may be `NULL` when the size has not been estimated.
 
@@ -698,16 +698,16 @@ These foreign keys need the rule:
 
 An **index** helps MySQL find records faster, similar to an index in a book. The first version should add indexes that support the current searches, joins, and sorting:
 
-| Table | Index fields | Purpose |
-| --- | --- | --- |
-| `facilities` | `facility_name` | Sort or search by name |
-| `facilities` | `status, facility_type_id` | Filter by status and Facility Type |
-| `addresses` | `state, city` | Filter by location |
-| `addresses` | `latitude, longitude` | Prepare for coordinate searches |
-| `properties` | `surface_type, estimated_play_area_sqft` | Filter by surface and minimum play-area size |
-| `evidence` | `facility_id, collected_at` | Find a Facility's Evidence in date order |
-| `evidence` | `data_source_id` | Find Evidence from one Data Source |
-| `opportunity_scores` | `facility_id, calculated_at` | Find the newest score for a Facility |
+| Table                | Index fields                             | Purpose                                      |
+| -------------------- | ---------------------------------------- | -------------------------------------------- |
+| `facilities`         | `facility_name`                          | Sort or search by name                       |
+| `facilities`         | `status, facility_type_id`               | Filter by status and Facility Type           |
+| `addresses`          | `state, city`                            | Filter by location                           |
+| `addresses`          | `latitude, longitude`                    | Prepare for coordinate searches              |
+| `properties`         | `surface_type, estimated_play_area_sqft` | Filter by surface and minimum play-area size |
+| `evidence`           | `facility_id, collected_at`              | Find a Facility's Evidence in date order     |
+| `evidence`           | `data_source_id`                         | Find Evidence from one Data Source           |
+| `opportunity_scores` | `facility_id, calculated_at`             | Find the newest score for a Facility         |
 
 ---
 
